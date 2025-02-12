@@ -93,7 +93,7 @@
 1672	2549	7610604636593391	_deps/glfw-build/tests/msaa.exe	d38529962a06ed2
 1638	2559	7610604636246499	_deps/glfw-build/tests/clipboard.exe	448b6701138e72b6
 1653	2592	7610604636400472	_deps/glfw-build/tests/events.exe	88112f5c8942b813
-479	2634	7610604624666100	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
+185	927	7610620964636068	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
 1937	2840	7610604639242121	_deps/glfw-build/tests/glfwinfo.exe	4ad45d21689c2d2e
 2136	3004	7610604641235182	_deps/glfw-build/tests/iconify.exe	2495b587877fe41f
 2206	3022	7610604641932985	_deps/glfw-build/tests/cursor.exe	1d8f901f444952f7
@@ -109,12 +109,6 @@
 2511	3254	7610604644984813	_deps/glfw-build/tests/timeout.exe	dd820694b4216e09
 2592	3257	7610604645801057	_deps/glfw-build/tests/window.exe	11ac2d4e5729259a
 471	3456	7610604624585543	_deps/glm-build/glm/CMakeFiles/glm.dir/detail/glm.cpp.obj	c0dbc034db5d7022
-3509	3817	7610604654969059	VulkanProject.exe	ffd9d5f17b714721
-34	821	7610612884344929	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
-822	1013	7610612892223900	VulkanProject.exe	ffd9d5f17b714721
-187	961	7610613291244719	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
-962	1100	7610613298991098	VulkanProject.exe	ffd9d5f17b714721
-189	943	7610615676376751	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
-943	1081	7610615683920616	VulkanProject.exe	ffd9d5f17b714721
-192	944	7610616222715355	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
-945	1076	7610616230240112	VulkanProject.exe	ffd9d5f17b714721
+928	1061	7610620972069345	VulkanProject.exe	152490269a5e319f
+193	946	7610625706890667	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
+947	1149	7610625714415169	VulkanProject.exe	ffd9d5f17b714721

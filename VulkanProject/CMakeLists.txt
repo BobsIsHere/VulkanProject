@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Vulkan REQUIRED)
 
 # Add source to this project's executable.
-add_executable (VulkanProject "VulkanProject.cpp" )
+add_executable (VulkanProject "VulkanProject.cpp")
 
 # Include glfw
 include(FetchContent)
