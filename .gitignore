@@ -1,5 +1,39 @@
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudio,cmake
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,cmake
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudio,cmake,c++
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,cmake,c++
+
+### C++ ###
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
 
 ### CMake ###
 CMakeLists.txt.user
@@ -97,9 +131,7 @@ StyleCopReport.xml
 *_h.h
 *.ilk
 *.meta
-*.obj
 *.iobj
-*.pch
 *.pdb
 *.ipdb
 *.pgc
@@ -421,4 +453,4 @@ FodyWeavers.xsd
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudio,cmake
+# End of https://www.toptal.com/developers/gitignore/api/visualstudio,cmake,c++
