@@ -47,7 +47,7 @@ cmake_ninja_workdir = C$:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-
 #############################################
 # Order-only phony target for VulkanProject
 
-build cmake_object_order_depends_target_VulkanProject: phony || cmake_object_order_depends_target_glfw cmake_object_order_depends_target_glm
+build cmake_object_order_depends_target_VulkanProject: phony || CopyShaders cmake_object_order_depends_target_glfw cmake_object_order_depends_target_glm
 
 build CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\VulkanProject.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1 -std:c++20
@@ -65,7 +65,7 @@ build CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj: CXX_COMPILER__VulkanPr
 #############################################
 # Link the executable VulkanProject.exe
 
-build VulkanProject.exe: CXX_EXECUTABLE_LINKER__VulkanProject_Debug CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj | C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glm-build\glm\glm.lib || _deps\glfw-build\src\glfw3.lib _deps\glm-build\glm\glm.lib
+build VulkanProject.exe: CXX_EXECUTABLE_LINKER__VulkanProject_Debug CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj | C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glm-build\glm\glm.lib || CopyShaders _deps\glfw-build\src\glfw3.lib _deps\glm-build\glm\glm.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = C:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib  _deps\glfw-build\src\glfw3.lib  C:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib  _deps\glm-build\glm\glm.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
@@ -76,6 +76,12 @@ build VulkanProject.exe: CXX_EXECUTABLE_LINKER__VulkanProject_Debug CMakeFiles\V
   TARGET_FILE = VulkanProject.exe
   TARGET_IMPLIB = VulkanProject.lib
   TARGET_PDB = VulkanProject.pdb
+
+
+#############################################
+# Utility command for CopyShaders
+
+build CopyShaders: phony CMakeFiles\CopyShaders
 
 
 #############################################
@@ -129,6 +135,14 @@ build CMakeFiles\install\local.util: CUSTOM_COMMAND all
   restat = 1
 
 build install\local: phony CMakeFiles\install\local.util
+
+
+#############################################
+# Custom command for CMakeFiles\CopyShaders
+
+build CMakeFiles\CopyShaders | ${cmake_ninja_workdir}CMakeFiles\CopyShaders: CUSTOM_COMMAND
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug && "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy_directory C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/shaders"
+  DESC = Copying shaders to output directory...
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
@@ -2350,7 +2364,7 @@ build windows.exe: phony _deps\glfw-build\examples\windows.exe
 #############################################
 # Folder: C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug
 
-build all: phony VulkanProject.exe _deps\glfw-build\all _deps\glm-build\all
+build all: phony VulkanProject.exe CopyShaders _deps\glfw-build\all _deps\glm-build\all
 
 # =============================================================================
 

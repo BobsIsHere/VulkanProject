@@ -35,3 +35,16 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(glm)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Vulkan::Vulkan glm::glm)
+
+# Define the shader directory
+set(SHADER_DIR "${CMAKE_SOURCE_DIR}/shaders")
+set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/shaders")
+
+# Ensure shaders are copied to the build directory
+add_custom_target(CopyShaders ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${SHADER_DIR} ${OUTPUT_DIR}
+    COMMENT "Copying shaders to output directory..."
+)
+
+# Ensure shaders are copied whenever the project is built
+add_dependencies(${PROJECT_NAME} CopyShaders)

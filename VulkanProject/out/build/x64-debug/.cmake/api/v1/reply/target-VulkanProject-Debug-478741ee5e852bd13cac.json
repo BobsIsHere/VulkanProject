@@ -14,7 +14,8 @@
 		"commands" : 
 		[
 			"add_executable",
-			"target_link_libraries"
+			"target_link_libraries",
+			"add_dependencies"
 		],
 		"files" : 
 		[
@@ -41,6 +42,12 @@
 				"command" : 1,
 				"file" : 0,
 				"line" : 37,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 50,
 				"parent" : 0
 			}
 		]
@@ -87,6 +94,10 @@
 	],
 	"dependencies" : 
 	[
+		{
+			"backtrace" : 4,
+			"id" : "CopyShaders::@6890427a1f51a3e7e1df"
+		},
 		{
 			"backtrace" : 2,
 			"id" : "glfw::@fa9f4482d3a2b070f206"

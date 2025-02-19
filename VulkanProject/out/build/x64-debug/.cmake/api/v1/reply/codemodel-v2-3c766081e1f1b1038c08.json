@@ -21,7 +21,8 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				},
 				{
@@ -34,7 +35,7 @@
 						5
 					],
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-_deps.glfw-build-Debug-6c77f9065bf455996936.json",
+					"jsonFile" : "directory-_deps.glfw-build-Debug-52610d15c18e8c9a1166.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -44,13 +45,13 @@
 					"source" : "out/build/x64-debug/_deps/glfw-src",
 					"targetIndexes" : 
 					[
-						31
+						32
 					]
 				},
 				{
 					"build" : "_deps/glfw-build/src",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-_deps.glfw-build.src-Debug-509cee59e5c2a729946c.json",
+					"jsonFile" : "directory-_deps.glfw-build.src-Debug-530d2afba792315223d4.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -60,8 +61,8 @@
 					"source" : "out/build/x64-debug/_deps/glfw-src/src",
 					"targetIndexes" : 
 					[
-						9,
-						32
+						10,
+						33
 					]
 				},
 				{
@@ -76,17 +77,17 @@
 					"source" : "out/build/x64-debug/_deps/glfw-src/examples",
 					"targetIndexes" : 
 					[
-						2,
-						8,
-						12,
-						19,
+						3,
+						9,
+						13,
 						20,
-						22,
+						21,
 						23,
-						28,
+						24,
 						29,
-						33,
-						35
+						30,
+						34,
+						36
 					]
 				},
 				{
@@ -101,26 +102,26 @@
 					"source" : "out/build/x64-debug/_deps/glfw-src/tests",
 					"targetIndexes" : 
 					[
-						1,
-						3,
+						2,
 						4,
 						5,
 						6,
 						7,
-						10,
-						13,
+						8,
+						11,
 						14,
 						15,
 						16,
 						17,
 						18,
-						21,
-						24,
+						19,
+						22,
 						25,
 						26,
 						27,
-						30,
-						34
+						28,
+						31,
+						35
 					]
 				},
 				{
@@ -161,7 +162,7 @@
 					"source" : "out/build/x64-debug/_deps/glm-src/glm",
 					"targetIndexes" : 
 					[
-						11
+						12
 					]
 				}
 			],
@@ -181,7 +182,8 @@
 					"name" : "VulkanProject",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				},
 				{
@@ -197,7 +199,6 @@
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
-						1,
 						2,
 						3,
 						4,
@@ -207,7 +208,7 @@
 						8,
 						9,
 						10,
-						12,
+						11,
 						13,
 						14,
 						15,
@@ -230,7 +231,8 @@
 						32,
 						33,
 						34,
-						35
+						35,
+						36
 					]
 				},
 				{
@@ -243,7 +245,7 @@
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
-						11
+						12
 					]
 				}
 			],
@@ -251,8 +253,15 @@
 			[
 				{
 					"directoryIndex" : 0,
+					"id" : "CopyShaders::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-CopyShaders-Debug-530ab585a59c7621292a.json",
+					"name" : "CopyShaders",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "VulkanProject::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-VulkanProject-Debug-6f5d8bebb1151cdb5eb5.json",
+					"jsonFile" : "target-VulkanProject-Debug-478741ee5e852bd13cac.json",
 					"name" : "VulkanProject",
 					"projectIndex" : 0
 				},
