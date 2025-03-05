@@ -97,6 +97,8 @@ private:
             glfwPollEvents();
             drawFrame();
         }
+
+        vkDeviceWaitIdle(device); 
     }
 
     void cleanup() 
@@ -915,6 +917,7 @@ private:
         submitInfo.pWaitDstStageMask = waitStages;
         submitInfo.commandBufferCount = 1; 
         submitInfo.pCommandBuffers = &commandBuffer;
+
         VkSemaphore signalSemaphores[] = { renderFinishedSemaphore }; 
         submitInfo.signalSemaphoreCount = 1; 
         submitInfo.pSignalSemaphores = signalSemaphores; 
@@ -923,6 +926,20 @@ private:
         {
             throw std::runtime_error("failed to submit draw command buffer!");
         }
+
+        VkPresentInfoKHR presentInfo{};
+        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+
+        presentInfo.waitSemaphoreCount = 1;
+        presentInfo.pWaitSemaphores = signalSemaphores;
+
+        VkSwapchainKHR swapChains[] = { swapChain };
+        presentInfo.swapchainCount = 1;
+        presentInfo.pSwapchains = swapChains;
+        presentInfo.pImageIndices = &imageIndex;
+        presentInfo.pResults = nullptr; // Optional
+
+        vkQueuePresentKHR(presentQueue, &presentInfo);
     }
 
     void createSyncObjects() 
@@ -936,7 +953,8 @@ private:
 
         if (vkCreateSemaphore(device, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
             vkCreateSemaphore(device, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS ||
-            vkCreateFence(device, &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS) {
+            vkCreateFence(device, &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS) 
+        {
             throw std::runtime_error("failed to create semaphores!");
         }
     }

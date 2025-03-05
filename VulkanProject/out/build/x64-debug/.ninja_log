@@ -5,8 +5,8 @@
 119	560	7628737331907848	_deps/glfw-build/src/CMakeFiles/glfw.dir/null_monitor.c.obj	22b974ca3aba96f
 124	527	7628737331971206	_deps/glfw-build/src/CMakeFiles/glfw.dir/null_window.c.obj	c0a7f23a100d2953
 133	486	7628737332067832	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_module.c.obj	f42f86ff946ae1f3
-142	630	7628737332067832	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_thread.c.obj	4d38744ed12adced
 1174	1302	7628737342451238	_deps/glfw-build/tests/CMakeFiles/inputlag.dir/__/deps/getopt.c.obj	dde754be07536d5c
+142	630	7628737332067832	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_thread.c.obj	4d38744ed12adced
 971	1201	7628737340440122	_deps/glfw-build/tests/CMakeFiles/events.dir/events.c.obj	71f7ff2a31d112d7
 95	579	7628737331693178	_deps/glfw-build/src/CMakeFiles/glfw.dir/vulkan.c.obj	9a6d9d7aa8161b6b
 560	645	7628737336331182	_deps/glfw-build/examples/CMakeFiles/gears.dir/glfw.rc.res	307f654770573abc
@@ -43,7 +43,7 @@
 1158	1324	7628737342303925	_deps/glfw-build/tests/CMakeFiles/icon.dir/icon.c.obj	7ad5267efe393303
 1064	1325	7628737341372393	_deps/glfw-build/tests/CMakeFiles/reopen.dir/reopen.c.obj	bbdb015fbc60229d
 831	1022	7628737339034379	_deps/glfw-build/examples/CMakeFiles/triangle-opengles.dir/glfw.rc.res	698d42fc70c4d7ad
-65	151	7628737331274733	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+33	73	7628755611405481	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
 535	840	7628737336060336	_deps/glfw-build/examples/CMakeFiles/boing.dir/boing.c.obj	5bf528f14a6735f3
 1030	1285	7628737341026467	_deps/glfw-build/tests/CMakeFiles/iconify.dir/iconify.c.obj	1d09970991cf68b7
 569	850	7628737336362010	_deps/glfw-build/examples/CMakeFiles/heightmap.dir/heightmap.c.obj	ce4cd6a7aadf054
@@ -94,7 +94,7 @@
 1732	2162	7628737348063427	_deps/glfw-build/tests/msaa.exe	d38529962a06ed2
 1706	2142	7628737347784721	_deps/glfw-build/tests/clipboard.exe	448b6701138e72b6
 1720	2209	7628737347925335	_deps/glfw-build/tests/events.exe	88112f5c8942b813
-528	3147	7628737336016284	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
+74	1187	7628755611880404	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
 1918	2357	7628737349910401	_deps/glfw-build/tests/glfwinfo.exe	4ad45d21689c2d2e
 1932	2366	7628737350048405	_deps/glfw-build/tests/iconify.exe	2495b587877fe41f
 2035	2433	7628737351078347	_deps/glfw-build/tests/cursor.exe	1d8f901f444952f7
@@ -110,11 +110,11 @@
 2143	2537	7628737352170982	_deps/glfw-build/tests/timeout.exe	dd820694b4216e09
 2209	2534	7628737352832082	_deps/glfw-build/tests/window.exe	11ac2d4e5729259a
 520	3002	7628737335919832	_deps/glm-build/glm/CMakeFiles/glm.dir/detail/glm.cpp.obj	c0dbc034db5d7022
-3148	3305	7628737362207404	VulkanProject.exe	ffd9d5f17b714721
-65	151	7628737331274733	CMakeFiles/CopyShaders	4c5666e148017b1
-48	90	7628737387668248	CMakeFiles/CopyShaders	4c5666e148017b1
-48	90	7628737387668248	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
-33	73	7628755611405481	CMakeFiles/CopyShaders	4c5666e148017b1
-33	73	7628755611405481	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
-74	1187	7628755611880404	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
 1188	1405	7628755623017206	VulkanProject.exe	ffd9d5f17b714721
+33	73	7628755611405481	CMakeFiles/CopyShaders	4c5666e148017b1
+88	128	7628847099447341	CMakeFiles/CopyShaders	4c5666e148017b1
+88	128	7628847099447341	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+40	81	7628850820214173	CMakeFiles/CopyShaders	4c5666e148017b1
+40	81	7628850820214173	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+82	1180	7628850820635212	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	26de414d8a3bd5ec
+1181	1387	7628850831622797	VulkanProject.exe	ffd9d5f17b714721
