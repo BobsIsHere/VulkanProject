@@ -47,7 +47,13 @@
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 50,
+				"line" : 87,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 56,
 				"parent" : 0
 			}
 		]
@@ -96,6 +102,10 @@
 	[
 		{
 			"backtrace" : 4,
+			"id" : "Shaders::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 5,
 			"id" : "CopyShaders::@6890427a1f51a3e7e1df"
 		},
 		{

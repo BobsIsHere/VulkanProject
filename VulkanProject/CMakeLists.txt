@@ -40,6 +40,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Vulkan::Vulkan glm::glm)
 set(SHADER_DIR "${CMAKE_SOURCE_DIR}/shaders")
 set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/shaders")
 
+# Define the shaders
+set(SHADERS
+	"${SHADER_DIR}/shader.vert"
+	"${SHADER_DIR}/shader.frag"
+)
+
 # Ensure shaders are copied to the build directory
 add_custom_target(CopyShaders ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${SHADER_DIR} ${OUTPUT_DIR}
@@ -48,3 +54,34 @@ add_custom_target(CopyShaders ALL
 
 # Ensure shaders are copied whenever the project is built
 add_dependencies(${PROJECT_NAME} CopyShaders)
+
+set(GLSLC "C:/VulkanSDK/1.3.296.0/Bin/glslc.exe")
+
+function(compile_shader shader)
+	#get_filename_component(FILE_NAME ${shader} NAME)
+	get_filename_component(FILE_EXT ${shader} EXT)
+
+	# Remove the leading dot from the extension
+    string(REPLACE "." "" FILE_EXT_NO_DOT ${FILE_EXT})
+
+    set(SPIRV_OUTPUT "${SHADER_DIR}/${FILE_EXT_NO_DOT}.spv")
+
+	add_custom_command(
+            OUTPUT ${SPIRV_OUTPUT}
+            COMMAND "${GLSLC}" ${shader} -o ${SPIRV_OUTPUT}
+            COMMENT "Compiling ${shader} to SPIR-V"
+            DEPENDS ${shader} ${GLSL_SHADERS}
+            VERBATIM
+    )
+
+	list(APPEND SPIRV_SHADERS ${SPIRV_OUTPUT})
+    set(SPIRV_SHADERS ${SPIRV_SHADERS} PARENT_SCOPE)
+endfunction()
+
+foreach (SHADER ${SHADERS})
+    compile_shader(${SHADER})
+endforeach()
+
+add_custom_target(Shaders ALL DEPENDS ${SPIRV_SHADERS})
+
+add_dependencies(${PROJECT_NAME} Shaders)

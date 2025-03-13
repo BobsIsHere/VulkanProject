@@ -22,7 +22,8 @@
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				},
 				{
@@ -33,7 +34,7 @@
 						3
 					],
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-_deps.glfw-build-Debug-5d36f20f59be97702d99.json",
+					"jsonFile" : "directory-_deps.glfw-build-Debug-242df10013b249c39780.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -43,13 +44,13 @@
 					"source" : "out/build/x64-debug/_deps/glfw-src",
 					"targetIndexes" : 
 					[
-						4
+						5
 					]
 				},
 				{
 					"build" : "_deps/glfw-build/src",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-_deps.glfw-build.src-Debug-968cab7750943a132cb1.json",
+					"jsonFile" : "directory-_deps.glfw-build.src-Debug-8a91bd2b2b7d2700bab9.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -59,8 +60,8 @@
 					"source" : "out/build/x64-debug/_deps/glfw-src/src",
 					"targetIndexes" : 
 					[
-						2,
-						5
+						3,
+						6
 					]
 				},
 				{
@@ -101,7 +102,7 @@
 					"source" : "out/build/x64-debug/_deps/glm-src/glm",
 					"targetIndexes" : 
 					[
-						3
+						4
 					]
 				}
 			],
@@ -122,7 +123,8 @@
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				},
 				{
@@ -136,9 +138,9 @@
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
-						2,
-						4,
-						5
+						3,
+						5,
+						6
 					]
 				},
 				{
@@ -151,7 +153,7 @@
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
-						3
+						4
 					]
 				}
 			],
@@ -160,14 +162,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CopyShaders::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CopyShaders-Debug-530ab585a59c7621292a.json",
+					"jsonFile" : "target-CopyShaders-Debug-6e575665339b0bb9ff71.json",
 					"name" : "CopyShaders",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
+					"id" : "Shaders::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Shaders-Debug-cb955d967ed2b051ce1f.json",
+					"name" : "Shaders",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "VulkanProject::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-VulkanProject-Debug-7d1919babbe65ab041ab.json",
+					"jsonFile" : "target-VulkanProject-Debug-bb64126d5ffa669b7743.json",
 					"name" : "VulkanProject",
 					"projectIndex" : 0
 				},
