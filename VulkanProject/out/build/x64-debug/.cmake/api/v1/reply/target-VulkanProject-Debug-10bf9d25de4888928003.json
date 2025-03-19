@@ -15,7 +15,8 @@
 		[
 			"add_executable",
 			"target_link_libraries",
-			"add_dependencies"
+			"add_dependencies",
+			"target_include_directories"
 		],
 		"files" : 
 		[
@@ -35,25 +36,31 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 24,
+				"line" : 29,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 37,
+				"line" : 42,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 87,
+				"line" : 61,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 56,
+				"line" : 92,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 94,
 				"parent" : 0
 			}
 		]
@@ -69,6 +76,14 @@
 			],
 			"includes" : 
 			[
+				{
+					"backtrace" : 6,
+					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/../3rdParty"
+				},
 				{
 					"backtrace" : 2,
 					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glfw-src/include"
@@ -102,11 +117,11 @@
 	[
 		{
 			"backtrace" : 4,
-			"id" : "Shaders::@6890427a1f51a3e7e1df"
+			"id" : "CopyShaders::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 5,
-			"id" : "CopyShaders::@6890427a1f51a3e7e1df"
+			"id" : "Shaders::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 2,

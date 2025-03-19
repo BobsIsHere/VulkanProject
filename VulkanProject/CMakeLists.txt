@@ -10,6 +10,11 @@ find_package(Vulkan REQUIRED)
 # Add source to this project's executable.
 add_executable (VulkanProject "VulkanProject.cpp")
 
+set(STB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../3rdParty")
+
+# Copy textures folder to output directory
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/textures" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+
 # Include glfw
 include(FetchContent)
 
@@ -85,3 +90,5 @@ endforeach()
 add_custom_target(Shaders ALL DEPENDS ${SPIRV_SHADERS})
 
 add_dependencies(${PROJECT_NAME} Shaders)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${STB_DIR})

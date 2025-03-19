@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_VulkanProject: phony || CopyShaders Shad
 
 build CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\VulkanProject.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
