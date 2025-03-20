@@ -12,8 +12,9 @@ add_executable (VulkanProject "VulkanProject.cpp")
 
 set(3rdParty "${CMAKE_CURRENT_SOURCE_DIR}/../3rdParty")
 
-# Copy textures folder to output directory
+# Copy folders to output directory
 file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/textures" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/models" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
 
 # Include glfw
 include(FetchContent)
