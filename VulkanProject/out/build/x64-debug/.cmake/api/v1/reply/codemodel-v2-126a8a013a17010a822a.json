@@ -12,7 +12,7 @@
 						4
 					],
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.11"
@@ -34,14 +34,14 @@
 						3
 					],
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-_deps.glfw-build-Release-5f24c8d2e6d66a0a63cb.json",
+					"jsonFile" : "directory-_deps.glfw-build-Debug-242df10013b249c39780.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
 					},
 					"parentIndex" : 0,
 					"projectIndex" : 1,
-					"source" : "out/build/x64-release/_deps/glfw-src",
+					"source" : "out/build/x64-debug/_deps/glfw-src",
 					"targetIndexes" : 
 					[
 						5
@@ -50,14 +50,14 @@
 				{
 					"build" : "_deps/glfw-build/src",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-_deps.glfw-build.src-Release-2e6f359caf2ddbbabcce.json",
+					"jsonFile" : "directory-_deps.glfw-build.src-Debug-8a91bd2b2b7d2700bab9.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
 					},
 					"parentIndex" : 1,
 					"projectIndex" : 1,
-					"source" : "out/build/x64-release/_deps/glfw-src/src",
+					"source" : "out/build/x64-debug/_deps/glfw-src/src",
 					"targetIndexes" : 
 					[
 						3,
@@ -66,14 +66,14 @@
 				},
 				{
 					"build" : "_deps/glfw-build/docs",
-					"jsonFile" : "directory-_deps.glfw-build.docs-Release-c994c2e30ae6c43afa35.json",
+					"jsonFile" : "directory-_deps.glfw-build.docs-Debug-27c4a03a7315f7bbcece.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
 					},
 					"parentIndex" : 1,
 					"projectIndex" : 1,
-					"source" : "out/build/x64-release/_deps/glfw-src/docs"
+					"source" : "out/build/x64-debug/_deps/glfw-src/docs"
 				},
 				{
 					"build" : "_deps/glm-build",
@@ -81,32 +81,32 @@
 					[
 						5
 					],
-					"jsonFile" : "directory-_deps.glm-build-Release-9b6410cfb365b96989e3.json",
+					"jsonFile" : "directory-_deps.glm-build-Debug-a9390b2df2ea554493f8.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.6"
 					},
 					"parentIndex" : 0,
 					"projectIndex" : 2,
-					"source" : "out/build/x64-release/_deps/glm-src"
+					"source" : "out/build/x64-debug/_deps/glm-src"
 				},
 				{
 					"build" : "_deps/glm-build/glm",
-					"jsonFile" : "directory-_deps.glm-build.glm-Release-1f0a7038108f3c87f015.json",
+					"jsonFile" : "directory-_deps.glm-build.glm-Debug-39bf127c0bf276f863a1.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.6"
 					},
 					"parentIndex" : 4,
 					"projectIndex" : 2,
-					"source" : "out/build/x64-release/_deps/glm-src/glm",
+					"source" : "out/build/x64-debug/_deps/glm-src/glm",
 					"targetIndexes" : 
 					[
 						4
 					]
 				}
 			],
-			"name" : "Release",
+			"name" : "Debug",
 			"projects" : 
 			[
 				{
@@ -162,49 +162,49 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CopyShaders::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CopyShaders-Release-9b50231cfdd2c14c316e.json",
+					"jsonFile" : "target-CopyShaders-Debug-cda6fa17805bd7299bfe.json",
 					"name" : "CopyShaders",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "Shaders::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Shaders-Release-6dd49b58d29b41d775f4.json",
+					"jsonFile" : "target-Shaders-Debug-ef40fa59fb5861ca3694.json",
 					"name" : "Shaders",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "VulkanProject::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-VulkanProject-Release-7b1877a292c2198c394d.json",
+					"jsonFile" : "target-VulkanProject-Debug-da21ad3f93bca7c90c0e.json",
 					"name" : "VulkanProject",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "glfw::@fa9f4482d3a2b070f206",
-					"jsonFile" : "target-glfw-Release-125c97c35e22d89f9f53.json",
+					"jsonFile" : "target-glfw-Debug-dbb7324a9439fbd65be7.json",
 					"name" : "glfw",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 5,
 					"id" : "glm::@ce54d98d7b326a3e12a8",
-					"jsonFile" : "target-glm-Release-dfcd7e8aac5a5b7851a7.json",
+					"jsonFile" : "target-glm-Debug-2e1882a9cdab248520de.json",
 					"name" : "glm",
 					"projectIndex" : 2
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "uninstall::@369fad943889a5ec39c8",
-					"jsonFile" : "target-uninstall-Release-2d083485c4e945263f6a.json",
+					"jsonFile" : "target-uninstall-Debug-a2ad1753df6bda40bbe4.json",
 					"name" : "uninstall",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "update_mappings::@fa9f4482d3a2b070f206",
-					"jsonFile" : "target-update_mappings-Release-2c647d8668175bc09f2e.json",
+					"jsonFile" : "target-update_mappings-Debug-511c32365f31e70e89fe.json",
 					"name" : "update_mappings",
 					"projectIndex" : 1
 				}
@@ -214,7 +214,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-release",
+		"build" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug",
 		"source" : "C:/GitHubFiles/GraphicsProg2/VulkanProject"
 	},
 	"version" : 
