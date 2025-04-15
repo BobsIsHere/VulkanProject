@@ -1,12 +1,7 @@
 #include <iostream>
 
 #include "VulkanInstance.h"
-
-#ifdef NDEBUG
-const bool enableValidationLayers = false;
-#else
-const bool enableValidationLayers = true;
-#endif
+#include "utils.h"
 
 VulkanInstance::VulkanInstance() :
     m_Instance{},
@@ -90,6 +85,11 @@ void VulkanInstance::SetupDebugMessenger()
 VkInstance VulkanInstance::GetInstance() const
 {
 	return m_Instance;
+}
+
+const std::vector<const char*>& VulkanInstance::GetValidationLayers() const
+{
+    return m_ValidationLayers;
 }
 
 bool VulkanInstance::CheckValidationLayerSupport()

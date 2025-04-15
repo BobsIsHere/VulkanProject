@@ -1,7 +1,9 @@
-#define GLFW_INCLUDE_VULKAN
-#include "GLFW/glfw3.h"
+#pragma once
 
 #include <vector>
+
+#define GLFW_INCLUDE_VULKAN
+#include "GLFW/glfw3.h"
 
 class VulkanInstance
 {
@@ -14,6 +16,7 @@ public:
 
 	void SetupDebugMessenger();
 	VkInstance GetInstance() const;
+	const std::vector<const char*>& GetValidationLayers() const;
 
 private:
 	VkInstance m_Instance;
