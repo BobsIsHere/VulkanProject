@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Vulkan REQUIRED)
 
 # Add source to this project's executable.
-add_executable (VulkanProject "VulkanProject.cpp" "core/utils.h" "core/Window.h" "core/Window.cpp" "core/VulkanInstance.cpp" "core/VulkanInstance.h" "core/VulkanDevice.h" "core/VulkanDevice.cpp" "core/VulkanSwapChain.h" "core/VulkanSwapChain.cpp" "core/VulkanRenderPass.h" "core/VulkanRenderPass.cpp")
+add_executable (VulkanProject "VulkanProject.cpp" "core/utils.h" "core/Window.h" "core/Window.cpp" "core/VulkanInstance.cpp" "core/VulkanInstance.h" "core/VulkanDevice.h" "core/VulkanDevice.cpp" "core/VulkanSwapChain.h" "core/VulkanSwapChain.cpp" "core/VulkanRenderPass.h" "core/VulkanRenderPass.cpp" "pipelines/GraphicsPipeline.h" "pipelines/GraphicsPipeline.cpp")
 
 set(3rdParty "${CMAKE_CURRENT_SOURCE_DIR}/../3rdParty")
 
