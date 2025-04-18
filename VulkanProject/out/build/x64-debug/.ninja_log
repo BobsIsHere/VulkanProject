@@ -1,7 +1,7 @@
 # ninja log v6
 88	1034	7666749817464827	_deps/glfw-build/src/CMakeFiles/glfw.dir/platform.c.obj	cad46e2864b0471f
-37	78	7666943262247379	CMakeFiles/CopyShaders	4c5666e148017b1
-37	78	7666943262247379	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+39	100	7666970398935541	CMakeFiles/CopyShaders	4c5666e148017b1
+39	100	7666970398935541	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
 171	1129	7666749818288176	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_thread.c.obj	f84dc4cc2eb6fd06
 148	1138	7666749818051890	_deps/glfw-build/src/CMakeFiles/glfw.dir/null_joystick.c.obj	a30a5c5af824e28c
 133	1110	7666749817916263	_deps/glfw-build/src/CMakeFiles/glfw.dir/null_monitor.c.obj	d05d5aee5680aa8e
@@ -25,23 +25,17 @@
 1036	1477	7666749826941786	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_monitor.c.obj	ffce2f5f9e89a6ee
 1047	1530	7666749827057015	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_window.c.obj	155cf981be055b92
 1057	1513	7666749827156070	_deps/glfw-build/src/CMakeFiles/glfw.dir/wgl_context.c.obj	2163f272f5133c06
-79	3029	7666943262670018	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	844f63e287868ee8
+101	2722	7666970399556075	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	844f63e287868ee8
 1531	1661	7666749831895173	_deps/glfw-build/src/glfw3.lib	d8afe9d96ed07884
 3022	3144	7666749846803262	_deps/glm-build/glm/glm.lib	66cdf09b3e6889ed
-3029	3285	7666943292173555	VulkanProject.exe	f3a4256911090e30
+2723	3073	7666970425778817	VulkanProject.exe	c1a7fbce971c3b53
 13	48	7666749816106899	clean	21a4d0550fd2b6b1
-36	1848	7666944737795339	build.ninja	3879bf3f98a8e58a
+36	1848	7666998254829539	build.ninja	3879bf3f98a8e58a
 43	295	7666749819343820	C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders/frag.spv	13b7d5e55d214390
 51	289	7666749819343820	C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders/vert.spv	ea447eef371e4952
 1088	1355	7666749827456813	CMakeFiles/VulkanProject.dir/core/Window.cpp.obj	86ecd176e6d5dc9b
+96	1535	7666970115849803	CMakeFiles/VulkanProject.dir/core/VulkanCommandBuffer.cpp.obj	be8986322d4b4dbf
 1100	2933	7666749827583080	CMakeFiles/VulkanProject.dir/core/VulkanInstance.cpp.obj	30623e1b6b315b61
 83	1283	7666892303284094	CMakeFiles/VulkanProject.dir/core/VulkanSwapChain.cpp.obj	292986d02bf1db8
 140	1375	7666931738827823	CMakeFiles/VulkanProject.dir/pipelines/GraphicsPipeline.cpp.obj	93493ac7eecbb827
 83	1527	7666943262705112	CMakeFiles/VulkanProject.dir/core/VulkanCommandPool.cpp.obj	5c51f09736b0eb79
-24	90	7666970115126047	CMakeFiles/CopyShaders	4c5666e148017b1
-24	90	7666970115126047	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
-96	1535	7666970115849803	CMakeFiles/VulkanProject.dir/core/VulkanCommandBuffer.cpp.obj	be8986322d4b4dbf
-39	100	7666970398935541	CMakeFiles/CopyShaders	4c5666e148017b1
-39	100	7666970398935541	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
-101	2722	7666970399556075	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	844f63e287868ee8
-2723	3073	7666970425778817	VulkanProject.exe	c1a7fbce971c3b53
