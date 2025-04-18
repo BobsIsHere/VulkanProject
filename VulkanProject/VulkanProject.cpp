@@ -60,6 +60,7 @@ public:
         initVulkan();
         mainLoop();
         CleanupVulkan();
+		CleanupResources();
     }
 
 private:
