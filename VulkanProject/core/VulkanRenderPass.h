@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 
 #define GLFW_INCLUDE_VULKAN
