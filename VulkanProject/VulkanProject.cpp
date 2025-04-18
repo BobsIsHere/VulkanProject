@@ -36,6 +36,7 @@
 #include "core/VulkanInstance.h"
 #include "core/VulkanDevice.h"
 #include "core/VulkanSwapChain.h"
+#include "core/VulkanRenderPass.h"
 
 class HelloTriangleApplication 
 {
@@ -49,6 +50,8 @@ public:
 		// Initialize Vulkan
 		m_pVulkanInstance = new VulkanInstance();
 		m_pVulkanDevice = new VulkanDevice(m_pVulkanInstance, m_pWindow);
+        m_pVulkanSwapChain = new VulkanSwapChain(m_pWindow, m_pVulkanDevice);
+		m_pVulkanRenderPass = new VulkanRenderPass(m_pVulkanDevice, m_pVulkanSwapChain);
 
         initVulkan();
         mainLoop();
@@ -66,11 +69,10 @@ private:
 		m_pVulkanDevice->PickPhysicalDevice();
 		m_pVulkanDevice->CreateLogicalDevice();
 
-        m_pVulkanSwapChain = new VulkanSwapChain(m_pWindow, m_pVulkanDevice);
         m_pVulkanSwapChain->Create();
 
         m_pVulkanSwapChain->CreateImageViews();
-        createRenderPass();
+        m_pVulkanRenderPass->Create();
         createDescriptorSetLayout();
 		createGraphicsPipeline();
         createCommandPool();
@@ -108,7 +110,10 @@ private:
 
         vkDestroyPipeline(device, graphicsPipeline, nullptr);
         vkDestroyPipelineLayout(device, pipelineLayout, nullptr);
-        vkDestroyRenderPass(device, renderPass, nullptr);
+
+		m_pVulkanRenderPass->Cleanup();
+		delete m_pVulkanRenderPass;
+		m_pVulkanRenderPass = nullptr;
 
         for (size_t i = 0; i < utils::MAX_FRAMES_IN_FLIGHT; ++i) 
         {
@@ -152,66 +157,6 @@ private:
         glfwDestroyWindow(m_pWindow->GetWindow());
 
         glfwTerminate();
-    }
-
-    void createRenderPass() 
-    {
-        VkAttachmentDescription colorAttachment{};
-        colorAttachment.format = m_pVulkanSwapChain->GetSwapChainImageFormat();
-        colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-        colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-        colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-        VkAttachmentReference colorAttachmentRef{};
-        colorAttachmentRef.attachment = 0;
-        colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-        VkAttachmentDescription depthAttachment{};
-        depthAttachment.format = findDepthFormat();
-        depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-        depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-        depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-        depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-        depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-        depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-        VkAttachmentReference depthAttachmentRef{};
-        depthAttachmentRef.attachment = 1;
-        depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-
-        VkSubpassDescription subpass{};
-        subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-        subpass.colorAttachmentCount = 1;
-        subpass.pColorAttachments = &colorAttachmentRef;
-        subpass.pDepthStencilAttachment = &depthAttachmentRef;
-
-        VkSubpassDependency dependency{};
-        dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
-        dependency.dstSubpass = 0;
-        dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-        dependency.srcAccessMask = 0;
-        dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-        dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
-
-        std::array<VkAttachmentDescription, 2> attachments = { colorAttachment, depthAttachment };
-        VkRenderPassCreateInfo renderPassInfo{};
-        renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-        renderPassInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-        renderPassInfo.pAttachments = attachments.data();
-        renderPassInfo.subpassCount = 1;
-        renderPassInfo.pSubpasses = &subpass;
-        renderPassInfo.dependencyCount = 1;
-        renderPassInfo.pDependencies = &dependency;
-
-        if (vkCreateRenderPass(m_pVulkanDevice->GetDevice(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
-        {
-            throw std::runtime_error("failed to create render pass!");
-        }
     }
 
     void createDescriptorSetLayout() 
@@ -375,7 +320,7 @@ private:
         pipelineInfo.pColorBlendState = &colorBlending;
         pipelineInfo.pDynamicState = &dynamicState;
         pipelineInfo.layout = pipelineLayout;
-        pipelineInfo.renderPass = renderPass;
+        pipelineInfo.renderPass = m_pVulkanRenderPass->GetRenderPass();
         pipelineInfo.subpass = 0;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
         pipelineInfo.basePipelineIndex = -1; // Optional
@@ -404,7 +349,7 @@ private:
 
             VkFramebufferCreateInfo framebufferInfo{};
             framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            framebufferInfo.renderPass = renderPass;
+            framebufferInfo.renderPass = m_pVulkanRenderPass->GetRenderPass();
             framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
             framebufferInfo.pAttachments = attachments.data();
             framebufferInfo.width = m_pVulkanSwapChain->GetSwapChainExtent().width;
@@ -780,7 +725,7 @@ private:
 
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-        renderPassInfo.renderPass = renderPass;
+        renderPassInfo.renderPass = m_pVulkanRenderPass->GetRenderPass();
         renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
         renderPassInfo.renderArea.offset = { 0, 0 };
         renderPassInfo.renderArea.extent = m_pVulkanSwapChain->GetSwapChainExtent();
@@ -1235,9 +1180,9 @@ private:
 	VulkanInstance* m_pVulkanInstance;
 	VulkanDevice* m_pVulkanDevice;
     VulkanSwapChain* m_pVulkanSwapChain;
+	VulkanRenderPass* m_pVulkanRenderPass;
 
     // Vulkan Member Variables
-    VkRenderPass renderPass;
     VkDescriptorSetLayout descriptorSetLayout;
     VkPipelineLayout pipelineLayout;
     VkPipeline graphicsPipeline;
