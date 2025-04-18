@@ -38,6 +38,7 @@
 #include "core/VulkanSwapChain.h"
 #include "core/VulkanRenderPass.h"
 #include "core/VulkanCommandPool.h"
+#include "core/VulkanCommandBuffer.h"
 #include "pipelines/GraphicsPipeline.h"
 
 class HelloTriangleApplication 
@@ -55,6 +56,12 @@ public:
         m_pVulkanSwapChain = new VulkanSwapChain(m_pWindow, m_pVulkanDevice);
 		m_pVulkanRenderPass = new VulkanRenderPass(m_pVulkanDevice, m_pVulkanSwapChain);
 		m_pVulkanCommandPool = new VulkanCommandPool(m_pVulkanDevice);
+        m_pVulkanCommandBuffers.resize(utils::MAX_FRAMES_IN_FLIGHT);
+        
+        for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
+        {
+			m_pVulkanCommandBuffers[idx] = new VulkanCommandBuffer(m_pVulkanDevice, m_pVulkanCommandPool);
+        }
 
 		//Create Graphics Pipeline
 		m_pGraphicsPipeline = new GraphicsPipeline(m_pVulkanDevice, m_pVulkanRenderPass);
@@ -974,6 +981,7 @@ private:
 	VulkanRenderPass* m_pVulkanRenderPass;
 	GraphicsPipeline* m_pGraphicsPipeline;
 	VulkanCommandPool* m_pVulkanCommandPool;
+    std::vector<VulkanCommandBuffer*> m_pVulkanCommandBuffers;
 
     // Vulkan Member Variables
     std::vector<VkFramebuffer> swapChainFramebuffers;
