@@ -37,6 +37,7 @@
 #include "core/VulkanDevice.h"
 #include "core/VulkanSwapChain.h"
 #include "core/VulkanRenderPass.h"
+#include "core/VulkanCommandPool.h"
 #include "pipelines/GraphicsPipeline.h"
 
 class HelloTriangleApplication 
@@ -53,6 +54,7 @@ public:
 		m_pVulkanDevice = new VulkanDevice(m_pVulkanInstance, m_pWindow);
         m_pVulkanSwapChain = new VulkanSwapChain(m_pWindow, m_pVulkanDevice);
 		m_pVulkanRenderPass = new VulkanRenderPass(m_pVulkanDevice, m_pVulkanSwapChain);
+		m_pVulkanCommandPool = new VulkanCommandPool(m_pVulkanDevice);
 
 		//Create Graphics Pipeline
 		m_pGraphicsPipeline = new GraphicsPipeline(m_pVulkanDevice, m_pVulkanRenderPass);
@@ -80,7 +82,7 @@ private:
         m_pVulkanRenderPass->Create();
         m_pGraphicsPipeline->CreateDescriptorSetLayout();
         m_pGraphicsPipeline->CreatePipeline();
-        createCommandPool();
+        m_pVulkanCommandPool->Create();
         createDepthResources();
         createFramebuffers();
         createTextureImage();
@@ -146,7 +148,7 @@ private:
             vkDestroyFence(device, inFlightFences[i], nullptr);
         }
 
-        vkDestroyCommandPool(device, commandPool, nullptr);
+		m_pVulkanCommandPool->Cleanup();
 
         m_pVulkanDevice->Cleanup();
 
@@ -164,6 +166,9 @@ private:
 
         delete m_pGraphicsPipeline;
         m_pGraphicsPipeline = nullptr;
+
+		delete m_pVulkanCommandPool;
+		m_pVulkanCommandPool = nullptr;
 
         delete m_pVulkanDevice;
         m_pVulkanDevice = nullptr;
@@ -198,21 +203,6 @@ private:
             {
                 throw std::runtime_error("failed to create framebuffer!");
             }
-        }
-    }
-
-    void createCommandPool() 
-    {
-        QueueFamilyIndices queueFamilyIndices = m_pVulkanDevice->FindQueueFamilies(m_pVulkanDevice->GetPhysicalDevice());
-
-        VkCommandPoolCreateInfo poolInfo{};
-        poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-        poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
-
-        if (vkCreateCommandPool(m_pVulkanDevice->GetDevice(), &poolInfo, nullptr, &commandPool) != VK_SUCCESS)
-        {
-            throw std::runtime_error("failed to create command pool!");
         }
     }
 
@@ -538,7 +528,7 @@ private:
 
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-        allocInfo.commandPool = commandPool;
+        allocInfo.commandPool = m_pVulkanCommandPool->GetCommandPool();
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
         allocInfo.commandBufferCount = (uint32_t)commandBuffers.size();
 
@@ -824,7 +814,7 @@ private:
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-        allocInfo.commandPool = commandPool;
+        allocInfo.commandPool = m_pVulkanCommandPool->GetCommandPool();
         allocInfo.commandBufferCount = 1;
 
         VkCommandBuffer commandBuffer;
@@ -851,7 +841,7 @@ private:
         vkQueueSubmit(m_pVulkanDevice->GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
         vkQueueWaitIdle(m_pVulkanDevice->GetGraphicsQueue());
 
-        vkFreeCommandBuffers(m_pVulkanDevice->GetDevice(), commandPool, 1, &commandBuffer);
+        vkFreeCommandBuffers(m_pVulkanDevice->GetDevice(), m_pVulkanCommandPool->GetCommandPool(), 1, &commandBuffer);
     }
 
     void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) 
@@ -983,10 +973,10 @@ private:
     VulkanSwapChain* m_pVulkanSwapChain;
 	VulkanRenderPass* m_pVulkanRenderPass;
 	GraphicsPipeline* m_pGraphicsPipeline;
+	VulkanCommandPool* m_pVulkanCommandPool;
 
     // Vulkan Member Variables
     std::vector<VkFramebuffer> swapChainFramebuffers;
-    VkCommandPool commandPool;
     std::vector<VkCommandBuffer> commandBuffers;
     std::vector<VkSemaphore> imageAvailableSemaphores;
     std::vector<VkSemaphore> renderFinishedSemaphores;
