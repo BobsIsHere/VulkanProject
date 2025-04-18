@@ -38,3 +38,10 @@
 83	1283	7666892303284094	CMakeFiles/VulkanProject.dir/core/VulkanSwapChain.cpp.obj	292986d02bf1db8
 140	1375	7666931738827823	CMakeFiles/VulkanProject.dir/pipelines/GraphicsPipeline.cpp.obj	93493ac7eecbb827
 83	1527	7666943262705112	CMakeFiles/VulkanProject.dir/core/VulkanCommandPool.cpp.obj	5c51f09736b0eb79
+24	90	7666970115126047	CMakeFiles/CopyShaders	4c5666e148017b1
+24	90	7666970115126047	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+96	1535	7666970115849803	CMakeFiles/VulkanProject.dir/core/VulkanCommandBuffer.cpp.obj	be8986322d4b4dbf
+39	100	7666970398935541	CMakeFiles/CopyShaders	4c5666e148017b1
+39	100	7666970398935541	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+101	2722	7666970399556075	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	844f63e287868ee8
+2723	3073	7666970425778817	VulkanProject.exe	c1a7fbce971c3b53

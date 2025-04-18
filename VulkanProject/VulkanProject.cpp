@@ -60,7 +60,7 @@ public:
         
         for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
         {
-			m_pVulkanCommandBuffers[idx] = new VulkanCommandBuffer(m_pVulkanDevice, m_pVulkanCommandPool);
+			m_pVulkanCommandBuffers[idx] = new VulkanCommandBuffer(m_pVulkanDevice, m_pVulkanCommandPool, m_pVulkanRenderPass, m_pVulkanSwapChain, m_pGraphicsPipeline);
         }
 
 		//Create Graphics Pipeline
