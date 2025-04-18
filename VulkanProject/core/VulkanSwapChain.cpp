@@ -81,6 +81,16 @@ void VulkanSwapChain::Cleanup()
     vkDestroySwapchainKHR(m_pVulkanDevice->GetDevice(), m_SwapChain, nullptr);
 }
 
+void VulkanSwapChain::CreateImageViews()
+{
+    m_SwapChainImageViews.resize(m_SwapChainImages.size());
+
+    for (uint32_t i = 0; i < m_SwapChainImages.size(); ++i)
+    {
+        m_SwapChainImageViews[i] = CreateImageView(m_SwapChainImages[i], m_SwapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT);
+    }
+}
+
 VkSwapchainKHR VulkanSwapChain::GetSwapChain() const
 {
     return m_SwapChain;
@@ -99,6 +109,11 @@ VkFormat VulkanSwapChain::GetSwapChainImageFormat() const
 VkExtent2D VulkanSwapChain::GetSwapChainExtent() const
 {
     return m_SwapChainExtent;
+}
+
+std::vector<VkImageView> VulkanSwapChain::GetSwapChainImageViews() const
+{
+    return m_SwapChainImageViews;
 }
 
 VkSurfaceFormatKHR VulkanSwapChain::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
@@ -150,4 +165,26 @@ VkExtent2D VulkanSwapChain::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& cap
 
         return actualExtent;
     }
+}
+
+VkImageView VulkanSwapChain::CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags)
+{
+    VkImageViewCreateInfo viewInfo{};
+    viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    viewInfo.image = image;
+    viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    viewInfo.format = format;
+    viewInfo.subresourceRange.aspectMask = aspectFlags;
+    viewInfo.subresourceRange.baseMipLevel = 0;
+    viewInfo.subresourceRange.levelCount = 1;
+    viewInfo.subresourceRange.baseArrayLayer = 0;
+    viewInfo.subresourceRange.layerCount = 1;
+
+    VkImageView imageView;
+    if (vkCreateImageView(m_pVulkanDevice->GetDevice(), &viewInfo, nullptr, &imageView) != VK_SUCCESS)
+    {
+        throw std::runtime_error("failed to create texture image view!");
+    }
+
+    return imageView;
 }

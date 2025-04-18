@@ -69,7 +69,7 @@ private:
         m_pVulkanSwapChain = new VulkanSwapChain(m_pWindow, m_pVulkanDevice);
         m_pVulkanSwapChain->Create();
 
-        createImageViews();
+        m_pVulkanSwapChain->CreateImageViews();
         createRenderPass();
         createDescriptorSetLayout();
 		createGraphicsPipeline();
@@ -152,17 +152,6 @@ private:
         glfwDestroyWindow(m_pWindow->GetWindow());
 
         glfwTerminate();
-    }
-
-    void createImageViews() 
-    {
-        swapChainImageViews.resize(m_pVulkanSwapChain->GetSwapChainImages().size());
-
-        for (uint32_t i = 0; i < m_pVulkanSwapChain->GetSwapChainImages().size(); ++i)
-        {
-            swapChainImageViews[i] = createImageView(m_pVulkanSwapChain->GetSwapChainImages()[i], m_pVulkanSwapChain->GetSwapChainImageFormat(), 
-                VK_IMAGE_ASPECT_COLOR_BIT);
-        }
     }
 
     void createRenderPass() 
@@ -403,12 +392,13 @@ private:
 
     void createFramebuffers() 
     {
-        swapChainFramebuffers.resize(swapChainImageViews.size());
+        swapChainFramebuffers.resize(m_pVulkanSwapChain->GetSwapChainImageViews().size());
+        auto temp = m_pVulkanSwapChain->GetSwapChainImageViews().size();
 
-        for (size_t i = 0; i < swapChainImageViews.size(); i++) 
+        for (size_t i = 0; i < m_pVulkanSwapChain->GetSwapChainImageViews().size(); i++)
         {
             std::array<VkImageView, 2> attachments = {
-                swapChainImageViews[i],
+                m_pVulkanSwapChain->GetSwapChainImageViews()[i],
                 depthImageView
             };
 
@@ -962,9 +952,9 @@ private:
             vkDestroyFramebuffer(m_pVulkanDevice->GetDevice(), swapChainFramebuffers[i], nullptr);
         }
 
-        for (size_t i = 0; i < swapChainImageViews.size(); i++) 
+        for (size_t i = 0; i < m_pVulkanSwapChain->GetSwapChainImageViews().size(); i++)
         {
-            vkDestroyImageView(m_pVulkanDevice->GetDevice(), swapChainImageViews[i], nullptr);
+            vkDestroyImageView(m_pVulkanDevice->GetDevice(), m_pVulkanSwapChain->GetSwapChainImageViews()[i], nullptr);
         }
 
         m_pVulkanSwapChain->Cleanup();
@@ -986,7 +976,7 @@ private:
         cleanupSwapChain();
 
         m_pVulkanSwapChain->Create();
-        createImageViews();
+		m_pVulkanSwapChain->CreateImageViews();
         createDepthResources();
         createFramebuffers();
     }
@@ -1247,7 +1237,6 @@ private:
     VulkanSwapChain* m_pVulkanSwapChain;
 
     // Vulkan Member Variables
-    std::vector<VkImageView> swapChainImageViews;
     VkRenderPass renderPass;
     VkDescriptorSetLayout descriptorSetLayout;
     VkPipelineLayout pipelineLayout;
