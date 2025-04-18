@@ -44,7 +44,7 @@ public:
     {
         // Make Window
 		m_pWindow = new Window();
-		m_pWindow->Initialize(utils::WIDTH, utils::HEIGHT, "Vulkan Window");
+		m_pWindow->Initialize(utils::WINDOW_WIDTH, utils::WINDOW_HEIGHT, "Vulkan Window");
 
 		// Initialize Vulkan
 		m_pVulkanInstance = new VulkanInstance();

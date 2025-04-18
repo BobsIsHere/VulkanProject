@@ -1,7 +1,7 @@
 # ninja log v6
 93	747	7664414767667684	_deps/glfw-build/src/CMakeFiles/glfw.dir/platform.c.obj	cad46e2864b0471f
-70	191	7664912034538199	CMakeFiles/CopyShaders	4c5666e148017b1
-70	191	7664912034538199	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+20	90	7666730157601318	CMakeFiles/CopyShaders	4c5666e148017b1
+20	90	7666730157601318	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
 168	720	7664414768419945	_deps/glfw-build/src/CMakeFiles/glfw.dir/win32_thread.c.obj	f84dc4cc2eb6fd06
 147	767	7664414768207809	_deps/glfw-build/src/CMakeFiles/glfw.dir/null_joystick.c.obj	a30a5c5af824e28c
 134	789	7664414768067042	_deps/glfw-build/src/CMakeFiles/glfw.dir/null_monitor.c.obj	d05d5aee5680aa8e
@@ -29,11 +29,9 @@
 2441	2520	7664414791146548	_deps/glm-build/glm/glm.lib	66cdf09b3e6889ed
 5420	6005	7664912088136348	VulkanProject.exe	6c8b5134f071dd7a
 37	69	7664414766300396	clean	21a4d0550fd2b6b1
-36	1848	7666729429677621	build.ninja	3879bf3f98a8e58a
+36	1848	7666730244308171	build.ninja	3879bf3f98a8e58a
 45	265	7664414769123339	C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders/frag.spv	13b7d5e55d214390
 54	272	7664414769193435	C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders/vert.spv	ea447eef371e4952
 779	1004	7664414774522392	CMakeFiles/VulkanProject.dir/core/Window.cpp.obj	86ecd176e6d5dc9b
 789	2457	7664414774621322	CMakeFiles/VulkanProject.dir/core/VulkanInstance.cpp.obj	30623e1b6b315b61
 199	2752	7664912035904787	CMakeFiles/VulkanProject.dir/core/VulkanSwapChain.cpp.obj	292986d02bf1db8
-20	90	7666730157601318	CMakeFiles/CopyShaders	4c5666e148017b1
-20	90	7666730157601318	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
