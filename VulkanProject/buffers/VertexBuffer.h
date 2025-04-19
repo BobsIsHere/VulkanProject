@@ -18,7 +18,4 @@ public:
 	~VertexBuffer();
 
 	void CreateVertexBuffer(std::vector<Vertex> vertices);
-
-private:
-
 };
