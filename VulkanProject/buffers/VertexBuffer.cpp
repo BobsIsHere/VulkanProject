@@ -1,7 +1,8 @@
 #include "VertexBuffer.h"
+#include "core/VulkanDevice.h"
 
-VertexBuffer::VertexBuffer(VulkanDevice* pDevice) :
-	VulkanBuffer(pDevice)
+VertexBuffer::VertexBuffer(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool) :
+	VulkanBuffer(pDevice, pCommandPool)
 {
 }
 
@@ -23,10 +24,10 @@ void VertexBuffer::CreateVertexBuffer(std::vector<Vertex> vertices)
     memcpy(data, vertices.data(), (size_t)bufferSize);
     vkUnmapMemory(m_pVulkanDevice->GetDevice(), stagingBufferMemory);
 
-    createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
-        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
+    CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_Buffer, m_BufferMemory);
 
-    copyBuffer(stagingBuffer, vertexBuffer, bufferSize);
+    CopyBuffer(stagingBuffer, m_Buffer, bufferSize);
 
     vkDestroyBuffer(m_pVulkanDevice->GetDevice(), stagingBuffer, nullptr);
     vkFreeMemory(m_pVulkanDevice->GetDevice(), stagingBufferMemory, nullptr);

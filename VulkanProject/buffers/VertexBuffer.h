@@ -9,11 +9,12 @@
 #include "core/utils.h"
 
 class VulkanDevice;
+class VulkanCommandPool;
 
 class VertexBuffer final : public VulkanBuffer
 {
 public:
-	VertexBuffer(VulkanDevice* pDevice);
+	VertexBuffer(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool);
 	~VertexBuffer();
 
 	void CreateVertexBuffer(std::vector<Vertex> vertices);

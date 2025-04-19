@@ -16,12 +16,13 @@ public:
 	virtual void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 	virtual void Cleanup();
 
-private:
+protected:
 	VulkanDevice* m_pVulkanDevice;
 	VulkanCommandPool* m_pVulkanCommandPool;
 
 	VkBuffer m_Buffer;
 	VkDeviceMemory m_BufferMemory;
 
+private:
 	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 };
