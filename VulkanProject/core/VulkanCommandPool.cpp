@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "VulkanCommandPool.h"
-#include "utils.h"
+#include "utils/utils.h"
 #include "VulkanDevice.h"
 
 VulkanCommandPool::VulkanCommandPool(VulkanDevice* pDevice) :

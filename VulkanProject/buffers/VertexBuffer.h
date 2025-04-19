@@ -6,7 +6,7 @@
 #include "GLFW/glfw3.h"
 
 #include "VulkanBuffer.h"
-#include "core/utils.h"
+#include "utils/utils.h"
 
 class VulkanDevice;
 class VulkanCommandPool;

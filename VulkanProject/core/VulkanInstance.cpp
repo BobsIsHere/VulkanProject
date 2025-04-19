@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "VulkanInstance.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 VulkanInstance::VulkanInstance() :
     m_Instance{},

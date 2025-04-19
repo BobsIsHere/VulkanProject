@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "GraphicsPipeline.h"
-#include "core/utils.h"
+#include "utils/utils.h"
 #include "core/VulkanDevice.h"
 #include "core/VulkanRenderPass.h"
 

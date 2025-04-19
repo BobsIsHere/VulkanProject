@@ -31,7 +31,8 @@
 #include <array>
 #include <set>
 
-#include "core/utils.h"
+#include "utils/utils.h"
+
 #include "core/Window.h"
 #include "core/VulkanInstance.h"
 #include "core/VulkanDevice.h"

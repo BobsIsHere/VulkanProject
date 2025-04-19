@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "VulkanCommandBuffer.h"
-#include "utils.h"
+#include "utils/utils.h"
 #include "VulkanDevice.h"
 #include "VulkanCommandPool.h"
 #include "VulkanRenderPass.h"

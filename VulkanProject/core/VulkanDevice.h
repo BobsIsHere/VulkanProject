@@ -5,7 +5,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
-#include "utils.h"
+#include "utils/utils.h"
 #include "VulkanInstance.h"
 #include "Window.h"
 

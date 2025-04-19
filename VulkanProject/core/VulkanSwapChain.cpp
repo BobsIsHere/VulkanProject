@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "VulkanSwapChain.h"
-#include "utils.h"
+#include "utils/utils.h"
 
 VulkanSwapChain::VulkanSwapChain(Window* pWindow, VulkanDevice* pDevice) :
     m_pWindow{ pWindow },
