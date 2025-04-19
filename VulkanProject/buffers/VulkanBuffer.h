@@ -4,11 +4,12 @@
 #include "GLFW/glfw3.h"
 
 class VulkanDevice;
+class VulkanCommandPool;
 
 class VulkanBuffer
 {
 public:
-	VulkanBuffer(VulkanDevice* pDevice);
+	VulkanBuffer(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool);
 	~VulkanBuffer();
 
 	virtual void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
@@ -17,6 +18,7 @@ public:
 
 private:
 	VulkanDevice* m_pVulkanDevice;
+	VulkanCommandPool* m_pVulkanCommandPool;
 
 	VkBuffer m_Buffer;
 	VkDeviceMemory m_BufferMemory;

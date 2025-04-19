@@ -2,6 +2,7 @@
 
 #include "core/VulkanDevice.h"
 #include "core/VulkanCommandPool.h"
+#include "core/VulkanCommandBuffer.h"
 
 namespace CommandUtils
 {

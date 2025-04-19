@@ -3,9 +3,11 @@
 #include "VulkanBuffer.h"
 #include "core/VulkanDevice.h"
 #include "core/VulkanCommandBuffer.h"
+#include "utils/CommandUtils.h"
 
-VulkanBuffer::VulkanBuffer(VulkanDevice* pDevice) :
+VulkanBuffer::VulkanBuffer(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool) :
 	m_pVulkanDevice{ pDevice },
+	m_pVulkanCommandPool{ pCommandPool },
 	m_Buffer{},
 	m_BufferMemory{}
 {
@@ -46,13 +48,13 @@ void VulkanBuffer::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkM
 
 void VulkanBuffer::CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
 {
-    VulkanCommandBuffer commandBuffer{};
+    VkCommandBuffer commandBuffer = CommandUtils::BeginSingleTimeCommands(m_pVulkanDevice, m_pVulkanCommandPool);
 
     VkBufferCopy copyRegion{};
     copyRegion.size = size;
     vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
 
-    endSingleTimeCommands(commandBuffer);
+    CommandUtils::EndSingleTimeCommands(m_pVulkanDevice, m_pVulkanCommandPool, commandBuffer);
 }
 
 void VulkanBuffer::Cleanup()
