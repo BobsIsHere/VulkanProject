@@ -10,6 +10,7 @@
 
 class VulkanDevice;
 class VulkanCommandPool;
+class VulkanSwapChain;
 
 class UniformBuffer final : public VulkanBuffer
 {
@@ -18,6 +19,9 @@ public:
 	~UniformBuffer();
 
 	void CreateUniformBuffer();
+	void UpdateUniformBuffer(VulkanSwapChain* pSwapChain);
+
+	void* GetBufferMapped() const;
 
 private:
 	void* m_pBufferMapped;
