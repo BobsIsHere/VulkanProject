@@ -40,6 +40,7 @@
 #include "core/VulkanRenderPass.h"
 #include "core/VulkanCommandPool.h"
 #include "core/VulkanCommandBuffer.h"
+#include "core/VulkanDescriptorPool.h"
 
 #include "pipelines/GraphicsPipeline.h"
 
@@ -68,6 +69,8 @@ public:
         {
 			m_pVulkanCommandBuffers[idx] = new VulkanCommandBuffer(m_pVulkanDevice, m_pVulkanCommandPool, m_pVulkanRenderPass, m_pVulkanSwapChain, m_pGraphicsPipeline);
         }
+
+		m_pVulkanDescriptorPool = new VulkanDescriptorPool(m_pVulkanDevice);
 
 		// Initialize Graphics Pipeline
 		m_pGraphicsPipeline = new GraphicsPipeline(m_pVulkanDevice, m_pVulkanRenderPass);
@@ -122,7 +125,7 @@ private:
 			m_pUniformBuffers[idx]->CreateUniformBuffer();
 		}
 
-        createDescriptorPool();
+		m_pVulkanDescriptorPool->Create();
         createDescriptorSets();
         createCommandBuffers();
         createSyncObjects();
@@ -154,7 +157,7 @@ private:
 			m_pUniformBuffers[i]->Cleanup();
         }
 
-        vkDestroyDescriptorPool(device, descriptorPool, nullptr);
+		m_pVulkanDescriptorPool->Cleanup();
 
         vkDestroySampler(device, textureSampler, nullptr);
         vkDestroyImageView(device, textureImageView, nullptr);
@@ -195,6 +198,9 @@ private:
             delete m_pUniformBuffers[idx];
             m_pUniformBuffers[idx] = nullptr;
         }
+
+		delete m_pVulkanDescriptorPool;
+		m_pVulkanDescriptorPool = nullptr;
 
         delete m_pGraphicsPipeline;
         m_pGraphicsPipeline = nullptr;
@@ -429,33 +435,13 @@ private:
         }
     }
 
-    void createDescriptorPool() 
-    {
-        std::array<VkDescriptorPoolSize, 2> poolSizes{};
-        poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSizes[0].descriptorCount = static_cast<uint32_t>(utils::MAX_FRAMES_IN_FLIGHT);
-        poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[1].descriptorCount = static_cast<uint32_t>(utils::MAX_FRAMES_IN_FLIGHT);
-
-        VkDescriptorPoolCreateInfo poolInfo{};
-        poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
-        poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = static_cast<uint32_t>(utils::MAX_FRAMES_IN_FLIGHT);
-
-        if (vkCreateDescriptorPool(m_pVulkanDevice->GetDevice(), &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS)
-        {
-            throw std::runtime_error("failed to create descriptor pool!");
-        }
-    }
-
     void createDescriptorSets() 
     {
         std::vector<VkDescriptorSetLayout> layouts(utils::MAX_FRAMES_IN_FLIGHT, m_pGraphicsPipeline->GetDescriptorSetLayout());
 
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = descriptorPool;
+        allocInfo.descriptorPool = m_pVulkanDescriptorPool->GetDescriptorPool();
         allocInfo.descriptorSetCount = static_cast<uint32_t>(utils::MAX_FRAMES_IN_FLIGHT);
         allocInfo.pSetLayouts = layouts.data();
 
@@ -924,6 +910,7 @@ private:
 	GraphicsPipeline* m_pGraphicsPipeline;
 	VulkanCommandPool* m_pVulkanCommandPool;
     std::vector<VulkanCommandBuffer*> m_pVulkanCommandBuffers;
+	VulkanDescriptorPool* m_pVulkanDescriptorPool;
 
 	VertexBuffer* m_pVertexBuffer;
 	IndexBuffer* m_pIndexBuffer;
@@ -941,7 +928,6 @@ private:
     std::vector<uint32_t> indices;
     std::vector<Vertex> vertices;
 
-    VkDescriptorPool descriptorPool;
     std::vector<VkDescriptorSet> descriptorSets;
 
     VkBuffer stagingBuffer;

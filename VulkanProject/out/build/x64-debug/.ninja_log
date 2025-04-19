@@ -32,7 +32,7 @@
 3636	3716	7667660433269069	_deps/glm-build/glm/glm.lib	66cdf09b3e6889ed
 5131	5434	7667660448212542	VulkanProject.exe	35715acfc6ac4bd0
 28	63	7667660396466955	clean	21a4d0550fd2b6b1
-36	1848	7667708778230296	build.ninja	3879bf3f98a8e58a
+36	1848	7667719089067331	build.ninja	3879bf3f98a8e58a
 41	230	7667660399106293	C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders/frag.spv	13b7d5e55d214390
 48	243	7667660399221496	C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders/vert.spv	ea447eef371e4952
 1108	3160	7667660407989775	CMakeFiles/VulkanProject.dir/buffers/VertexBuffer.cpp.obj	6feecbc2e98eb21f
@@ -44,3 +44,8 @@
 1083	3472	7667660407733261	CMakeFiles/VulkanProject.dir/core/VulkanCommandPool.cpp.obj	5c51f09736b0eb79
 1117	3178	7667660408070770	CMakeFiles/VulkanProject.dir/buffers/IndexBuffer.cpp.obj	a04ec8f0a0ade570
 1100	3562	7667660407898637	CMakeFiles/VulkanProject.dir/buffers/VulkanBuffer.cpp.obj	633b16adb746f6a3
+40	106	7667723252899732	CMakeFiles/CopyShaders	4c5666e148017b1
+40	106	7667723252899732	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+111	1582	7667723253609155	CMakeFiles/VulkanProject.dir/core/VulkanDescriptorPool.cpp.obj	8e0a12d9a494c7ff
+107	3008	7667723253554028	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	844f63e287868ee8
+3009	3401	7667723282578607	VulkanProject.exe	ae6f3178f248e7e3
