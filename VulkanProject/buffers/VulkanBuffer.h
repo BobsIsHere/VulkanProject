@@ -16,6 +16,9 @@ public:
 	virtual void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 	virtual void Cleanup();
 
+	VkBuffer GetBuffer() const;
+	VkDeviceMemory GetBufferMemory() const;
+
 protected:
 	VulkanDevice* m_pVulkanDevice;
 	VulkanCommandPool* m_pVulkanCommandPool;

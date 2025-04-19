@@ -63,6 +63,16 @@ void VulkanBuffer::Cleanup()
     vkFreeMemory(m_pVulkanDevice->GetDevice(), m_BufferMemory, nullptr);
 }
 
+VkBuffer VulkanBuffer::GetBuffer() const
+{
+    return m_Buffer;
+}
+
+VkDeviceMemory VulkanBuffer::GetBufferMemory() const
+{
+    return m_BufferMemory;
+}
+
 uint32_t VulkanBuffer::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
 {
     VkPhysicalDeviceMemoryProperties memProperties;
