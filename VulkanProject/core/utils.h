@@ -14,6 +14,7 @@
 #include <glm/gtx/hash.hpp>
 
 #include <optional>
+#include <string>
 #include <array>
 
 #ifdef NDEBUG
