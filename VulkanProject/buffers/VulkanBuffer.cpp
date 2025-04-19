@@ -2,10 +2,12 @@
 
 #include "VulkanBuffer.h"
 #include "core/VulkanDevice.h"
+#include "core/VulkanCommandBuffer.h"
 
 VulkanBuffer::VulkanBuffer(VulkanDevice* pDevice) :
 	m_pVulkanDevice{ pDevice },
-	m_Buffer{}
+	m_Buffer{},
+	m_BufferMemory{}
 {
 }
 
@@ -13,7 +15,7 @@ VulkanBuffer::~VulkanBuffer()
 {
 }
 
-void VulkanBuffer::Create(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+void VulkanBuffer::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 {
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
@@ -40,6 +42,17 @@ void VulkanBuffer::Create(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryP
     }
 
     vkBindBufferMemory(m_pVulkanDevice->GetDevice(), buffer, bufferMemory, 0);
+}
+
+void VulkanBuffer::CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
+{
+    VulkanCommandBuffer commandBuffer{};
+
+    VkBufferCopy copyRegion{};
+    copyRegion.size = size;
+    vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+
+    endSingleTimeCommands(commandBuffer);
 }
 
 void VulkanBuffer::Cleanup()

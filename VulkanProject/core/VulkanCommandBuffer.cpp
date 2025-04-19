@@ -37,41 +37,6 @@ void VulkanCommandBuffer::Create()
     }
 }
 
-VkCommandBuffer VulkanCommandBuffer::Begin()
-{
-    VkCommandBufferAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandPool = m_pVulkanCommandPool->GetCommandPool();
-    allocInfo.commandBufferCount = 1;
-
-    VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(m_pVulkanDevice->GetDevice(), &allocInfo, &commandBuffer);
-
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-    vkBeginCommandBuffer(commandBuffer, &beginInfo);
-
-    return commandBuffer;
-}
-
-void VulkanCommandBuffer::End()
-{
-    vkEndCommandBuffer(m_CommandBuffer);
-
-    VkSubmitInfo submitInfo{};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &m_CommandBuffer;
-
-    vkQueueSubmit(m_pVulkanDevice->GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
-    vkQueueWaitIdle(m_pVulkanDevice->GetGraphicsQueue());
-
-    vkFreeCommandBuffers(m_pVulkanDevice->GetDevice(), m_pVulkanCommandPool->GetCommandPool(), 1, &m_CommandBuffer);
-}
-
 void VulkanCommandBuffer::Record(uint32_t imageIdx)
 {
     //VkCommandBufferBeginInfo beginInfo{};

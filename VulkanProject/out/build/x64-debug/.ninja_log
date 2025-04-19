@@ -30,7 +30,7 @@
 3022	3144	7666749846803262	_deps/glm-build/glm/glm.lib	66cdf09b3e6889ed
 2723	3073	7666970425778817	VulkanProject.exe	c1a7fbce971c3b53
 13	48	7666749816106899	clean	21a4d0550fd2b6b1
-36	1848	7666998254829539	build.ninja	3879bf3f98a8e58a
+36	1848	7667607637797681	build.ninja	3879bf3f98a8e58a
 43	295	7666749819343820	C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders/frag.spv	13b7d5e55d214390
 51	289	7666749819343820	C:/GitHubFiles/GraphicsProg2/VulkanProject/shaders/vert.spv	ea447eef371e4952
 1088	1355	7666749827456813	CMakeFiles/VulkanProject.dir/core/Window.cpp.obj	86ecd176e6d5dc9b

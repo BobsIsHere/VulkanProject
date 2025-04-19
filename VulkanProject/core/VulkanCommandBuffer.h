@@ -18,8 +18,6 @@ public:
 	~VulkanCommandBuffer();
 
 	void Create();
-	VkCommandBuffer Begin();
-	void End();
 	void Record(uint32_t imageIdx);
 
 	VkCommandBuffer GetCommandBuffer() const;
