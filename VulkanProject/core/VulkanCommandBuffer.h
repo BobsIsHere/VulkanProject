@@ -5,6 +5,10 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
+#include "buffers/VertexBuffer.h"
+#include "buffers/IndexBuffer.h"
+#include "VulkanDescriptorSet.h"
+
 class VulkanDevice;
 class VulkanCommandPool;
 class VulkanRenderPass;
@@ -18,7 +22,10 @@ public:
 	~VulkanCommandBuffer();
 
 	void Create();
-	void Record(uint32_t imageIdx);
+	void Cleanup();
+
+	void Record(uint32_t imageIdx, std::vector<VkFramebuffer> swapChainFramebuffers, VertexBuffer* m_pVertexBuffer, IndexBuffer* m_pIndexBuffer, 
+		std::vector<VulkanDescriptorSet*> m_pVulkanDescriptorSets, uint32_t currentFrame, std::vector<uint32_t> indices);
 
 	VkCommandBuffer GetCommandBuffer() const;
 

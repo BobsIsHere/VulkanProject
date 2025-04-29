@@ -37,66 +37,73 @@ void VulkanCommandBuffer::Create()
     }
 }
 
-void VulkanCommandBuffer::Record(uint32_t imageIdx)
+void VulkanCommandBuffer::Cleanup()
 {
-    //VkCommandBufferBeginInfo beginInfo{};
-    //beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    //beginInfo.flags = 0; // Optional
-    //beginInfo.pInheritanceInfo = nullptr; // Optional
+    
+}
 
-    //if (vkBeginCommandBuffer(m_CommandBuffer, &beginInfo) != VK_SUCCESS)
-    //{
-    //    throw std::runtime_error("failed to begin recording command buffer!");
-    //}
+void VulkanCommandBuffer::Record(uint32_t imageIdx, std::vector<VkFramebuffer> swapChainFramebuffers, VertexBuffer* m_pVertexBuffer, IndexBuffer* m_pIndexBuffer, 
+    std::vector<VulkanDescriptorSet*> m_pVulkanDescriptorSets, uint32_t currentFrame, std::vector<uint32_t> indices)
+{
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = 0; // Optional
+    beginInfo.pInheritanceInfo = nullptr; // Optional
 
-    //VkRenderPassBeginInfo renderPassInfo{};
-    //renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-    //renderPassInfo.renderPass = m_pVulkanRenderPass->GetRenderPass();
-    //renderPassInfo.framebuffer = swapChainFramebuffers[imageIdx];
-    //renderPassInfo.renderArea.offset = { 0, 0 };
-    //renderPassInfo.renderArea.extent = m_pVulkanSwapChain->GetSwapChainExtent();
+    if (vkBeginCommandBuffer(m_CommandBuffer, &beginInfo) != VK_SUCCESS)
+    {
+        throw std::runtime_error("failed to begin recording command buffer!");
+    }
 
-    //std::array<VkClearValue, 2> clearValues{};
-    //clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
-    //clearValues[1].depthStencil = { 1.0f, 0 };
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = m_pVulkanRenderPass->GetRenderPass();
+    renderPassInfo.framebuffer = swapChainFramebuffers[imageIdx];
+    renderPassInfo.renderArea.offset = { 0, 0 };
+    renderPassInfo.renderArea.extent = m_pVulkanSwapChain->GetSwapChainExtent();
 
-    //renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-    //renderPassInfo.pClearValues = clearValues.data();
+    std::array<VkClearValue, 2> clearValues{};
+    clearValues[0].color = { {0.0f, 0.0f, 0.0f, 1.0f} };
+    clearValues[1].depthStencil = { 1.0f, 0 };
 
-    //vkCmdBeginRenderPass(m_CommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
 
-    //vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pGraphicsPipeline->GetGraphicsPipeline());
+    vkCmdBeginRenderPass(m_CommandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-    //VkViewport viewport{};
-    //viewport.x = 0.0f;
-    //viewport.y = 0.0f;
-    //viewport.width = static_cast<float>(m_pVulkanSwapChain->GetSwapChainExtent().width);
-    //viewport.height = static_cast<float>(m_pVulkanSwapChain->GetSwapChainExtent().height);
-    //viewport.minDepth = 0.0f;
-    //viewport.maxDepth = 1.0f;
-    //vkCmdSetViewport(m_CommandBuffer, 0, 1, &viewport);
+    vkCmdBindPipeline(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pGraphicsPipeline->GetGraphicsPipeline());
 
-    //VkRect2D scissor{};
-    //scissor.offset = { 0, 0 };
-    //scissor.extent = m_pVulkanSwapChain->GetSwapChainExtent();
-    //vkCmdSetScissor(m_CommandBuffer, 0, 1, &scissor);
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = static_cast<float>(m_pVulkanSwapChain->GetSwapChainExtent().width);
+    viewport.height = static_cast<float>(m_pVulkanSwapChain->GetSwapChainExtent().height);
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    vkCmdSetViewport(m_CommandBuffer, 0, 1, &viewport);
 
-    //VkBuffer vertexBuffers[] = { vertexBuffer };
-    //VkDeviceSize offsets[] = { 0 };
-    //vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);
+    VkRect2D scissor{};
+    scissor.offset = { 0, 0 };
+    scissor.extent = m_pVulkanSwapChain->GetSwapChainExtent();
+    vkCmdSetScissor(m_CommandBuffer, 0, 1, &scissor);
 
-    //vkCmdBindIndexBuffer(m_CommandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
+    VkBuffer vertexBuffers[] = { m_pVertexBuffer->GetBuffer() };
+    VkDeviceSize offsets[] = { 0 };
+    vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);
 
-    //vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pGraphicsPipeline->GetPipelineLayout(), 0, 1,
-    //    &descriptorSets[currentFrame], 0, nullptr);
-    //vkCmdDrawIndexed(m_CommandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+    vkCmdBindIndexBuffer(m_CommandBuffer, m_pIndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
 
-    //vkCmdEndRenderPass(m_CommandBuffer);
+    const VkDescriptorSet descriptorSet{ m_pVulkanDescriptorSets[currentFrame]->GetDescriptorSet() };
+    vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pGraphicsPipeline->GetPipelineLayout(), 0, 1,
+        &descriptorSet, 0, nullptr);
+    vkCmdDrawIndexed(m_CommandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
-    //if (vkEndCommandBuffer(m_CommandBuffer) != VK_SUCCESS)
-    //{
-    //    throw std::runtime_error("failed to record command buffer!");
-    //}
+    vkCmdEndRenderPass(m_CommandBuffer);
+
+    if (vkEndCommandBuffer(m_CommandBuffer) != VK_SUCCESS)
+    {
+        throw std::runtime_error("failed to record command buffer!");
+    }
 }
 
 VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
