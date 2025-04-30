@@ -42,6 +42,7 @@
 #include "core/VulkanCommandBuffer.h"
 #include "core/VulkanDescriptorPool.h"
 #include "core/VulkanDescriptorSet.h"
+#include "core/Renderer.h"
 
 #include "pipelines/GraphicsPipeline.h"
 
@@ -73,8 +74,7 @@ public:
 		m_pVulkanDescriptorSets.resize(utils::MAX_FRAMES_IN_FLIGHT);
         for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
         {
-			m_pVulkanCommandBuffers[idx] = new VulkanCommandBuffer(m_pVulkanDevice, m_pVulkanCommandPool, m_pVulkanRenderPass, 
-                m_pVulkanSwapChain, m_pGraphicsPipeline);
+			m_pVulkanCommandBuffers[idx] = new VulkanCommandBuffer();
 			m_pVulkanDescriptorSets[idx] = new VulkanDescriptorSet(m_pVulkanDevice, m_pVulkanDescriptorPool);
         }
 
@@ -88,6 +88,8 @@ public:
         {
 			m_pUniformBuffers[idx] = new UniformBuffer(m_pVulkanDevice, m_pVulkanCommandPool);
         }
+
+        m_pRenderer = new Renderer(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pWindow);
 
         initVulkan();
         mainLoop();
@@ -113,8 +115,8 @@ private:
         m_pGraphicsPipeline->CreateDescriptorSetLayout();
         m_pGraphicsPipeline->CreatePipeline();
         m_pVulkanCommandPool->Create();
-        createDepthResources();
-        createFramebuffers();
+        m_pRenderer->CreateDepthResources();
+        m_pRenderer->CreateFrameBuffers();
         createTextureImage();
         createTextureImageView();
         createTextureSampler();
@@ -131,15 +133,11 @@ private:
 		m_pVulkanDescriptorPool->Create();
         for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
         {
+            m_pVulkanCommandBuffers[idx]->Create(m_pVulkanDevice, m_pVulkanCommandPool);
 			m_pVulkanDescriptorSets[idx]->Create(m_pGraphicsPipeline, m_pUniformBuffers[idx], textureImageView, textureSampler);
         }
 
-        for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
-        {
-            m_pVulkanCommandBuffers[idx]->Create();
-        }
-
-        createSyncObjects();
+        m_pRenderer->CreateSyncObjects();
     }
 
     void mainLoop() 
@@ -147,7 +145,8 @@ private:
         while (!glfwWindowShouldClose(m_pWindow->GetWindow())) 
         {
             glfwPollEvents();
-            drawFrame();
+            m_pRenderer->DrawFrame(m_pUniformBuffers, m_pVertexBuffer, m_pIndexBuffer, m_pVulkanCommandBuffers, m_pGraphicsPipeline, m_pVulkanDescriptorSets,
+            indices);
         }
 
         vkDeviceWaitIdle(m_pVulkanDevice->GetDevice()); 
@@ -157,7 +156,7 @@ private:
     {
         const auto& device{ m_pVulkanDevice->GetDevice() };
 
-        cleanupSwapChain();
+        m_pRenderer->CleanupSwapChain();
 
 		m_pGraphicsPipeline->CleanupPipeline();
 
@@ -181,12 +180,7 @@ private:
 		m_pIndexBuffer->Cleanup();
 		m_pVertexBuffer->Cleanup();
 
-        for (size_t i = 0; i < utils::MAX_FRAMES_IN_FLIGHT; ++i)
-        {
-            vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
-            vkDestroySemaphore(device, imageAvailableSemaphores[i], nullptr);
-            vkDestroyFence(device, inFlightFences[i], nullptr);
-        }
+        m_pRenderer->Cleanup();
 
 		m_pVulkanCommandPool->Cleanup();
 
@@ -201,6 +195,9 @@ private:
 
     void CleanupResources()
     {
+        delete m_pRenderer;
+        m_pRenderer = nullptr;
+
         delete m_pVulkanRenderPass;
         m_pVulkanRenderPass = nullptr;
 
@@ -208,6 +205,9 @@ private:
         {
             delete m_pUniformBuffers[idx];
             m_pUniformBuffers[idx] = nullptr;
+
+            delete m_pVulkanCommandBuffers[idx];
+            m_pVulkanCommandBuffers[idx] = nullptr;
         }
 
 		delete m_pVulkanDescriptorPool;
@@ -230,45 +230,6 @@ private:
 
         delete m_pVulkanInstance;
         m_pVulkanInstance = nullptr;
-    }
-
-    void createFramebuffers() 
-    {
-        swapChainFramebuffers.resize(m_pVulkanSwapChain->GetSwapChainImageViews().size());
-        auto temp = m_pVulkanSwapChain->GetSwapChainImageViews().size();
-
-        for (size_t i = 0; i < m_pVulkanSwapChain->GetSwapChainImageViews().size(); i++)
-        {
-            std::array<VkImageView, 2> attachments = {
-                m_pVulkanSwapChain->GetSwapChainImageViews()[i],
-                depthImageView
-            };
-
-            VkFramebufferCreateInfo framebufferInfo{};
-            framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-            framebufferInfo.renderPass = m_pVulkanRenderPass->GetRenderPass();
-            framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-            framebufferInfo.pAttachments = attachments.data();
-            framebufferInfo.width = m_pVulkanSwapChain->GetSwapChainExtent().width;
-            framebufferInfo.height = m_pVulkanSwapChain->GetSwapChainExtent().height;
-            framebufferInfo.layers = 1;
-
-            if (vkCreateFramebuffer(m_pVulkanDevice->GetDevice(), &framebufferInfo, nullptr,
-                &swapChainFramebuffers[i]) != VK_SUCCESS) 
-            {
-                throw std::runtime_error("failed to create framebuffer!");
-            }
-        }
-    }
-
-    void createDepthResources() 
-    {
-        VkFormat depthFormat = findDepthFormat();
-
-        createImage(m_pVulkanSwapChain->GetSwapChainExtent().width, m_pVulkanSwapChain->GetSwapChainExtent().height, depthFormat, 
-            VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, 
-            depthImage, depthImageMemory);
-        depthImageView = createImageView(depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
     }
 
     void createTextureImage() 
@@ -446,143 +407,6 @@ private:
         }
     }
 
-    void drawFrame() 
-    {
-        vkWaitForFences(m_pVulkanDevice->GetDevice(), 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
-
-        uint32_t imageIndex;
-        VkResult result = vkAcquireNextImageKHR(m_pVulkanDevice->GetDevice(), m_pVulkanSwapChain->GetSwapChain(), UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
-
-        if (result == VK_ERROR_OUT_OF_DATE_KHR) 
-        {
-            recreateSwapChain();
-            return;
-        }
-        else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) 
-        {
-            throw std::runtime_error("failed to acquire swap chain image!");
-        }
-
-        m_pUniformBuffers[currentFrame]->UpdateUniformBuffer(m_pVulkanSwapChain);
-
-        vkResetFences(m_pVulkanDevice->GetDevice(), 1, &inFlightFences[currentFrame]);
-
-        vkResetCommandBuffer(m_pVulkanCommandBuffers[currentFrame]->GetCommandBuffer(), /*VkCommandBufferResetFlagBits*/ 0);
-        m_pVulkanCommandBuffers[currentFrame]->Record(imageIndex, swapChainFramebuffers, m_pVertexBuffer, m_pIndexBuffer, m_pVulkanDescriptorSets, currentFrame, indices);
-
-        VkSubmitInfo submitInfo{};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
-        VkSemaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
-        VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
-        submitInfo.waitSemaphoreCount = 1;
-        submitInfo.pWaitSemaphores = waitSemaphores;
-        submitInfo.pWaitDstStageMask = waitStages;
-
-        const VkCommandBuffer commandBuffer{ m_pVulkanCommandBuffers[currentFrame]->GetCommandBuffer() };
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &commandBuffer;
-
-        VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
-        submitInfo.signalSemaphoreCount = 1;
-        submitInfo.pSignalSemaphores = signalSemaphores;
-
-        if (vkQueueSubmit(m_pVulkanDevice->GetGraphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS)
-        {
-            throw std::runtime_error("failed to submit draw command buffer!");
-        }
-
-        VkPresentInfoKHR presentInfo{};
-        presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-
-        presentInfo.waitSemaphoreCount = 1;
-        presentInfo.pWaitSemaphores = signalSemaphores;
-
-        VkSwapchainKHR swapChains[] = { m_pVulkanSwapChain->GetSwapChain() };
-        presentInfo.swapchainCount = 1;
-        presentInfo.pSwapchains = swapChains;
-
-        presentInfo.pImageIndices = &imageIndex;
-
-        result = vkQueuePresentKHR(m_pVulkanDevice->GetPresentQueue(), &presentInfo);
-
-        if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || m_pWindow->GetFramebufferResized()) 
-        {
-            m_pWindow->SetFramebufferResized(false);
-            recreateSwapChain();
-        }
-        else if (result != VK_SUCCESS) 
-        {
-            throw std::runtime_error("failed to present swap chain image!");
-        }
-
-        currentFrame = (currentFrame + 1) % utils::MAX_FRAMES_IN_FLIGHT;
-    }
-
-    void createSyncObjects() 
-    {
-        imageAvailableSemaphores.resize(utils::MAX_FRAMES_IN_FLIGHT);
-        renderFinishedSemaphores.resize(utils::MAX_FRAMES_IN_FLIGHT);
-        inFlightFences.resize(utils::MAX_FRAMES_IN_FLIGHT);
-
-        VkSemaphoreCreateInfo semaphoreInfo{};
-        semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-        VkFenceCreateInfo fenceInfo{};
-        fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-        fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-
-        for (size_t i = 0; i < utils::MAX_FRAMES_IN_FLIGHT; ++i)
-        {
-            if (vkCreateSemaphore(m_pVulkanDevice->GetDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-                vkCreateSemaphore(m_pVulkanDevice->GetDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-                vkCreateFence(m_pVulkanDevice->GetDevice(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS)
-            {
-                throw std::runtime_error("failed to create synchronization objects for a frame!");
-            }
-        }
-    }
-
-    void cleanupSwapChain() 
-    {
-        vkDestroyImageView(m_pVulkanDevice->GetDevice(), depthImageView, nullptr);
-        vkDestroyImage(m_pVulkanDevice->GetDevice(), depthImage, nullptr);
-        vkFreeMemory(m_pVulkanDevice->GetDevice(), depthImageMemory, nullptr);
-
-        for (size_t i = 0; i < swapChainFramebuffers.size(); i++) 
-        {
-            vkDestroyFramebuffer(m_pVulkanDevice->GetDevice(), swapChainFramebuffers[i], nullptr);
-        }
-
-        for (size_t i = 0; i < m_pVulkanSwapChain->GetSwapChainImageViews().size(); i++)
-        {
-            vkDestroyImageView(m_pVulkanDevice->GetDevice(), m_pVulkanSwapChain->GetSwapChainImageViews()[i], nullptr);
-        }
-
-        m_pVulkanSwapChain->Cleanup();
-    }
-
-    void recreateSwapChain() 
-    {
-        int width = 0;
-        int height = 0;
-
-        while (width == 0 || height == 0) 
-        {
-            glfwGetFramebufferSize(m_pWindow->GetWindow(), &width, &height);
-            glfwWaitEvents();
-        }
-
-        vkDeviceWaitIdle(m_pVulkanDevice->GetDevice());
-
-        cleanupSwapChain();
-
-        m_pVulkanSwapChain->Create();
-		m_pVulkanSwapChain->CreateImageViews();
-        createDepthResources();
-        createFramebuffers();
-    }
-
     uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) 
     {
         VkPhysicalDeviceMemoryProperties memProperties;
@@ -751,35 +575,6 @@ private:
         endSingleTimeCommands(commandBuffer);
     }
 
-    VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) 
-    {
-        for (VkFormat format : candidates) 
-        {
-            VkFormatProperties props;
-            vkGetPhysicalDeviceFormatProperties(m_pVulkanDevice->GetPhysicalDevice(), format, &props);
-
-            if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) 
-            {
-                return format;
-            }
-            else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) 
-            {
-                return format;
-            }
-        }
-
-        throw std::runtime_error("failed to find supported format!");
-    }
-
-    VkFormat findDepthFormat() 
-    {
-        return findSupportedFormat(
-            { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
-            VK_IMAGE_TILING_OPTIMAL,
-            VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-        );
-    }
-
     bool hasStencilComponent(VkFormat format) 
     {
         return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
@@ -796,19 +591,13 @@ private:
     std::vector<VulkanCommandBuffer*> m_pVulkanCommandBuffers;
 	VulkanDescriptorPool* m_pVulkanDescriptorPool;
 	std::vector<VulkanDescriptorSet*> m_pVulkanDescriptorSets;
+    Renderer* m_pRenderer;
 
 	VertexBuffer* m_pVertexBuffer;
 	IndexBuffer* m_pIndexBuffer;
     std::vector<UniformBuffer*> m_pUniformBuffers;
 
     // Vulkan Member Variables
-    std::vector<VkFramebuffer> swapChainFramebuffers;
-    std::vector<VkSemaphore> imageAvailableSemaphores;
-    std::vector<VkSemaphore> renderFinishedSemaphores;
-    std::vector<VkFence> inFlightFences;
-
-    uint32_t currentFrame = 0; 
-
     std::vector<uint32_t> indices;
     std::vector<Vertex> vertices;
 
@@ -819,10 +608,6 @@ private:
 
     VkImageView textureImageView;
     VkSampler textureSampler;
-
-    VkImage depthImage;
-    VkDeviceMemory depthImageMemory;
-    VkImageView depthImageView;
 };
 
 int main()

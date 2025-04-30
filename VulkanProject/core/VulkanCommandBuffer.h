@@ -18,23 +18,24 @@ class GraphicsPipeline;
 class VulkanCommandBuffer
 {
 public:
-	VulkanCommandBuffer(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool, VulkanRenderPass* pRenderPass, VulkanSwapChain* pSwapChain, GraphicsPipeline* pGraphicsPipeline);
+	VulkanCommandBuffer();
 	~VulkanCommandBuffer();
 
-	void Create();
-	void Cleanup();
+	void Create(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool);
 
-	void Record(uint32_t imageIdx, std::vector<VkFramebuffer> swapChainFramebuffers, VertexBuffer* m_pVertexBuffer, IndexBuffer* m_pIndexBuffer, 
-		std::vector<VulkanDescriptorSet*> m_pVulkanDescriptorSets, uint32_t currentFrame, std::vector<uint32_t> indices);
+	void Reset(VkCommandBufferResetFlags flags = 0) const;
+	void Begin(VkCommandBufferUsageFlags flags = 0) const;
+	void End() const;
 
+	void Submit(VkQueue queue, const VkSubmitInfo& info, VkFence fence = VK_NULL_HANDLE) const;
+
+	void SetCommandBuffer(VkCommandBuffer commandBuffer);
 	VkCommandBuffer GetCommandBuffer() const;
 
-private:
-	VulkanDevice* m_pVulkanDevice;
-	VulkanCommandPool* m_pVulkanCommandPool;
-	VulkanRenderPass* m_pVulkanRenderPass;
-	VulkanSwapChain* m_pVulkanSwapChain;
-	GraphicsPipeline* m_pGraphicsPipeline;
+	void Record(uint32_t imageIdx, std::vector<VkFramebuffer> swapChainFramebuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, VulkanRenderPass* pRenderPass,
+		VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<VulkanDescriptorSet*> m_pVulkanDescriptorSets, 
+		uint32_t currentFrame, std::vector<uint32_t> indices);
 
+private:
 	VkCommandBuffer m_CommandBuffer;
 };
