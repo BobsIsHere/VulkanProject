@@ -9,7 +9,7 @@ class VulkanDevice;
 class VulkanCommandPool;
 class VulkanSwapChain;
 
-class VulkanImage final
+class VulkanImage
 {
 public:
 	VulkanImage(VulkanDevice* pDevice);
@@ -25,7 +25,7 @@ public:
 	VkImageView GetImageView() const;
 	VkFormat GetFormat() const;
 
-private:
+protected:
 	VulkanDevice* m_pVulkanDevice;
 
 	VkImage m_Image;
@@ -37,6 +37,7 @@ private:
 		VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 	VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 
+private:
 	VkFormat FindFormat();
 	VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);

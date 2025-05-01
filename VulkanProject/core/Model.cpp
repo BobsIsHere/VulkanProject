@@ -1,6 +1,8 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <3rdParty/tiny_obj_loader.h>
 
+#include <iostream>
+
 #include "Model.h"
 
 Model::Model(std::string fileName) :

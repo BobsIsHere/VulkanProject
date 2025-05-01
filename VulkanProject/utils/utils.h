@@ -108,6 +108,4 @@ namespace utils
     const uint32_t WINDOW_WIDTH = 800;
     const uint32_t WINDOW_HEIGHT = 600;
     const int MAX_FRAMES_IN_FLIGHT = 2;
-
-    const std::string TEXTURE_PATH = "textures/viking_room.png";
 }

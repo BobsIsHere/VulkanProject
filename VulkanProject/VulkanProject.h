@@ -40,6 +40,7 @@
 #include "core/VulkanDescriptorSet.h"
 #include "core/Renderer.h"
 #include "core/Model.h"
+#include "core/Texture.h"
 
 #include "pipelines/GraphicsPipeline.h"
 
@@ -59,22 +60,6 @@ private:
     void CleanupVulkan();
     void CleanupResources();
 
-    void CreateTextureImage();
-    void CreateTextureImageView();
-    void CreateTextureSampler();
-
-    void CreateImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage,
-        VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
-    VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
-
-    uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-    void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
-    VkCommandBuffer BeginSingleTimeCommands();
-    void EndSingleTimeCommands(VkCommandBuffer commandBuffer);
-    void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
-    void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
-    bool HasStencilComponent(VkFormat format);
-
     // Own Member Variables
     Window* m_pWindow;
     VulkanInstance* m_pVulkanInstance;
@@ -88,17 +73,9 @@ private:
     std::vector<VulkanDescriptorSet*> m_pVulkanDescriptorSets;
     Renderer* m_pRenderer;
     Model* m_pVikingModel;
+    Texture* m_pVikingTexture;
 
     VertexBuffer* m_pVertexBuffer;
     IndexBuffer* m_pIndexBuffer;
     std::vector<UniformBuffer*> m_pUniformBuffers;
-
-    // Vulkan Member Variables
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
-    VkImage textureImage;
-    VkDeviceMemory textureImageMemory;
-
-    VkImageView textureImageView;
-    VkSampler textureSampler;
 };
