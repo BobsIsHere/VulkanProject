@@ -15,6 +15,7 @@ class IndexBuffer;
 class VulkanCommandBuffer;
 class GraphicsPipeline;
 class VulkanDescriptorSet;
+class VulkanImage;
 
 class Renderer final
 {
@@ -22,6 +23,7 @@ public:
 	Renderer(VulkanDevice* device, VulkanSwapChain* swapChain, VulkanRenderPass* renderPass, Window* window);
 	~Renderer();
 
+	void CreateDepthResources();
 	void Cleanup();
 
 	void CreateFrameBuffers();
@@ -31,7 +33,6 @@ public:
 	void CleanupSwapChain();
 	void RecreateSwapChain();
 	void CreateSyncObjects();
-	void CreateDepthResources();
 
 private:
 	VulkanDevice* m_pVulkanDevice;
@@ -46,14 +47,5 @@ private:
 
 	uint32_t m_CurrentFrame = 0;
 
-	VkImage m_DepthImage;
-	VkDeviceMemory m_DepthImageMemory;
-	VkImageView m_DepthImageView;
-
-	VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
-	VkFormat FindDepthFormat();
-	void CreateImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage,
-		VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
-	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-	VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
+	VulkanImage* m_pDepthImage;
 };
