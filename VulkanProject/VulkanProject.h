@@ -39,6 +39,7 @@
 #include "core/VulkanDescriptorPool.h"
 #include "core/VulkanDescriptorSet.h"
 #include "core/Renderer.h"
+#include "core/Model.h"
 
 #include "pipelines/GraphicsPipeline.h"
 
@@ -66,8 +67,6 @@ private:
         VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
     VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 
-    void LoadModel();
-
     uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
     void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
     VkCommandBuffer BeginSingleTimeCommands();
@@ -88,15 +87,13 @@ private:
     VulkanDescriptorPool* m_pVulkanDescriptorPool;
     std::vector<VulkanDescriptorSet*> m_pVulkanDescriptorSets;
     Renderer* m_pRenderer;
+    Model* m_pVikingModel;
 
     VertexBuffer* m_pVertexBuffer;
     IndexBuffer* m_pIndexBuffer;
     std::vector<UniformBuffer*> m_pUniformBuffers;
 
     // Vulkan Member Variables
-    std::vector<uint32_t> indices;
-    std::vector<Vertex> vertices;
-
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
     VkImage textureImage;

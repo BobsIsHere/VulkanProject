@@ -1,9 +1,6 @@
 ﻿#define STB_IMAGE_IMPLEMENTATION
 #include <3rdParty/stb_image.h>
 
-#define TINYOBJLOADER_IMPLEMENTATION
-#include <3rdParty/tiny_obj_loader.h>
-
 #include "VulkanProject.h"
 
 void VulkanProject::Run()
@@ -44,6 +41,8 @@ void VulkanProject::Run()
 
     m_pRenderer = new Renderer(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pWindow);
 
+    m_pVikingModel = new Model("models/viking_room.obj");
+
     InitVulkan();
     MainLoop();
     CleanupVulkan();
@@ -71,11 +70,11 @@ void VulkanProject::InitVulkan()
     CreateTextureImage();
     CreateTextureImageView();
     CreateTextureSampler();
-    LoadModel();
+    m_pVikingModel->LoadModel();
 
     // Create Buffers
-    m_pVertexBuffer->CreateVertexBuffer(vertices);
-    m_pIndexBuffer->CreateIndexBuffer(indices);
+    m_pVertexBuffer->CreateVertexBuffer(m_pVikingModel->GetVertices());
+    m_pIndexBuffer->CreateIndexBuffer(m_pVikingModel->GetIndices());
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
         m_pUniformBuffers[idx]->CreateUniformBuffer();
@@ -97,7 +96,7 @@ void VulkanProject::MainLoop()
     {
         glfwPollEvents();
         m_pRenderer->DrawFrame(m_pUniformBuffers, m_pVertexBuffer, m_pIndexBuffer, m_pVulkanCommandBuffers, m_pGraphicsPipeline, m_pVulkanDescriptorSets,
-            indices);
+            m_pVikingModel->GetIndices());
     }
 
     vkDeviceWaitIdle(m_pVulkanDevice->GetDevice());
@@ -146,6 +145,9 @@ void VulkanProject::CleanupVulkan()
 
 void VulkanProject::CleanupResources()
 {
+    delete m_pVikingModel;
+    m_pVikingModel = nullptr;
+
     delete m_pRenderer;
     m_pRenderer = nullptr;
 
@@ -312,50 +314,6 @@ VkImageView VulkanProject::CreateImageView(VkImage image, VkFormat format, VkIma
     }
 
     return imageView;
-}
-
-void VulkanProject::LoadModel()
-{
-    tinyobj::attrib_t attrib;
-    std::vector<tinyobj::shape_t> shapes;
-    std::vector<tinyobj::material_t> materials;
-    std::string warn, err;
-
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, utils::MODEL_PATH.c_str()))
-    {
-        throw std::runtime_error(warn + err);
-    }
-
-    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
-
-    for (const auto& shape : shapes)
-    {
-        for (const auto& index : shape.mesh.indices)
-        {
-            Vertex vertex{};
-
-            vertex.pos = {
-                attrib.vertices[3 * index.vertex_index + 0],
-                attrib.vertices[3 * index.vertex_index + 1],
-                attrib.vertices[3 * index.vertex_index + 2]
-            };
-
-            vertex.texCoord = {
-                attrib.texcoords[2 * index.texcoord_index + 0],
-                1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
-            };
-
-            vertex.color = { 1.0f, 1.0f, 1.0f };
-
-            if (uniqueVertices.count(vertex) == 0)
-            {
-                uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
-                vertices.push_back(vertex);
-            }
-
-            indices.push_back(uniqueVertices[vertex]);
-        }
-    }
 }
 
 uint32_t VulkanProject::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
