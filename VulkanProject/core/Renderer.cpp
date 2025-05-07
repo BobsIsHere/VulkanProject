@@ -10,14 +10,17 @@
 #include "buffers/VertexBuffer.h"
 #include "buffers/IndexBuffer.h"
 #include "Window.h"
+#include "FramebufferManager.h"
 
 Renderer::Renderer(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderPass* pRenderPass, Window* pWindow) :
     m_pVulkanDevice{ pDevice },
     m_pVulkanSwapChain{ pSwapChain },
     m_pVulkanRenderPass{ pRenderPass },
     m_pWindow{ pWindow },
-    m_pDepthImage{ new VulkanImage(pDevice) }
+    m_pDepthImage{ new VulkanImage(pDevice) },
+    m_pFramebufferManager{ new FramebufferManager() }
 {
+    
 }
 
 Renderer::~Renderer()
@@ -39,33 +42,9 @@ void Renderer::Cleanup()
     }
 }
 
-void Renderer::CreateFrameBuffers()
+void Renderer::CreateFramebuffers()
 {
-    m_SwapChainFrameBuffers.resize(m_pVulkanSwapChain->GetSwapChainImageViews().size());
-    auto temp = m_pVulkanSwapChain->GetSwapChainImageViews().size();
-
-    for (size_t idx = 0; idx < m_pVulkanSwapChain->GetSwapChainImageViews().size(); ++idx)
-    {
-        std::array<VkImageView, 2> attachments = {
-            m_pVulkanSwapChain->GetSwapChainImageViews()[idx],
-            m_pDepthImage->GetImageView()
-        };
-
-        VkFramebufferCreateInfo framebufferInfo{};
-        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = m_pVulkanRenderPass->GetRenderPass();
-        framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-        framebufferInfo.pAttachments = attachments.data();
-        framebufferInfo.width = m_pVulkanSwapChain->GetSwapChainExtent().width;
-        framebufferInfo.height = m_pVulkanSwapChain->GetSwapChainExtent().height;
-        framebufferInfo.layers = 1;
-
-        if (vkCreateFramebuffer(m_pVulkanDevice->GetDevice(), &framebufferInfo, nullptr,
-            &m_SwapChainFrameBuffers[idx]) != VK_SUCCESS)
-        {
-            throw std::runtime_error("failed to create framebuffer!");
-        }
-    }
+    m_pFramebufferManager->CreateFramebuffers(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pDepthImage);
 }
 
 void Renderer::DrawFrame(std::vector<UniformBuffer*> pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, std::vector<VulkanCommandBuffer*> pCommandBuffers,
@@ -94,7 +73,7 @@ void Renderer::DrawFrame(std::vector<UniformBuffer*> pUniformBuffers, VertexBuff
     pCommandBuffers[m_CurrentFrame]->Reset();
     pCommandBuffers[m_CurrentFrame]->Begin();
 
-    pCommandBuffers[m_CurrentFrame]->Record(imageIndex, m_SwapChainFrameBuffers, pVertexBuffer, pIndexBuffer, m_pVulkanRenderPass, 
+    pCommandBuffers[m_CurrentFrame]->Record(imageIndex, m_pFramebufferManager->GetFramebuffers(), pVertexBuffer, pIndexBuffer, m_pVulkanRenderPass,
         m_pVulkanSwapChain, pPipeline, pVulkanDescriptorSets, m_CurrentFrame, indices);
 
     pCommandBuffers[m_CurrentFrame]->End();
@@ -152,10 +131,7 @@ void Renderer::CleanupSwapChain()
 {
     m_pDepthImage->Cleanup();
 
-    for (size_t idx = 0; idx < m_SwapChainFrameBuffers.size(); ++idx)
-    {
-        vkDestroyFramebuffer(m_pVulkanDevice->GetDevice(), m_SwapChainFrameBuffers[idx], nullptr);
-    }
+    m_pFramebufferManager->Cleanup(m_pVulkanDevice);
 
     for (size_t idx = 0; idx < m_pVulkanSwapChain->GetSwapChainImageViews().size(); ++idx)
     {
@@ -183,7 +159,7 @@ void Renderer::RecreateSwapChain()
     m_pVulkanSwapChain->Create();
     m_pVulkanSwapChain->CreateImageViews();
     m_pDepthImage->Create(m_pVulkanSwapChain);
-    CreateFrameBuffers();
+    m_pFramebufferManager->CreateFramebuffers(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pDepthImage);
 }
 
 void Renderer::CreateSyncObjects()
@@ -208,4 +184,9 @@ void Renderer::CreateSyncObjects()
             throw std::runtime_error("failed to create synchronization objects for a frame!");
         }
     }
+}
+
+VulkanImage* Renderer::GetDepthImage() const
+{
+    return m_pDepthImage;
 }

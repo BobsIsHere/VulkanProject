@@ -68,7 +68,7 @@ void VulkanProject::InitVulkan()
     m_pGraphicsPipeline->CreatePipeline();
     m_pVulkanCommandPool->Create();
     m_pRenderer->CreateDepthResources();
-    m_pRenderer->CreateFrameBuffers();
+    m_pRenderer->CreateFramebuffers();
     m_pVikingTexture->CreateTextureImage();
     m_pVikingTexture->CreateTextureImageView();
     m_pVikingTexture->CreateTextureSampler();

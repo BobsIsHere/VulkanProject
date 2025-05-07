@@ -16,6 +16,7 @@ class VulkanCommandBuffer;
 class GraphicsPipeline;
 class VulkanDescriptorSet;
 class VulkanImage;
+class FramebufferManager;
 
 class Renderer final
 {
@@ -26,13 +27,15 @@ public:
 	void CreateDepthResources();
 	void Cleanup();
 
-	void CreateFrameBuffers();
+	void CreateFramebuffers();
 	void DrawFrame(std::vector<UniformBuffer*> pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, std::vector<VulkanCommandBuffer*> pCommandBuffers,
 		GraphicsPipeline* pPipeline, std::vector<VulkanDescriptorSet*> pVulkanDescriptorSets, std::vector<uint32_t> indices);
 
 	void CleanupSwapChain();
 	void RecreateSwapChain();
 	void CreateSyncObjects();
+
+	VulkanImage* GetDepthImage() const;
 
 private:
 	VulkanDevice* m_pVulkanDevice;
@@ -43,9 +46,9 @@ private:
 	std::vector<VkSemaphore> m_ImageAvailableSemaphores;
 	std::vector<VkSemaphore> m_RenderFinishedSemaphores;
 	std::vector<VkFence> m_InFlightFences;
-	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
 
 	uint32_t m_CurrentFrame = 0;
 
 	VulkanImage* m_pDepthImage;
+	FramebufferManager* m_pFramebufferManager;
 };

@@ -217,6 +217,14 @@ build CMakeFiles\VulkanProject.dir\core\Texture.cpp.obj: CXX_COMPILER__VulkanPro
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
   TARGET_PDB = VulkanProject.pdb
 
+build CMakeFiles\VulkanProject.dir\core\FramebufferManager.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\FramebufferManager.cpp || cmake_object_order_depends_target_VulkanProject
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  OBJECT_DIR = CMakeFiles\VulkanProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
+  TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
+  TARGET_PDB = VulkanProject.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target VulkanProject
@@ -225,7 +233,7 @@ build CMakeFiles\VulkanProject.dir\core\Texture.cpp.obj: CXX_COMPILER__VulkanPro
 #############################################
 # Link the executable VulkanProject.exe
 
-build VulkanProject.exe: CXX_EXECUTABLE_LINKER__VulkanProject_Debug CMakeFiles\VulkanProject.dir\main.cpp.obj CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj CMakeFiles\VulkanProject.dir\core\Window.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanInstance.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDevice.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanSwapChain.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanRenderPass.cpp.obj CMakeFiles\VulkanProject.dir\pipelines\GraphicsPipeline.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanCommandPool.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanCommandBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\VulkanBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\VertexBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\IndexBuffer.cpp.obj CMakeFiles\VulkanProject.dir\utils\CommandUtils.cpp.obj CMakeFiles\VulkanProject.dir\buffers\UniformBuffer.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDescriptorPool.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDescriptorSet.cpp.obj CMakeFiles\VulkanProject.dir\core\Renderer.cpp.obj CMakeFiles\VulkanProject.dir\core\Model.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanImage.cpp.obj CMakeFiles\VulkanProject.dir\core\Texture.cpp.obj | C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glm-build\glm\glm.lib || CopyShaders Shaders _deps\glfw-build\src\glfw3.lib _deps\glm-build\glm\glm.lib
+build VulkanProject.exe: CXX_EXECUTABLE_LINKER__VulkanProject_Debug CMakeFiles\VulkanProject.dir\main.cpp.obj CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj CMakeFiles\VulkanProject.dir\core\Window.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanInstance.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDevice.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanSwapChain.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanRenderPass.cpp.obj CMakeFiles\VulkanProject.dir\pipelines\GraphicsPipeline.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanCommandPool.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanCommandBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\VulkanBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\VertexBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\IndexBuffer.cpp.obj CMakeFiles\VulkanProject.dir\utils\CommandUtils.cpp.obj CMakeFiles\VulkanProject.dir\buffers\UniformBuffer.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDescriptorPool.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDescriptorSet.cpp.obj CMakeFiles\VulkanProject.dir\core\Renderer.cpp.obj CMakeFiles\VulkanProject.dir\core\Model.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanImage.cpp.obj CMakeFiles\VulkanProject.dir\core\Texture.cpp.obj CMakeFiles\VulkanProject.dir\core\FramebufferManager.cpp.obj | C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glm-build\glm\glm.lib || CopyShaders Shaders _deps\glfw-build\src\glfw3.lib _deps\glm-build\glm\glm.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = C:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib  _deps\glfw-build\src\glfw3.lib  C:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib  _deps\glm-build\glm\glm.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
