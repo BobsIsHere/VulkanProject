@@ -83,16 +83,6 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, std::vector<VkFramebuffer> s
     VulkanRenderPass* pRenderPass, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<VulkanDescriptorSet*> pVulkanDescriptorSets,
     uint32_t currentFrame, std::vector<uint32_t> indices)
 {
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = 0; // Optional
-    beginInfo.pInheritanceInfo = nullptr; // Optional
-
-    if (vkBeginCommandBuffer(m_CommandBuffer, &beginInfo) != VK_SUCCESS)
-    {
-        throw std::runtime_error("failed to begin recording command buffer!");
-    }
-
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassInfo.renderPass = pRenderPass->GetRenderPass();
@@ -137,9 +127,4 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, std::vector<VkFramebuffer> s
     vkCmdDrawIndexed(m_CommandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
     vkCmdEndRenderPass(m_CommandBuffer);
-
-    if (vkEndCommandBuffer(m_CommandBuffer) != VK_SUCCESS)
-    {
-        throw std::runtime_error("failed to record command buffer!");
-    }
 }
