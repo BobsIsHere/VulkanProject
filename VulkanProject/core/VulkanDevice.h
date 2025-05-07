@@ -9,7 +9,7 @@
 #include "VulkanInstance.h"
 #include "Window.h"
 
-class VulkanDevice
+class VulkanDevice final
 {
 public:
 	VulkanDevice(VulkanInstance* pInstance, Window* pWindow);

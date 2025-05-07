@@ -8,7 +8,7 @@ class VulkanDescriptorPool;
 class GraphicsPipeline;
 class UniformBuffer;
 
-class VulkanDescriptorSet
+class VulkanDescriptorSet final
 {
 public:
 	VulkanDescriptorSet(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool);

@@ -5,7 +5,7 @@
 
 class VulkanDevice;
 
-class VulkanCommandPool
+class VulkanCommandPool final
 {
 public:
 	VulkanCommandPool(VulkanDevice* pDevice);

@@ -8,7 +8,7 @@
 #include "Window.h"
 #include "VulkanDevice.h"
 
-class VulkanSwapChain
+class VulkanSwapChain final
 {
 public:
 	VulkanSwapChain(Window* pWindow, VulkanDevice* pDevice);

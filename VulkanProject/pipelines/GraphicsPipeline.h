@@ -8,7 +8,7 @@
 class VulkanDevice;
 class VulkanRenderPass;
 
-class GraphicsPipeline
+class GraphicsPipeline final
 {
 public:
 	GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderPass* pRenderPass);

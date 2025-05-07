@@ -8,7 +8,7 @@
 class VulkanDevice;
 class VulkanSwapChain;
 
-class VulkanRenderPass
+class VulkanRenderPass final
 {
 public:
 	VulkanRenderPass(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain);

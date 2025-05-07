@@ -44,7 +44,7 @@ void Renderer::CreateFrameBuffers()
     m_SwapChainFrameBuffers.resize(m_pVulkanSwapChain->GetSwapChainImageViews().size());
     auto temp = m_pVulkanSwapChain->GetSwapChainImageViews().size();
 
-    for (size_t idx = 0; idx < m_pVulkanSwapChain->GetSwapChainImageViews().size(); idx++)
+    for (size_t idx = 0; idx < m_pVulkanSwapChain->GetSwapChainImageViews().size(); ++idx)
     {
         std::array<VkImageView, 2> attachments = {
             m_pVulkanSwapChain->GetSwapChainImageViews()[idx],

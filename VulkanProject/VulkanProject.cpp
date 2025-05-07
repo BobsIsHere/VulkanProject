@@ -39,6 +39,7 @@ void VulkanProject::Run()
         m_pUniformBuffers[idx] = new UniformBuffer(m_pVulkanDevice, m_pVulkanCommandPool);
     }
 
+    // Initialize Rendering
     m_pRenderer = new Renderer(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pWindow);
 
     m_pVikingModel = new Model("models/viking_room.obj");

@@ -15,7 +15,7 @@ class VulkanRenderPass;
 class VulkanSwapChain;
 class GraphicsPipeline;
 
-class VulkanCommandBuffer
+class VulkanCommandBuffer final
 {
 public:
 	VulkanCommandBuffer();
