@@ -47,8 +47,9 @@ void Renderer::CreateFramebuffers()
     m_pFramebufferManager->CreateFramebuffers(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pDepthImage);
 }
 
-void Renderer::DrawFrame(std::vector<UniformBuffer*> pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, std::vector<VulkanCommandBuffer*> pCommandBuffers,
-    GraphicsPipeline* pPipeline, std::vector<VulkanDescriptorSet*> pVulkanDescriptorSets, std::vector<uint32_t> indices)
+void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer,
+    std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, GraphicsPipeline* pPipeline, 
+    std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices)
 {
     vkWaitForFences(m_pVulkanDevice->GetDevice(), 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
 

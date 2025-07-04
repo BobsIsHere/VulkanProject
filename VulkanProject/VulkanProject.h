@@ -60,22 +60,22 @@ private:
     void CleanupVulkan();
     void CleanupResources();
 
-    // Own Member Variables
-    Window* m_pWindow;
-    VulkanInstance* m_pVulkanInstance;
-    VulkanDevice* m_pVulkanDevice;
-    VulkanSwapChain* m_pVulkanSwapChain;
-    VulkanRenderPass* m_pVulkanRenderPass;
-    GraphicsPipeline* m_pGraphicsPipeline;
-    VulkanCommandPool* m_pVulkanCommandPool;
-    std::vector<VulkanCommandBuffer*> m_pVulkanCommandBuffers;
-    VulkanDescriptorPool* m_pVulkanDescriptorPool;
-    std::vector<VulkanDescriptorSet*> m_pVulkanDescriptorSets;
-    Renderer* m_pRenderer;
-    Model* m_pVikingModel;
-    Texture* m_pVikingTexture;
+    std::unique_ptr<Window> m_pWindow;
+    std::unique_ptr<VulkanInstance> m_pVulkanInstance;
+    std::unique_ptr<VulkanDevice> m_pVulkanDevice;
+    std::unique_ptr<VulkanSwapChain> m_pVulkanSwapChain;
+    std::unique_ptr<VulkanRenderPass> m_pVulkanRenderPass;
+    std::unique_ptr<GraphicsPipeline> m_pGraphicsPipeline;
+    std::unique_ptr<VulkanCommandPool> m_pVulkanCommandPool;
 
-    VertexBuffer* m_pVertexBuffer;
-    IndexBuffer* m_pIndexBuffer;
-    std::vector<UniformBuffer*> m_pUniformBuffers;
+    std::vector<std::unique_ptr<VulkanCommandBuffer>> m_pVulkanCommandBuffers;
+    std::unique_ptr<VulkanDescriptorPool> m_pVulkanDescriptorPool;
+    std::vector<std::unique_ptr<VulkanDescriptorSet>> m_pVulkanDescriptorSets;
+    std::unique_ptr<Renderer> m_pRenderer;
+    std::unique_ptr<Model> m_pVikingModel;
+    std::unique_ptr<Texture> m_pVikingTexture;
+
+    std::unique_ptr<VertexBuffer> m_pVertexBuffer;
+    std::unique_ptr<IndexBuffer> m_pIndexBuffer;
+    std::vector<std::unique_ptr<UniformBuffer>> m_pUniformBuffers;
 };

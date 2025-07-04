@@ -80,7 +80,7 @@ VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
 }
 
 void VulkanCommandBuffer::Record(uint32_t imageIdx, std::vector<VkFramebuffer> swapChainFramebuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
-    VulkanRenderPass* pRenderPass, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<VulkanDescriptorSet*> pVulkanDescriptorSets,
+    VulkanRenderPass* pRenderPass, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets,
     uint32_t currentFrame, std::vector<uint32_t> indices)
 {
     VkRenderPassBeginInfo renderPassInfo{};

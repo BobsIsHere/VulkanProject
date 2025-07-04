@@ -6,44 +6,44 @@
 void VulkanProject::Run()
 {
     // Make Window
-    m_pWindow = new Window();
+    m_pWindow = std::make_unique<Window>();
     m_pWindow->Initialize(utils::WINDOW_WIDTH, utils::WINDOW_HEIGHT, "Vulkan Window");
 
     // Initialize Vulkan
-    m_pVulkanInstance = new VulkanInstance();
-    m_pVulkanDevice = new VulkanDevice(m_pVulkanInstance, m_pWindow);
-    m_pVulkanSwapChain = new VulkanSwapChain(m_pWindow, m_pVulkanDevice);
-    m_pVulkanRenderPass = new VulkanRenderPass(m_pVulkanDevice, m_pVulkanSwapChain);
-    m_pVulkanCommandPool = new VulkanCommandPool(m_pVulkanDevice);
-    m_pVulkanDescriptorPool = new VulkanDescriptorPool(m_pVulkanDevice);
+    m_pVulkanInstance = std::make_unique<VulkanInstance>();
+    m_pVulkanDevice = std::make_unique<VulkanDevice>(m_pVulkanInstance.get(), m_pWindow.get());
+    m_pVulkanSwapChain = std::make_unique<VulkanSwapChain>(m_pWindow.get(), m_pVulkanDevice.get());
+    m_pVulkanRenderPass = std::make_unique<VulkanRenderPass>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get());
+    m_pVulkanCommandPool = std::make_unique<VulkanCommandPool>(m_pVulkanDevice.get());
+    m_pVulkanDescriptorPool = std::make_unique<VulkanDescriptorPool>(m_pVulkanDevice.get());
 
     // Initialize Graphics Pipeline
-    m_pGraphicsPipeline = new GraphicsPipeline(m_pVulkanDevice, m_pVulkanRenderPass);
+    m_pGraphicsPipeline = std::make_unique<GraphicsPipeline>(m_pVulkanDevice.get(), m_pVulkanRenderPass.get());
 
     m_pVulkanCommandBuffers.resize(utils::MAX_FRAMES_IN_FLIGHT);
     m_pVulkanDescriptorSets.resize(utils::MAX_FRAMES_IN_FLIGHT);
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
-        m_pVulkanCommandBuffers[idx] = new VulkanCommandBuffer();
-        m_pVulkanDescriptorSets[idx] = new VulkanDescriptorSet(m_pVulkanDevice, m_pVulkanDescriptorPool);
+        m_pVulkanCommandBuffers[idx] = std::make_unique<VulkanCommandBuffer>();
+        m_pVulkanDescriptorSets[idx] = std::make_unique<VulkanDescriptorSet>(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get());
     }
 
     // Initialize Buffers
     m_pUniformBuffers.resize(utils::MAX_FRAMES_IN_FLIGHT);
 
-    m_pVertexBuffer = new VertexBuffer(m_pVulkanDevice, m_pVulkanCommandPool);
-    m_pIndexBuffer = new IndexBuffer(m_pVulkanDevice, m_pVulkanCommandPool);
+    m_pVertexBuffer = std::make_unique<VertexBuffer>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
+    m_pIndexBuffer = std::make_unique<IndexBuffer>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
 
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
-        m_pUniformBuffers[idx] = new UniformBuffer(m_pVulkanDevice, m_pVulkanCommandPool);
+        m_pUniformBuffers[idx] = std::make_unique<UniformBuffer>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
     }
 
     // Initialize Rendering
-    m_pRenderer = new Renderer(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pWindow);
+    m_pRenderer = std::make_unique<Renderer>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get(), m_pVulkanRenderPass.get(), m_pWindow.get());
 
-    m_pVikingModel = new Model("models/viking_room.obj");
-    m_pVikingTexture = new Texture(m_pVulkanDevice, m_pVulkanCommandPool, "textures/viking_room.png");
+    m_pVikingModel = std::make_unique<Model>("models/viking_room.obj");
+    m_pVikingTexture = std::make_unique<Texture>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get(), "textures/viking_room.png");
 
     InitVulkan();
     MainLoop();
@@ -85,8 +85,8 @@ void VulkanProject::InitVulkan()
     m_pVulkanDescriptorPool->Create();
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
-        m_pVulkanCommandBuffers[idx]->Create(m_pVulkanDevice, m_pVulkanCommandPool);
-        m_pVulkanDescriptorSets[idx]->Create(m_pGraphicsPipeline, m_pUniformBuffers[idx], 
+        m_pVulkanCommandBuffers[idx]->Create(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
+        m_pVulkanDescriptorSets[idx]->Create(m_pGraphicsPipeline.get(), m_pUniformBuffers[idx].get(),
             m_pVikingTexture->GetImageView(), m_pVikingTexture->GetSampler());
     }
 
@@ -98,7 +98,7 @@ void VulkanProject::MainLoop()
     while (!glfwWindowShouldClose(m_pWindow->GetWindow()))
     {
         glfwPollEvents();
-        m_pRenderer->DrawFrame(m_pUniformBuffers, m_pVertexBuffer, m_pIndexBuffer, m_pVulkanCommandBuffers, m_pGraphicsPipeline, m_pVulkanDescriptorSets,
+        m_pRenderer->DrawFrame(m_pUniformBuffers, m_pVertexBuffer.get(), m_pIndexBuffer.get(), m_pVulkanCommandBuffers, m_pGraphicsPipeline.get(), m_pVulkanDescriptorSets,
             m_pVikingModel->GetIndices());
     }
 
@@ -145,42 +145,4 @@ void VulkanProject::CleanupVulkan()
 
 void VulkanProject::CleanupResources()
 {
-    delete m_pVikingModel;
-    m_pVikingModel = nullptr;
-
-    delete m_pRenderer;
-    m_pRenderer = nullptr;
-
-    delete m_pVulkanRenderPass;
-    m_pVulkanRenderPass = nullptr;
-
-    for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
-    {
-        delete m_pUniformBuffers[idx];
-        m_pUniformBuffers[idx] = nullptr;
-
-        delete m_pVulkanCommandBuffers[idx];
-        m_pVulkanCommandBuffers[idx] = nullptr;
-    }
-
-    delete m_pVulkanDescriptorPool;
-    m_pVulkanDescriptorPool = nullptr;
-
-    delete m_pGraphicsPipeline;
-    m_pGraphicsPipeline = nullptr;
-
-    delete m_pIndexBuffer;
-    m_pIndexBuffer = nullptr;
-
-    delete m_pVertexBuffer;
-    m_pVertexBuffer = nullptr;
-
-    delete m_pVulkanCommandPool;
-    m_pVulkanCommandPool = nullptr;
-
-    delete m_pVulkanDevice;
-    m_pVulkanDevice = nullptr;
-
-    delete m_pVulkanInstance;
-    m_pVulkanInstance = nullptr;
 }
