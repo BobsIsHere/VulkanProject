@@ -56,9 +56,7 @@ public:
 private:
     void InitVulkan();
     void MainLoop();
-
     void CleanupVulkan();
-    void CleanupResources();
 
     std::unique_ptr<Window> m_pWindow;
     std::unique_ptr<VulkanInstance> m_pVulkanInstance;

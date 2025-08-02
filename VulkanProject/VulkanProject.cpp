@@ -1,7 +1,4 @@
-﻿#define STB_IMAGE_IMPLEMENTATION
-#include <3rdParty/stb_image.h>
-
-#include "VulkanProject.h"
+﻿#include "VulkanProject.h"
 
 void VulkanProject::Run()
 {
@@ -48,7 +45,6 @@ void VulkanProject::Run()
     InitVulkan();
     MainLoop();
     CleanupVulkan();
-    CleanupResources();
 }
 
 void VulkanProject::InitVulkan()
@@ -141,8 +137,4 @@ void VulkanProject::CleanupVulkan()
     glfwDestroyWindow(m_pWindow->GetWindow());
 
     glfwTerminate();
-}
-
-void VulkanProject::CleanupResources()
-{
 }
