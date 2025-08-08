@@ -153,32 +153,71 @@ void VulkanProject::InitImGui()
     ImGui_ImplVulkan_Init(&init_info);
 }
 
+void VulkanProject::MainLoopImGui()
+{
+    // Start ImGui frame
+    ImGui_ImplVulkan_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("Debug");
+
+    // FPS & Frame Time
+    ImGuiIO& io = ImGui::GetIO();
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+    static float frameTimes[100] = {};
+    static int frameIndex = 0;
+    frameTimes[frameIndex] = 1000.0f / io.Framerate;
+    frameIndex = (frameIndex + 1) % 100;
+    ImGui::PlotLines("Frame Times (ms)", frameTimes, IM_ARRAYSIZE(frameTimes), frameIndex, nullptr, 0.0f, 50.0f, ImVec2(0, 80));
+
+    ImGui::Separator();
+
+    // Vulkan info
+    VkPhysicalDeviceProperties deviceProperties{};
+    vkGetPhysicalDeviceProperties(m_pVulkanDevice->GetPhysicalDevice(), &deviceProperties);
+
+    ImGui::Text("Vulkan Device: %s", deviceProperties.deviceName);
+    ImGui::Text("API Version: %d.%d.%d",
+        VK_VERSION_MAJOR(deviceProperties.apiVersion),
+        VK_VERSION_MINOR(deviceProperties.apiVersion),
+        VK_VERSION_PATCH(deviceProperties.apiVersion));
+    ImGui::Text("Driver Version: %u", deviceProperties.driverVersion);
+
+    // VRAM info (if available)
+    VkPhysicalDeviceMemoryProperties memProperties{};
+    vkGetPhysicalDeviceMemoryProperties(m_pVulkanDevice->GetPhysicalDevice(), &memProperties);
+
+    // A total VRAM calculation (device local heaps)
+    VkDeviceSize totalVRAM = 0;
+    for (uint32_t i = 0; i < memProperties.memoryHeapCount; i++)
+    {
+        if (memProperties.memoryHeaps[i].flags & VK_MEMORY_HEAP_DEVICE_LOCAL_BIT)
+            totalVRAM += memProperties.memoryHeaps[i].size;
+    }
+    ImGui::Text("Total VRAM: %.2f MB", totalVRAM / (1024.0f * 1024.0f));
+
+    ImGui::End();
+
+    ImGui::Render();
+
+    m_pRenderer->DrawFrame(
+        m_pUniformBuffers,
+        m_pVertexBuffer.get(), m_pIndexBuffer.get(),
+        m_pVulkanCommandBuffers,
+        m_pGraphicsPipeline.get(),
+        m_pVulkanDescriptorSets,
+        m_pVikingModel->GetIndices(),
+        ImGui::GetDrawData());
+}
+
 void VulkanProject::MainLoop()
 {
     while (!glfwWindowShouldClose(m_pWindow->GetWindow()))
     {
         glfwPollEvents();
-
-        // Start ImGui frame
-        ImGui_ImplVulkan_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // Your ImGui UI here
-        ImGui::Begin("Debug");
-        ImGui::Text("FPS: %.2f", ImGui::GetIO().Framerate);
-        ImGui::End();
-
-        ImGui::Render();
-
-        m_pRenderer->DrawFrame(
-            m_pUniformBuffers, 
-            m_pVertexBuffer.get(), m_pIndexBuffer.get(), 
-            m_pVulkanCommandBuffers, 
-            m_pGraphicsPipeline.get(), 
-            m_pVulkanDescriptorSets,
-            m_pVikingModel->GetIndices(),
-            ImGui::GetDrawData());
+		MainLoopImGui();
     }
 
     vkDeviceWaitIdle(m_pVulkanDevice->GetDevice());

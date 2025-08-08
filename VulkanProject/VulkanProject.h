@@ -60,6 +60,7 @@ private:
     void CleanupVulkan();
 
     void InitImGui();
+	void MainLoopImGui();
 
     std::unique_ptr<Window> m_pWindow;
     std::unique_ptr<VulkanInstance> m_pVulkanInstance;
