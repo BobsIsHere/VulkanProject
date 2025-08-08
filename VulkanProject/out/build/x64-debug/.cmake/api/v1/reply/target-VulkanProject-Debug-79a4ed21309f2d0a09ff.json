@@ -152,12 +152,13 @@
 				39,
 				41,
 				43,
-				44,
 				45,
 				46,
 				47,
 				48,
-				49
+				49,
+				50,
+				51
 			]
 		}
 	],
@@ -255,12 +256,13 @@
 				39,
 				41,
 				43,
-				44,
 				45,
 				46,
 				47,
 				48,
-				49
+				49,
+				50,
+				51
 			]
 		},
 		{
@@ -288,7 +290,8 @@
 				36,
 				38,
 				40,
-				42
+				42,
+				44
 			]
 		}
 	],
@@ -534,6 +537,17 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "core/FramebufferManager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "core/Camera.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "core/Camera.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

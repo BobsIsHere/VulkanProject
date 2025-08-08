@@ -42,6 +42,7 @@
 #include "core/Renderer.h"
 #include "core/Model.h"
 #include "core/Texture.h"
+#include "core/Camera.h"
 
 #include "pipelines/GraphicsPipeline.h"
 
@@ -62,6 +63,8 @@ private:
     void InitImGui();
 	void MainLoopImGui();
 
+    void UpdateUniformBufferWithCamera();
+
     std::unique_ptr<Window> m_pWindow;
     std::unique_ptr<VulkanInstance> m_pVulkanInstance;
     std::unique_ptr<VulkanDevice> m_pVulkanDevice;
@@ -80,4 +83,6 @@ private:
     std::unique_ptr<VertexBuffer> m_pVertexBuffer;
     std::unique_ptr<IndexBuffer> m_pIndexBuffer;
     std::vector<std::unique_ptr<UniformBuffer>> m_pUniformBuffers;
+
+	std::unique_ptr<Camera> m_pCamera;
 };

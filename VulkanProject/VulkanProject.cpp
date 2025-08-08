@@ -44,6 +44,7 @@ void VulkanProject::Run()
 
     m_pVikingModel = std::make_unique<Model>("models/viking_room.obj");
     m_pVikingTexture = std::make_unique<Texture>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get(), "textures/viking_room.png");
+	m_pCamera = std::make_unique<Camera>(glm::vec3(0.f,0.f,0.f));
 
     InitVulkan();
     InitImGui();
@@ -212,12 +213,52 @@ void VulkanProject::MainLoopImGui()
         ImGui::GetDrawData());
 }
 
+void VulkanProject::UpdateUniformBufferWithCamera()
+{
+    glm::mat4 view{ m_pCamera->GetViewMatrix() };
+    glm::mat4 proj{ glm::perspective(glm::radians(45.0f),
+        (float)utils::WINDOW_WIDTH / (float)utils::WINDOW_HEIGHT,
+        0.1f, 100.0f) };
+
+    // GLM is designed for OpenGL, flip Y for Vulkan
+    proj[1][1] *= -1; 
+
+    UniformBufferObject ubo{};
+    ubo.view = view;
+    ubo.proj = proj;
+    ubo.model = glm::mat4(1.0f);
+
+    void* data;
+    vkMapMemory(m_pVulkanDevice->GetDevice(), m_pUniformBuffers[0]->GetBufferMemory(), 0, sizeof(ubo), 0, &data);
+    memcpy(data, &ubo, sizeof(ubo));
+    vkUnmapMemory(m_pVulkanDevice->GetDevice(), m_pUniformBuffers[0]->GetBufferMemory());
+}
+
 void VulkanProject::MainLoop()
 {
+    float lastFrameTime{ static_cast<float>(glfwGetTime()) };
+
     while (!glfwWindowShouldClose(m_pWindow->GetWindow()))
     {
+        const float currentFrameTime{ static_cast<float>(glfwGetTime()) };
+        const float deltaTime{ currentFrameTime - lastFrameTime };
+        lastFrameTime = currentFrameTime;
+
         glfwPollEvents();
+
+        // Process keyboard input for movement
+        GLFWwindow* window{ m_pWindow->GetWindow() };
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
+            m_pCamera->ProcessKeyboardInput(GLFW_KEY_W, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) 
+            m_pCamera->ProcessKeyboardInput(GLFW_KEY_S, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) 
+            m_pCamera->ProcessKeyboardInput(GLFW_KEY_A, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) 
+            m_pCamera->ProcessKeyboardInput(GLFW_KEY_D, deltaTime);
+
 		MainLoopImGui();
+        UpdateUniformBufferWithCamera();
     }
 
     vkDeviceWaitIdle(m_pVulkanDevice->GetDevice());
