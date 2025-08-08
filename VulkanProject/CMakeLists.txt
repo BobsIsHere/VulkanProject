@@ -30,8 +30,6 @@ FetchContent_MakeAvailable(glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE Vulkan::Vulkan glfw)
 
 # Include glm
-include(FetchContent)
-
 FetchContent_Declare(
 	  glm
 	  GIT_REPOSITORY https://github.com/g-truc/glm.git
@@ -41,6 +39,29 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(glm)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Vulkan::Vulkan glm::glm)
+
+# Include ImGui
+FetchContent_Declare(
+	imgui
+	GIT_REPOSITORY https://github.com/ocornut/imgui.git
+	GIT_TAG        master
+	GIT_SHALLOW    TRUE
+)
+FetchContent_MakeAvailable(imgui)
+
+target_sources(${PROJECT_NAME} PRIVATE
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_vulkan.cpp
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
 
 # Define the shader directory
 set(SHADER_DIR "${CMAKE_SOURCE_DIR}/shaders")

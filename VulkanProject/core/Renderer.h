@@ -5,6 +5,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
+#include "imgui.h"
 #include "core/VulkanCommandBuffer.h"
 
 class VulkanDevice;
@@ -30,7 +31,7 @@ public:
 
 	void CreateFramebuffers();
 	void DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers,
-		GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices);
+		GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData);
 
 	void CleanupSwapChain();
 	void RecreateSwapChain();

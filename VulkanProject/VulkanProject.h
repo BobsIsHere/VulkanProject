@@ -28,6 +28,7 @@
 #include <set>
 
 #include "utils/utils.h"
+#include "utils/CommandUtils.h"
 
 #include "core/Window.h"
 #include "core/VulkanInstance.h"
@@ -57,6 +58,8 @@ private:
     void InitVulkan();
     void MainLoop();
     void CleanupVulkan();
+
+    void InitImGui();
 
     std::unique_ptr<Window> m_pWindow;
     std::unique_ptr<VulkanInstance> m_pVulkanInstance;

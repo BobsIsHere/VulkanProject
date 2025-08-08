@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_VulkanProject: phony || CopyShaders Shad
 
 build CMakeFiles\VulkanProject.dir\main.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\main.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -59,7 +59,7 @@ build CMakeFiles\VulkanProject.dir\main.cpp.obj: CXX_COMPILER__VulkanProject_uns
 
 build CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\VulkanProject.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -67,7 +67,7 @@ build CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj: CXX_COMPILER__VulkanPr
 
 build CMakeFiles\VulkanProject.dir\core\Window.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\Window.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -75,7 +75,7 @@ build CMakeFiles\VulkanProject.dir\core\Window.cpp.obj: CXX_COMPILER__VulkanProj
 
 build CMakeFiles\VulkanProject.dir\core\VulkanInstance.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanInstance.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -83,7 +83,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanInstance.cpp.obj: CXX_COMPILER__Vu
 
 build CMakeFiles\VulkanProject.dir\core\VulkanDevice.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanDevice.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -91,7 +91,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanDevice.cpp.obj: CXX_COMPILER__Vulk
 
 build CMakeFiles\VulkanProject.dir\core\VulkanSwapChain.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanSwapChain.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -99,7 +99,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanSwapChain.cpp.obj: CXX_COMPILER__V
 
 build CMakeFiles\VulkanProject.dir\core\VulkanRenderPass.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanRenderPass.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -107,7 +107,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanRenderPass.cpp.obj: CXX_COMPILER__
 
 build CMakeFiles\VulkanProject.dir\pipelines\GraphicsPipeline.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\pipelines\GraphicsPipeline.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\pipelines
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -115,7 +115,7 @@ build CMakeFiles\VulkanProject.dir\pipelines\GraphicsPipeline.cpp.obj: CXX_COMPI
 
 build CMakeFiles\VulkanProject.dir\core\VulkanCommandPool.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanCommandPool.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -123,7 +123,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanCommandPool.cpp.obj: CXX_COMPILER_
 
 build CMakeFiles\VulkanProject.dir\core\VulkanCommandBuffer.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanCommandBuffer.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -131,7 +131,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanCommandBuffer.cpp.obj: CXX_COMPILE
 
 build CMakeFiles\VulkanProject.dir\buffers\VulkanBuffer.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\buffers\VulkanBuffer.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\buffers
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -139,7 +139,7 @@ build CMakeFiles\VulkanProject.dir\buffers\VulkanBuffer.cpp.obj: CXX_COMPILER__V
 
 build CMakeFiles\VulkanProject.dir\buffers\VertexBuffer.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\buffers\VertexBuffer.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\buffers
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -147,7 +147,7 @@ build CMakeFiles\VulkanProject.dir\buffers\VertexBuffer.cpp.obj: CXX_COMPILER__V
 
 build CMakeFiles\VulkanProject.dir\buffers\IndexBuffer.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\buffers\IndexBuffer.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\buffers
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -155,7 +155,7 @@ build CMakeFiles\VulkanProject.dir\buffers\IndexBuffer.cpp.obj: CXX_COMPILER__Vu
 
 build CMakeFiles\VulkanProject.dir\utils\CommandUtils.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\utils\CommandUtils.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\utils
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -163,7 +163,7 @@ build CMakeFiles\VulkanProject.dir\utils\CommandUtils.cpp.obj: CXX_COMPILER__Vul
 
 build CMakeFiles\VulkanProject.dir\buffers\UniformBuffer.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\buffers\UniformBuffer.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\buffers
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -171,7 +171,7 @@ build CMakeFiles\VulkanProject.dir\buffers\UniformBuffer.cpp.obj: CXX_COMPILER__
 
 build CMakeFiles\VulkanProject.dir\core\VulkanDescriptorPool.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanDescriptorPool.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -179,7 +179,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanDescriptorPool.cpp.obj: CXX_COMPIL
 
 build CMakeFiles\VulkanProject.dir\core\VulkanDescriptorSet.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanDescriptorSet.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -187,7 +187,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanDescriptorSet.cpp.obj: CXX_COMPILE
 
 build CMakeFiles\VulkanProject.dir\core\Renderer.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\Renderer.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -195,7 +195,7 @@ build CMakeFiles\VulkanProject.dir\core\Renderer.cpp.obj: CXX_COMPILER__VulkanPr
 
 build CMakeFiles\VulkanProject.dir\core\Model.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\Model.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -203,7 +203,7 @@ build CMakeFiles\VulkanProject.dir\core\Model.cpp.obj: CXX_COMPILER__VulkanProje
 
 build CMakeFiles\VulkanProject.dir\core\VulkanImage.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\VulkanImage.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -211,7 +211,7 @@ build CMakeFiles\VulkanProject.dir\core\VulkanImage.cpp.obj: CXX_COMPILER__Vulka
 
 build CMakeFiles\VulkanProject.dir\core\Texture.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\Texture.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
@@ -219,9 +219,57 @@ build CMakeFiles\VulkanProject.dir\core\Texture.cpp.obj: CXX_COMPILER__VulkanPro
 
 build CMakeFiles\VulkanProject.dir\core\FramebufferManager.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\core\FramebufferManager.cpp || cmake_object_order_depends_target_VulkanProject
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
-  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
   OBJECT_DIR = CMakeFiles\VulkanProject.dir
   OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\core
+  TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
+  TARGET_PDB = VulkanProject.pdb
+
+build CMakeFiles\VulkanProject.dir\_deps\imgui-src\imgui.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\imgui.cpp || cmake_object_order_depends_target_VulkanProject
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  OBJECT_DIR = CMakeFiles\VulkanProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\_deps\imgui-src
+  TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
+  TARGET_PDB = VulkanProject.pdb
+
+build CMakeFiles\VulkanProject.dir\_deps\imgui-src\imgui_draw.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\imgui_draw.cpp || cmake_object_order_depends_target_VulkanProject
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  OBJECT_DIR = CMakeFiles\VulkanProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\_deps\imgui-src
+  TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
+  TARGET_PDB = VulkanProject.pdb
+
+build CMakeFiles\VulkanProject.dir\_deps\imgui-src\imgui_tables.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\imgui_tables.cpp || cmake_object_order_depends_target_VulkanProject
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  OBJECT_DIR = CMakeFiles\VulkanProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\_deps\imgui-src
+  TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
+  TARGET_PDB = VulkanProject.pdb
+
+build CMakeFiles\VulkanProject.dir\_deps\imgui-src\imgui_widgets.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\imgui_widgets.cpp || cmake_object_order_depends_target_VulkanProject
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  OBJECT_DIR = CMakeFiles\VulkanProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\_deps\imgui-src
+  TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
+  TARGET_PDB = VulkanProject.pdb
+
+build CMakeFiles\VulkanProject.dir\_deps\imgui-src\backends\imgui_impl_glfw.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends\imgui_impl_glfw.cpp || cmake_object_order_depends_target_VulkanProject
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  OBJECT_DIR = CMakeFiles\VulkanProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\_deps\imgui-src\backends
+  TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
+  TARGET_PDB = VulkanProject.pdb
+
+build CMakeFiles\VulkanProject.dir\_deps\imgui-src\backends\imgui_impl_vulkan.cpp.obj: CXX_COMPILER__VulkanProject_unscanned_Debug C$:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends\imgui_impl_vulkan.cpp || cmake_object_order_depends_target_VulkanProject
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++20
+  INCLUDES = -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\imgui-src\backends -IC:\GitHubFiles\GraphicsProg2\VulkanProject -IC:\GitHubFiles\GraphicsProg2\VulkanProject\..\3rdParty -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glfw-src\include -IC:\GitHubFiles\GraphicsProg2\VulkanProject\out\build\x64-debug\_deps\glm-src -external:IC:\VulkanSDK\1.3.296.0\Include -external:W0
+  OBJECT_DIR = CMakeFiles\VulkanProject.dir
+  OBJECT_FILE_DIR = CMakeFiles\VulkanProject.dir\_deps\imgui-src\backends
   TARGET_COMPILE_PDB = CMakeFiles\VulkanProject.dir\
   TARGET_PDB = VulkanProject.pdb
 
@@ -233,7 +281,7 @@ build CMakeFiles\VulkanProject.dir\core\FramebufferManager.cpp.obj: CXX_COMPILER
 #############################################
 # Link the executable VulkanProject.exe
 
-build VulkanProject.exe: CXX_EXECUTABLE_LINKER__VulkanProject_Debug CMakeFiles\VulkanProject.dir\main.cpp.obj CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj CMakeFiles\VulkanProject.dir\core\Window.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanInstance.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDevice.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanSwapChain.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanRenderPass.cpp.obj CMakeFiles\VulkanProject.dir\pipelines\GraphicsPipeline.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanCommandPool.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanCommandBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\VulkanBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\VertexBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\IndexBuffer.cpp.obj CMakeFiles\VulkanProject.dir\utils\CommandUtils.cpp.obj CMakeFiles\VulkanProject.dir\buffers\UniformBuffer.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDescriptorPool.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDescriptorSet.cpp.obj CMakeFiles\VulkanProject.dir\core\Renderer.cpp.obj CMakeFiles\VulkanProject.dir\core\Model.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanImage.cpp.obj CMakeFiles\VulkanProject.dir\core\Texture.cpp.obj CMakeFiles\VulkanProject.dir\core\FramebufferManager.cpp.obj | C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glm-build\glm\glm.lib || CopyShaders Shaders _deps\glfw-build\src\glfw3.lib _deps\glm-build\glm\glm.lib
+build VulkanProject.exe: CXX_EXECUTABLE_LINKER__VulkanProject_Debug CMakeFiles\VulkanProject.dir\main.cpp.obj CMakeFiles\VulkanProject.dir\VulkanProject.cpp.obj CMakeFiles\VulkanProject.dir\core\Window.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanInstance.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDevice.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanSwapChain.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanRenderPass.cpp.obj CMakeFiles\VulkanProject.dir\pipelines\GraphicsPipeline.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanCommandPool.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanCommandBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\VulkanBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\VertexBuffer.cpp.obj CMakeFiles\VulkanProject.dir\buffers\IndexBuffer.cpp.obj CMakeFiles\VulkanProject.dir\utils\CommandUtils.cpp.obj CMakeFiles\VulkanProject.dir\buffers\UniformBuffer.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDescriptorPool.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanDescriptorSet.cpp.obj CMakeFiles\VulkanProject.dir\core\Renderer.cpp.obj CMakeFiles\VulkanProject.dir\core\Model.cpp.obj CMakeFiles\VulkanProject.dir\core\VulkanImage.cpp.obj CMakeFiles\VulkanProject.dir\core\Texture.cpp.obj CMakeFiles\VulkanProject.dir\core\FramebufferManager.cpp.obj CMakeFiles\VulkanProject.dir\_deps\imgui-src\imgui.cpp.obj CMakeFiles\VulkanProject.dir\_deps\imgui-src\imgui_draw.cpp.obj CMakeFiles\VulkanProject.dir\_deps\imgui-src\imgui_tables.cpp.obj CMakeFiles\VulkanProject.dir\_deps\imgui-src\imgui_widgets.cpp.obj CMakeFiles\VulkanProject.dir\_deps\imgui-src\backends\imgui_impl_glfw.cpp.obj CMakeFiles\VulkanProject.dir\_deps\imgui-src\backends\imgui_impl_vulkan.cpp.obj | C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glfw-build\src\glfw3.lib C$:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib _deps\glm-build\glm\glm.lib || CopyShaders Shaders _deps\glfw-build\src\glfw3.lib _deps\glm-build\glm\glm.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = C:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib  _deps\glfw-build\src\glfw3.lib  C:\VulkanSDK\1.3.296.0\Lib\vulkan-1.lib  _deps\glm-build\glm\glm.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

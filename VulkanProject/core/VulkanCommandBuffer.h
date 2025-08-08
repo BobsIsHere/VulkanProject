@@ -6,6 +6,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
+#include "imgui.h"
+
 #include "buffers/VertexBuffer.h"
 #include "buffers/IndexBuffer.h"
 #include "VulkanDescriptorSet.h"
@@ -35,7 +37,7 @@ public:
 
 	void Record(uint32_t imageIdx, std::vector<VkFramebuffer> swapChainFramebuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, VulkanRenderPass* pRenderPass,
 		VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& m_pVulkanDescriptorSets,
-		uint32_t currentFrame, std::vector<uint32_t> indices);
+		uint32_t currentFrame, std::vector<uint32_t> indices, ImDrawData* drawData);
 
 private:
 	VkCommandBuffer m_CommandBuffer;

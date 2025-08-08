@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "backends/imgui_impl_vulkan.h"
+
 #include "VulkanCommandBuffer.h"
 #include "utils/utils.h"
 #include "VulkanDevice.h"
@@ -81,7 +83,7 @@ VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
 
 void VulkanCommandBuffer::Record(uint32_t imageIdx, std::vector<VkFramebuffer> swapChainFramebuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
     VulkanRenderPass* pRenderPass, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets,
-    uint32_t currentFrame, std::vector<uint32_t> indices)
+    uint32_t currentFrame, std::vector<uint32_t> indices, ImDrawData* drawData)
 {
     VkRenderPassBeginInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -125,6 +127,12 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, std::vector<VkFramebuffer> s
     vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 0, 1,
         &descriptorSet, 0, nullptr);
     vkCmdDrawIndexed(m_CommandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+
+	// Render ImGui
+	if (drawData)
+	{
+		ImGui_ImplVulkan_RenderDrawData(drawData, m_CommandBuffer);
+	}
 
     vkCmdEndRenderPass(m_CommandBuffer);
 }

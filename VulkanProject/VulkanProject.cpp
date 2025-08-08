@@ -1,4 +1,7 @@
 ﻿#include "VulkanProject.h"
+#include "imgui.h"
+#include "backends/imgui_impl_vulkan.h"
+#include "backends/imgui_impl_glfw.h"
 
 void VulkanProject::Run()
 {
@@ -43,6 +46,7 @@ void VulkanProject::Run()
     m_pVikingTexture = std::make_unique<Texture>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get(), "textures/viking_room.png");
 
     InitVulkan();
+    InitImGui();
     MainLoop();
     CleanupVulkan();
 }
@@ -89,13 +93,92 @@ void VulkanProject::InitVulkan()
     m_pRenderer->CreateSyncObjects();
 }
 
+void VulkanProject::InitImGui()
+{
+	std::unique_ptr<VulkanCommandPool> commandPool{ std::make_unique<VulkanCommandPool>(m_pVulkanDevice.get()) };
+
+    //1. Create descriptor pool for IMGUI
+    VkDescriptorPoolSize imguiPoolSize[] = {
+        { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
+        { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
+        { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
+        { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
+        { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
+        { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
+        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
+        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
+        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
+        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
+        { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
+    };
+
+	VkDescriptorPoolCreateInfo imguiPoolInfo{};
+    imguiPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	imguiPoolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+	imguiPoolInfo.maxSets = 1000;
+    imguiPoolInfo.poolSizeCount = std::size(imguiPoolSize);
+    imguiPoolInfo.pPoolSizes = imguiPoolSize;
+
+    VkDescriptorPool imguiPool{};
+    if (vkCreateDescriptorPool(m_pVulkanDevice->GetDevice(), &imguiPoolInfo, nullptr, &imguiPool) != VK_SUCCESS)
+    {
+        throw std::runtime_error("failed to create ImGui DescriptorPool");
+    }
+
+    // 2. Setup ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	ImGui::StyleColorsDark();
+
+    // 3. Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForVulkan(m_pWindow->GetWindow(), true);
+
+    ImGui_ImplVulkan_InitInfo init_info = {};
+    init_info.Instance = m_pVulkanInstance->GetInstance();
+    init_info.PhysicalDevice = m_pVulkanDevice->GetPhysicalDevice();
+    init_info.Device = m_pVulkanDevice->GetDevice();
+    init_info.QueueFamily = m_pVulkanDevice->FindQueueFamilies(m_pVulkanDevice->GetPhysicalDevice()).graphicsFamily.value();
+    init_info.Queue = m_pVulkanDevice->GetGraphicsQueue();
+    init_info.PipelineCache = VK_NULL_HANDLE;
+    init_info.DescriptorPool = imguiPool;
+    init_info.Subpass = 0;
+    init_info.MinImageCount = utils::MAX_FRAMES_IN_FLIGHT;
+    init_info.ImageCount = utils::MAX_FRAMES_IN_FLIGHT;
+    init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+    init_info.Allocator = nullptr;
+    init_info.RenderPass = m_pVulkanRenderPass->GetRenderPass();
+
+    ImGui_ImplVulkan_Init(&init_info);
+}
+
 void VulkanProject::MainLoop()
 {
     while (!glfwWindowShouldClose(m_pWindow->GetWindow()))
     {
         glfwPollEvents();
-        m_pRenderer->DrawFrame(m_pUniformBuffers, m_pVertexBuffer.get(), m_pIndexBuffer.get(), m_pVulkanCommandBuffers, m_pGraphicsPipeline.get(), m_pVulkanDescriptorSets,
-            m_pVikingModel->GetIndices());
+
+        // Start ImGui frame
+        ImGui_ImplVulkan_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Your ImGui UI here
+        ImGui::Begin("Debug");
+        ImGui::Text("FPS: %.2f", ImGui::GetIO().Framerate);
+        ImGui::End();
+
+        ImGui::Render();
+
+        m_pRenderer->DrawFrame(
+            m_pUniformBuffers, 
+            m_pVertexBuffer.get(), m_pIndexBuffer.get(), 
+            m_pVulkanCommandBuffers, 
+            m_pGraphicsPipeline.get(), 
+            m_pVulkanDescriptorSets,
+            m_pVikingModel->GetIndices(),
+            ImGui::GetDrawData());
     }
 
     vkDeviceWaitIdle(m_pVulkanDevice->GetDevice());
@@ -103,7 +186,9 @@ void VulkanProject::MainLoop()
 
 void VulkanProject::CleanupVulkan()
 {
-    const auto& device{ m_pVulkanDevice->GetDevice() };
+    ImGui_ImplVulkan_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     m_pRenderer->CleanupSwapChain();
 
