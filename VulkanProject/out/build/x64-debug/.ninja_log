@@ -99,3 +99,13 @@
 39	77	7763707160521078	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
 78	190	7763707160916068	CMakeFiles/VulkanProject.dir/core/Window.cpp.obj	3271f28510a2976d
 190	338	7763707162031462	VulkanProject.exe	394f51308eb8a05e
+27	66	7763708863835928	CMakeFiles/CopyShaders	4c5666e148017b1
+27	66	7763708863835928	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+75	187	7763708864310792	CMakeFiles/VulkanProject.dir/core/Window.cpp.obj	3271f28510a2976d
+66	1906	7763708864220473	CMakeFiles/VulkanProject.dir/main.cpp.obj	f6a00fe9adccc309
+71	1975	7763708864265632	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	75f936ea4a5ccdc
+1976	2167	7763708883319346	VulkanProject.exe	394f51308eb8a05e
+41	82	7763709556882147	CMakeFiles/CopyShaders	4c5666e148017b1
+41	82	7763709556882147	C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/CopyShaders	4c5666e148017b1
+83	1950	7763709557296421	CMakeFiles/VulkanProject.dir/VulkanProject.cpp.obj	75f936ea4a5ccdc
+1950	2124	7763709575978312	VulkanProject.exe	394f51308eb8a05e

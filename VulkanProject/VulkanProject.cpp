@@ -258,7 +258,7 @@ void VulkanProject::MainLoop()
             m_pCamera->ProcessKeyboardInput(GLFW_KEY_D, deltaTime);
 
 		MainLoopImGui();
-        UpdateUniformBufferWithCamera();
+        //UpdateUniformBufferWithCamera();
     }
 
     vkDeviceWaitIdle(m_pVulkanDevice->GetDevice());
