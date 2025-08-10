@@ -6,7 +6,8 @@
 void VulkanProject::Run()
 {
     // Make Window
-    m_pWindow = std::make_unique<Window>();
+    m_pCamera = std::make_unique<Camera>(glm::vec3(0.f, 0.f, 3.f));
+    m_pWindow = std::make_unique<Window>(m_pCamera.get());
     m_pWindow->Initialize(utils::WINDOW_WIDTH, utils::WINDOW_HEIGHT, "Vulkan Window");
 
     // Initialize Vulkan
@@ -40,11 +41,10 @@ void VulkanProject::Run()
     }
 
     // Initialize Rendering
-    m_pRenderer = std::make_unique<Renderer>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get(), m_pVulkanRenderPass.get(), m_pWindow.get());
+    m_pRenderer = std::make_unique<Renderer>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get(), m_pVulkanRenderPass.get(), m_pWindow.get(), m_pCamera.get());
 
     m_pVikingModel = std::make_unique<Model>("models/viking_room.obj");
     m_pVikingTexture = std::make_unique<Texture>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get(), "textures/viking_room.png");
-	m_pCamera = std::make_unique<Camera>(glm::vec3(0.f,0.f,0.f));
 
     InitVulkan();
     InitImGui();
@@ -215,7 +215,7 @@ void VulkanProject::MainLoopImGui()
 
 void VulkanProject::UpdateUniformBufferWithCamera()
 {
-    glm::mat4 view{ m_pCamera->GetViewMatrix() };
+    glm::mat4 view{ m_pCamera->Update() };
     glm::mat4 proj{ glm::perspective(glm::radians(45.0f),
         (float)utils::WINDOW_WIDTH / (float)utils::WINDOW_HEIGHT,
         0.1f, 100.0f) };
@@ -245,20 +245,7 @@ void VulkanProject::MainLoop()
         lastFrameTime = currentFrameTime;
 
         glfwPollEvents();
-
-        // Process keyboard input for movement
-        GLFWwindow* window{ m_pWindow->GetWindow() };
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) 
-            m_pCamera->ProcessKeyboardInput(GLFW_KEY_W, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) 
-            m_pCamera->ProcessKeyboardInput(GLFW_KEY_S, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) 
-            m_pCamera->ProcessKeyboardInput(GLFW_KEY_A, deltaTime);
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) 
-            m_pCamera->ProcessKeyboardInput(GLFW_KEY_D, deltaTime);
-
 		MainLoopImGui();
-        //UpdateUniformBufferWithCamera();
     }
 
     vkDeviceWaitIdle(m_pVulkanDevice->GetDevice());

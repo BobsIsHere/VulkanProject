@@ -12,6 +12,7 @@ class VulkanDevice;
 class VulkanSwapChain;
 class VulkanRenderPass;
 class Window;
+class Camera;
 class UniformBuffer;
 class VertexBuffer;
 class IndexBuffer;
@@ -23,7 +24,7 @@ class FramebufferManager;
 class Renderer final
 {
 public:
-	Renderer(VulkanDevice* device, VulkanSwapChain* swapChain, VulkanRenderPass* renderPass, Window* window);
+	Renderer(VulkanDevice* device, VulkanSwapChain* swapChain, VulkanRenderPass* renderPass, Window* window, Camera* pCamera);
 	~Renderer();
 
 	void CreateDepthResources();
@@ -44,6 +45,7 @@ private:
 	VulkanSwapChain* m_pVulkanSwapChain;
 	VulkanRenderPass* m_pVulkanRenderPass;
 	Window* m_pWindow;
+	Camera* m_pCamera;
 
 	std::vector<VkSemaphore> m_ImageAvailableSemaphores;
 	std::vector<VkSemaphore> m_RenderFinishedSemaphores;

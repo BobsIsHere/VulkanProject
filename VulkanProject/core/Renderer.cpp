@@ -11,12 +11,14 @@
 #include "buffers/IndexBuffer.h"
 #include "Window.h"
 #include "FramebufferManager.h"
+#include "Camera.h"
 
-Renderer::Renderer(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderPass* pRenderPass, Window* pWindow) :
+Renderer::Renderer(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderPass* pRenderPass, Window* pWindow, Camera* pCamera) :
     m_pVulkanDevice{ pDevice },
     m_pVulkanSwapChain{ pSwapChain },
     m_pVulkanRenderPass{ pRenderPass },
     m_pWindow{ pWindow },
+	m_pCamera{ pCamera },
     m_pDepthImage{ new VulkanImage(pDevice) },
     m_pFramebufferManager{ new FramebufferManager() }
 {
@@ -67,7 +69,7 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
-    pUniformBuffers[m_CurrentFrame]->UpdateUniformBuffer(m_pVulkanSwapChain);
+    pUniformBuffers[m_CurrentFrame]->UpdateUniformBuffer(m_pVulkanSwapChain, m_pCamera);
 
     vkResetFences(m_pVulkanDevice->GetDevice(), 1, &m_InFlightFences[m_CurrentFrame]);
 

@@ -8,17 +8,23 @@ class Camera final
 public:
 	Camera(glm::vec3 startPos);
 
-	void ProcessKeyboardInput(int key, float deltaTime);
-	void ProcessMouseMovement(float xoffset, float yoffset);
+	glm::mat4 Update();
 
-	glm::mat4 GetViewMatrix() const;
+	void ProcessKeyboardInput(int key, int scancode, int action, int mods);
+	void ProcessMouseMovement(GLFWwindow* window, double xpos, double ypos);
+	void ProcessMouseEvent(GLFWwindow* window, int button, int action, int mods);
 
 private:
-	glm::vec3 m_Position;
+	glm::vec2 m_LastMousePosition;
+	glm::vec3 m_CameraPosition;
+	glm::vec3 m_CameraForward{ 0.f, 0.f, -1.f };
+	glm::vec3 m_CameraUp{ 0.f, 1.f, 0.f };
+	glm::vec3 m_CameraRight{ 1.f, 0.f, 0.f };
 
 	float m_Yaw;
 	float m_Pitch;
 
 	const float m_MovementSpeed = 100.f;
 	const float m_MouseSensitivity = 0.001f;
+	const float m_MaxAngle = 89.f;
 };

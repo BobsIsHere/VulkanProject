@@ -1,7 +1,8 @@
 #include "Window.h"
 
-Window::Window() :
-    m_Window{}
+Window::Window(Camera* pCamera) :
+    m_Window{},
+	m_pCamera{ pCamera }
 {
 }
 
@@ -21,23 +22,32 @@ void Window::Initialize(const int width, const int height, const char* title)
 
     glfwSetFramebufferSizeCallback(m_Window, FramebufferResizeCallback);
 
-	/*glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
-		void* pUser = glfwGetWindowUserPointer(window);
-		VulkanBase* vBase = static_cast<VulkanBase*>(pUser);
-		vBase->KeyEvent(key, scancode, action, mods);
-		});
+    glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        auto* wnd{ static_cast<Window*>(glfwGetWindowUserPointer(window)) };
+        if (wnd && wnd->m_pCamera)
+        {
+            wnd->m_pCamera->ProcessKeyboardInput(key, scancode, action, mods);
+        }
+    });
 
-	glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos) {
-		void* pUser = glfwGetWindowUserPointer(window);
-		VulkanBase* vBase = static_cast<VulkanBase*>(pUser);
-		vBase->MouseMove(window, xpos, ypos);
-		});
+    glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xpos, double ypos)
+    {
+        auto* wnd{ static_cast<Window*>(glfwGetWindowUserPointer(window)) };
+        if (wnd && wnd->m_pCamera)
+        {
+            wnd->m_pCamera->ProcessMouseMovement(window, xpos, ypos);
+        }
+    });
 
-	glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
-		void* pUser = glfwGetWindowUserPointer(window);
-		VulkanBase* vBase = static_cast<VulkanBase*>(pUser);
-		vBase->MouseEvent(window, button, action, mods);
-		});*/
+    glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
+    {
+        auto* wnd{ static_cast<Window*>(glfwGetWindowUserPointer(window)) };
+        if (wnd && wnd->m_pCamera)
+        {
+            wnd->m_pCamera->ProcessMouseEvent(window, button, action, mods);
+        }
+    });
 }
 
 GLFWwindow* Window::GetWindow() const

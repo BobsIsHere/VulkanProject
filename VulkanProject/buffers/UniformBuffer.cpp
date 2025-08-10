@@ -4,6 +4,7 @@
 #include "core/VulkanDevice.h"
 #include "core/VulkanCommandPool.h"
 #include "core/VulkanSwapChain.h"
+#include "core/Camera.h"
 
 UniformBuffer::UniformBuffer(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool) :
 	VulkanBuffer(pDevice, pCommandPool),
@@ -25,19 +26,16 @@ void UniformBuffer::CreateUniformBuffer()
 	vkMapMemory(m_pVulkanDevice->GetDevice(), m_BufferMemory, 0, bufferSize, 0, &m_pBufferMapped);
 }
 
-void UniformBuffer::UpdateUniformBuffer(VulkanSwapChain* pSwapChain)
+void UniformBuffer::UpdateUniformBuffer(VulkanSwapChain* pSwapChain, Camera* pCamera)
 {
-    static auto startTime = std::chrono::high_resolution_clock::now();
+	const float m_FOV{ 45.f };
+	const float m_AspectRatio{ pSwapChain->GetSwapChainExtent().width / static_cast<float>(pSwapChain->GetSwapChainExtent().height) };
 
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
-    UniformBufferObject ubo{};
-    ubo.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.proj = glm::perspective(glm::radians(45.0f), pSwapChain->GetSwapChainExtent().width /
-        (float)pSwapChain->GetSwapChainExtent().height, 0.1f, 10.0f);
-    ubo.proj[1][1] *= -1;
+	UniformBufferObject ubo{};
+	ubo.model = glm::mat4(1.f);
+	ubo.view = pCamera->Update();
+	ubo.proj = glm::perspective(glm::radians(m_FOV), m_AspectRatio, 0.1f, 100.0f);
+	ubo.proj[1][1] *= -1;
 
     memcpy(m_pBufferMapped, &ubo, sizeof(ubo));
 }
