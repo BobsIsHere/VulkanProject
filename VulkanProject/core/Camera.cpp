@@ -4,7 +4,7 @@
 Camera::Camera(glm::vec3 startPos) :
 	m_CameraPosition{ startPos },
 	m_LastMousePosition{ 0.f, 0.f },
-	m_Yaw{ -90.f }, 
+	m_Yaw{ 180.f }, 
 	m_Pitch{ 0.f },
 	m_MovementSpeed{ 1.f },
 	m_MouseSensitivity{ 0.1f }
