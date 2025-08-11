@@ -34,9 +34,9 @@ void UniformBuffer::UpdateUniformBuffer(VulkanSwapChain* pSwapChain, Camera* pCa
 	UniformBufferObject ubo{};
 	ubo.model = glm::rotate(glm::mat4(1.0f),
 		glm::radians(-90.0f),
-		glm::vec3(1.0f, 0.0f, 0.0f));;
+		glm::vec3(1.0f, 0.0f, 0.0f));
 	ubo.view = pCamera->Update();
-	ubo.proj = glm::perspective(glm::radians(m_FOV), m_AspectRatio, 0.1f, 100.0f);
+	ubo.proj = glm::perspective(glm::radians(m_FOV), m_AspectRatio, 0.1f, 10.0f);
 	ubo.proj[1][1] *= -1;
 
     memcpy(m_pBufferMapped, &ubo, sizeof(ubo));

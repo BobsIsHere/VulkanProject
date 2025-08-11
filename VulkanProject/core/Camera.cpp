@@ -6,26 +6,13 @@ Camera::Camera(glm::vec3 startPos) :
 	m_LastMousePosition{ 0.f, 0.f },
 	m_Yaw{ 180.f }, 
 	m_Pitch{ 0.f },
-	m_MovementSpeed{ 1.f },
+	m_MovementSpeed{ 0.05f },
 	m_MouseSensitivity{ 0.1f }
 {
 }
 
 glm::mat4 Camera::Update()
 {
-	//glm::vec3 newForward{ glm::normalize(glm::rotate(glm::mat4(1.0f), -m_Yaw, glm::vec3(0.0f, 1.0f, 0.0f)) *
-	//					  glm::rotate(glm::mat4(1.0f), m_Pitch, glm::vec3(1.0f, 0.0f, 0.0f)) *
-	//					  glm::vec4(m_CameraForward, 1.0f))
-	//};
-
-	//m_CameraForward = newForward;
-	//m_CameraRight = glm::cross(m_CameraForward, glm::vec3(0.f, 1.f, 0.f));
-	//m_CameraUp = glm::cross(m_CameraRight, m_CameraForward);
-
-	//glm::mat4 viewMatrix{ glm::lookAt(m_CameraPosition, m_CameraPosition + m_CameraForward, m_CameraUp) };
-
-	//return viewMatrix;
-
 	float yawRad{ glm::radians(m_Yaw) };
 	float pitchRad{ glm::radians(m_Pitch) };
 

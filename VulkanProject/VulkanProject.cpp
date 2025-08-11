@@ -6,7 +6,7 @@
 void VulkanProject::Run()
 {
     // Make Window
-    m_pCamera = std::make_unique<Camera>(glm::vec3(3.f, 0.f, 0.f));
+    m_pCamera = std::make_unique<Camera>(glm::vec3(3.f, 0.5f, 0.f));
     m_pWindow = std::make_unique<Window>(m_pCamera.get());
     m_pWindow->Initialize(utils::WINDOW_WIDTH, utils::WINDOW_HEIGHT, "Vulkan Window");
 
