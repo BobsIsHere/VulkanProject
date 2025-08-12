@@ -120,8 +120,8 @@ void VulkanProject::InitImGui()
     imguiPoolInfo.poolSizeCount = std::size(imguiPoolSize);
     imguiPoolInfo.pPoolSizes = imguiPoolSize;
 
-    VkDescriptorPool imguiPool{};
-    if (vkCreateDescriptorPool(m_pVulkanDevice->GetDevice(), &imguiPoolInfo, nullptr, &imguiPool) != VK_SUCCESS)
+    m_ImGuiPool = VK_NULL_HANDLE;
+    if (vkCreateDescriptorPool(m_pVulkanDevice->GetDevice(), &imguiPoolInfo, nullptr, &m_ImGuiPool) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to create ImGui DescriptorPool");
     }
@@ -143,7 +143,7 @@ void VulkanProject::InitImGui()
     init_info.QueueFamily = m_pVulkanDevice->FindQueueFamilies(m_pVulkanDevice->GetPhysicalDevice()).graphicsFamily.value();
     init_info.Queue = m_pVulkanDevice->GetGraphicsQueue();
     init_info.PipelineCache = VK_NULL_HANDLE;
-    init_info.DescriptorPool = imguiPool;
+    init_info.DescriptorPool = m_ImGuiPool;
     init_info.Subpass = 0;
     init_info.MinImageCount = utils::MAX_FRAMES_IN_FLIGHT;
     init_info.ImageCount = utils::MAX_FRAMES_IN_FLIGHT;
@@ -256,6 +256,8 @@ void VulkanProject::CleanupVulkan()
     ImGui_ImplVulkan_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+	vkDestroyDescriptorPool(m_pVulkanDevice->GetDevice(), m_ImGuiPool, nullptr);
 
     m_pRenderer->CleanupSwapChain();
 

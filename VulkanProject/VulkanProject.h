@@ -85,4 +85,6 @@ private:
     std::vector<std::unique_ptr<UniformBuffer>> m_pUniformBuffers;
 
 	std::unique_ptr<Camera> m_pCamera;
+
+    VkDescriptorPool m_ImGuiPool;
 };
