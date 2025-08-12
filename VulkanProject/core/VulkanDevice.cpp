@@ -79,15 +79,34 @@ void VulkanDevice::CreateLogicalDevice()
         queueCreateInfos.push_back(queueCreateInfo);
     }
 
+	VkPhysicalDeviceVulkan13Features features13{};
+	features13.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES;
+    features13.pNext = nullptr;
+	features13.synchronization2 = VK_TRUE;
+
+	VkPhysicalDeviceVulkan12Features features12{};
+	features12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
+	features12.pNext = &features13;
+
+	VkPhysicalDeviceVulkan11Features features11{};
+	features11.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES;
+	features11.pNext = &features12;
+
     VkPhysicalDeviceFeatures deviceFeatures{};
     deviceFeatures.samplerAnisotropy = VK_TRUE;
 
+	VkPhysicalDeviceFeatures2 deviceFeatures2{};
+	deviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+	deviceFeatures2.features = deviceFeatures;
+	deviceFeatures2.pNext = &features11;
+
     VkDeviceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+	createInfo.pNext = &deviceFeatures2;
     createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
     createInfo.pQueueCreateInfos = queueCreateInfos.data();
 
-    createInfo.pEnabledFeatures = &deviceFeatures;
+    createInfo.pEnabledFeatures = nullptr;
     createInfo.enabledExtensionCount = static_cast<uint32_t>(m_DeviceExtensions.size());
     createInfo.ppEnabledExtensionNames = m_DeviceExtensions.data();
 
@@ -150,10 +169,26 @@ bool VulkanDevice::IsDeviceSuitable(VkPhysicalDevice device)
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
 
-    VkPhysicalDeviceFeatures supportedFeatures;
-    vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
+    VkPhysicalDeviceVulkan13Features available13{};
+    available13.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES;
 
-    return indices.isComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
+    VkPhysicalDeviceVulkan12Features available12{};
+    available12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
+    available12.pNext = &available13;
+
+    VkPhysicalDeviceVulkan11Features available11{};
+    available11.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES;
+    available11.pNext = &available12;
+
+    VkPhysicalDeviceFeatures2 available{};
+    available.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+    available.pNext = &available11;
+
+    vkGetPhysicalDeviceFeatures2(device, &available);
+
+    const bool requiredFeaturesSupported{ available.features.samplerAnisotropy && available13.synchronization2 };
+
+    return indices.isComplete() && extensionsSupported && swapChainAdequate && requiredFeaturesSupported;
 }
 
 bool VulkanDevice::CheckDeviceExtensionSupport(VkPhysicalDevice device)
