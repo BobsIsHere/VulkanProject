@@ -63,8 +63,6 @@ private:
     void InitImGui();
 	void MainLoopImGui();
 
-    void UpdateUniformBufferWithCamera();
-
     std::unique_ptr<Window> m_pWindow;
     std::unique_ptr<VulkanInstance> m_pVulkanInstance;
     std::unique_ptr<VulkanDevice> m_pVulkanDevice;

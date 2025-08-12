@@ -213,27 +213,6 @@ void VulkanProject::MainLoopImGui()
         ImGui::GetDrawData());
 }
 
-void VulkanProject::UpdateUniformBufferWithCamera()
-{
-    glm::mat4 view{ m_pCamera->Update() };
-    glm::mat4 proj{ glm::perspective(glm::radians(45.0f),
-        (float)utils::WINDOW_WIDTH / (float)utils::WINDOW_HEIGHT,
-        0.1f, 100.0f) };
-
-    // GLM is designed for OpenGL, flip Y for Vulkan
-    proj[1][1] *= -1; 
-
-    UniformBufferObject ubo{};
-    ubo.view = view;
-    ubo.proj = proj;
-    ubo.model = glm::mat4(1.0f);
-
-    void* data;
-    vkMapMemory(m_pVulkanDevice->GetDevice(), m_pUniformBuffers[0]->GetBufferMemory(), 0, sizeof(ubo), 0, &data);
-    memcpy(data, &ubo, sizeof(ubo));
-    vkUnmapMemory(m_pVulkanDevice->GetDevice(), m_pUniformBuffers[0]->GetBufferMemory());
-}
-
 void VulkanProject::MainLoop()
 {
     float lastFrameTime{ static_cast<float>(glfwGetTime()) };
