@@ -26,12 +26,17 @@ namespace CommandUtils
 	{
         vkEndCommandBuffer(commandBuffer);
 
-        VkSubmitInfo submitInfo{};
-        submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &commandBuffer;
+        VkCommandBufferSubmitInfo cmdBufSubmitInfo{};
+        cmdBufSubmitInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO;
+        cmdBufSubmitInfo.commandBuffer = commandBuffer;
+        cmdBufSubmitInfo.deviceMask = 0;
 
-        vkQueueSubmit(device->GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
+        VkSubmitInfo2 submitInfo2{};
+        submitInfo2.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO_2;
+        submitInfo2.commandBufferInfoCount = 1;
+        submitInfo2.pCommandBufferInfos = &cmdBufSubmitInfo;
+
+        vkQueueSubmit2(device->GetGraphicsQueue(), 1, &submitInfo2, VK_NULL_HANDLE);
         vkQueueWaitIdle(device->GetGraphicsQueue());
 
         vkFreeCommandBuffers(device->GetDevice(), commandPool->GetCommandPool(), 1, &commandBuffer);
