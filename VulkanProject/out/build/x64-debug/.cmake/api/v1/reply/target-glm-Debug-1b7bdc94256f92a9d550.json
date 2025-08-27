@@ -84,7 +84,7 @@
 			[
 				{
 					"backtrace" : 5,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glm-src"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glm-src"
 				}
 			],
 			"language" : "CXX",

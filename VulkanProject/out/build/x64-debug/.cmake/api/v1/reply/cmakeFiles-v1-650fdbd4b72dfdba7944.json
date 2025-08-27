@@ -341,8 +341,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug",
-		"source" : "C:/GitHubFiles/GraphicsProg2/VulkanProject"
+		"build" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug",
+		"source" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject"
 	},
 	"version" : 
 	{

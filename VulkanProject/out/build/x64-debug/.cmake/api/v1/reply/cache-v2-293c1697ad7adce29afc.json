@@ -51,7 +51,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug"
+			"value" : "c:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -479,7 +479,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/CMakeFiles/pkgRedirects"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject"
 		},
 		{
 			"name" : "CMAKE_INSTALL_BINDIR",
@@ -779,7 +779,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/install/x64-debug"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/install/x64-debug"
 		},
 		{
 			"name" : "CMAKE_INSTALL_RUNSTATEDIR",
@@ -1455,7 +1455,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps"
 		},
 		{
 			"name" : "FETCHCONTENT_FULLY_DISCONNECTED",
@@ -1566,18 +1566,6 @@
 			"value" : "OFF"
 		},
 		{
-			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_OpenGL",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Details about finding OpenGL"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "[opengl32][c ][v()]"
-		},
-		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Threads",
 			"properties" : 
 			[
@@ -1627,7 +1615,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glfw-build"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glfw-build"
 		},
 		{
 			"name" : "GLFW_BUILD_DOCS",
@@ -1747,7 +1735,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glfw-src"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glfw-src"
 		},
 		{
 			"name" : "GLFW_USE_HYBRID_HPG",
@@ -1990,38 +1978,6 @@
 			"value" : "OFF"
 		},
 		{
-			"name" : "OPENGL_gl_LIBRARY",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "OpenGL library for win32"
-				}
-			],
-			"type" : "STRING",
-			"value" : "opengl32"
-		},
-		{
-			"name" : "OPENGL_glu_LIBRARY",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "GLU library for win32"
-				}
-			],
-			"type" : "STRING",
-			"value" : "glu32"
-		},
-		{
 			"name" : "USE_MSVC_RUNTIME_LIBRARY_DLL",
 			"properties" : 
 			[
@@ -2043,7 +1999,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug"
 		},
 		{
 			"name" : "VulkanProject_IS_TOP_LEVEL",
@@ -2067,7 +2023,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject"
 		},
 		{
 			"name" : "Vulkan_GLSLANG_VALIDATOR_EXECUTABLE",
@@ -2143,31 +2099,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/install/x64-debug"
-		},
-		{
-			"name" : "glfw3_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "The directory containing a CMake configuration file for glfw3."
-				}
-			],
-			"type" : "PATH",
-			"value" : "glfw3_DIR-NOTFOUND"
-		},
-		{
-			"name" : "glfw_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "The directory containing a CMake configuration file for glfw."
-				}
-			],
-			"type" : "PATH",
-			"value" : "glfw_DIR-NOTFOUND"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/install/x64-debug"
 		},
 		{
 			"name" : "glm_BINARY_DIR",
@@ -2179,7 +2111,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glm-build"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glm-build"
 		},
 		{
 			"name" : "glm_IS_TOP_LEVEL",
@@ -2203,7 +2135,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glm-src"
+			"value" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glm-src"
 		}
 	],
 	"kind" : "cache",

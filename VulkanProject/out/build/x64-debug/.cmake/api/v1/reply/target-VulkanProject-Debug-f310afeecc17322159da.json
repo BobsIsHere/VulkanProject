@@ -91,27 +91,27 @@
 			[
 				{
 					"backtrace" : 6,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/imgui-src"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/imgui-src"
 				},
 				{
 					"backtrace" : 6,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/imgui-src/backends"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/imgui-src/backends"
 				},
 				{
 					"backtrace" : 7,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject"
 				},
 				{
 					"backtrace" : 7,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/../3rdParty"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/../3rdParty"
 				},
 				{
 					"backtrace" : 2,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glfw-src/include"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glfw-src/include"
 				},
 				{
 					"backtrace" : 3,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glm-src"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glm-src"
 				},
 				{
 					"backtrace" : 2,

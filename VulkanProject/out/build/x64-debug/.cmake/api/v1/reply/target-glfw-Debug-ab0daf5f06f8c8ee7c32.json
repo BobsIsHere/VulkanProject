@@ -141,15 +141,15 @@
 			[
 				{
 					"backtrace" : 7,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glfw-src/include"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glfw-src/include"
 				},
 				{
 					"backtrace" : 8,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glfw-src/src"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glfw-src/src"
 				},
 				{
 					"backtrace" : 8,
-					"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/build/x64-debug/_deps/glfw-build/src"
+					"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/build/x64-debug/_deps/glfw-build/src"
 				}
 			],
 			"language" : "C",
@@ -203,7 +203,7 @@
 		],
 		"prefix" : 
 		{
-			"path" : "C:/GitHubFiles/GraphicsProg2/VulkanProject/out/install/x64-debug"
+			"path" : "C:/GitHubFiles/VulkanProject/VulkanProject/VulkanProject/out/install/x64-debug"
 		}
 	},
 	"name" : "glfw",
