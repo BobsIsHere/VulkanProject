@@ -20,6 +20,7 @@ class GraphicsPipeline;
 class VulkanDescriptorSet;
 class VulkanImage;
 class FramebufferManager;
+class VulkanCommandPool;
 
 class Renderer final
 {
@@ -31,8 +32,9 @@ public:
 	void Cleanup();
 
 	void CreateFramebuffers();
-	void DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers,
-		GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData);
+	void DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
+		std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, VulkanCommandPool* pCommandPool, GraphicsPipeline* pPipeline, 
+		std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData);
 
 	void CleanupSwapChain();
 	void RecreateSwapChain();
@@ -53,6 +55,7 @@ private:
 
 	uint32_t m_CurrentFrame = 0;
 
+	VulkanImage* m_pSwapChainImage;
 	VulkanImage* m_pDepthImage;
 	FramebufferManager* m_pFramebufferManager;
 };

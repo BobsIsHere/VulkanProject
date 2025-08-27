@@ -50,7 +50,7 @@ void Renderer::CreateFramebuffers()
 }
 
 void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer,
-    std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, GraphicsPipeline* pPipeline, 
+    std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, VulkanCommandPool* pCommandPool, GraphicsPipeline* pPipeline,
     std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData)
 {
     vkWaitForFences(m_pVulkanDevice->GetDevice(), 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
@@ -76,8 +76,16 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
     pCommandBuffers[m_CurrentFrame]->Reset();
     pCommandBuffers[m_CurrentFrame]->Begin();
 
+	m_pDepthImage->TransitionImageLayout(m_pDepthImage->GetImage(), m_pDepthImage->GetFormat(), VK_IMAGE_LAYOUT_UNDEFINED, 
+        VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL, pCommandPool);
+	m_pSwapChainImage->TransitionImageLayout(m_pSwapChainImage->GetImage(), m_pSwapChainImage->GetFormat(),
+		VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, pCommandPool);
+
     pCommandBuffers[m_CurrentFrame]->Record(imageIndex, m_pFramebufferManager->GetFramebuffers(), pVertexBuffer, pIndexBuffer, m_pVulkanRenderPass,
         m_pVulkanSwapChain, pPipeline, pVulkanDescriptorSets, m_CurrentFrame, indices, drawData);
+
+    m_pSwapChainImage->TransitionImageLayout(m_pSwapChainImage->GetImage(), m_pSwapChainImage->GetFormat(),
+        VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, pCommandPool);
 
     pCommandBuffers[m_CurrentFrame]->End();
 

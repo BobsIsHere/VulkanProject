@@ -16,6 +16,7 @@ class VulkanDevice;
 class VulkanCommandPool;
 class VulkanRenderPass;
 class VulkanSwapChain;
+class VulkanImage;
 class GraphicsPipeline;
 
 class VulkanCommandBuffer final

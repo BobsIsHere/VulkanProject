@@ -207,6 +207,7 @@ void VulkanProject::MainLoopImGui()
         m_pUniformBuffers,
         m_pVertexBuffer.get(), m_pIndexBuffer.get(),
         m_pVulkanCommandBuffers,
+        m_pVulkanCommandPool.get(),
         m_pGraphicsPipeline.get(),
         m_pVulkanDescriptorSets,
         m_pVikingModel->GetIndices(),
