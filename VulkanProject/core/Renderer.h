@@ -10,7 +10,7 @@
 
 class VulkanDevice;
 class VulkanSwapChain;
-class VulkanRenderPass;
+class VulkanRenderContext;
 class Window;
 class Camera;
 class UniformBuffer;
@@ -19,22 +19,20 @@ class IndexBuffer;
 class GraphicsPipeline;
 class VulkanDescriptorSet;
 class VulkanImage;
-class FramebufferManager;
 class VulkanCommandPool;
 
 class Renderer final
 {
 public:
-	Renderer(VulkanDevice* device, VulkanSwapChain* swapChain, VulkanRenderPass* renderPass, Window* window, Camera* pCamera);
+	Renderer(VulkanDevice* device, VulkanSwapChain* swapChain, VulkanRenderContext* renderPass, Window* window, Camera* pCamera);
 	~Renderer();
 
 	void CreateDepthResources();
 	void Cleanup();
 
-	void CreateFramebuffers();
 	void DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
 		std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, VulkanCommandPool* pCommandPool, GraphicsPipeline* pPipeline, 
-		std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData);
+		std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage);
 
 	void CleanupSwapChain();
 	void RecreateSwapChain();
@@ -45,7 +43,7 @@ public:
 private:
 	VulkanDevice* m_pVulkanDevice;
 	VulkanSwapChain* m_pVulkanSwapChain;
-	VulkanRenderPass* m_pVulkanRenderPass;
+	VulkanRenderContext* m_pVulkanRenderContext;
 	Window* m_pWindow;
 	Camera* m_pCamera;
 
@@ -57,5 +55,4 @@ private:
 
 	VulkanImage* m_pSwapChainImage;
 	VulkanImage* m_pDepthImage;
-	FramebufferManager* m_pFramebufferManager;
 };

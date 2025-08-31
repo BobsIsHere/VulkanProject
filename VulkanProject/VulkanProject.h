@@ -34,7 +34,7 @@
 #include "core/VulkanInstance.h"
 #include "core/VulkanDevice.h"
 #include "core/VulkanSwapChain.h"
-#include "core/VulkanRenderPass.h"
+#include "core/VulkanRenderContext.h"
 #include "core/VulkanCommandPool.h"
 #include "core/VulkanCommandBuffer.h"
 #include "core/VulkanDescriptorPool.h"
@@ -67,7 +67,7 @@ private:
     std::unique_ptr<VulkanInstance> m_pVulkanInstance;
     std::unique_ptr<VulkanDevice> m_pVulkanDevice;
     std::unique_ptr<VulkanSwapChain> m_pVulkanSwapChain;
-    std::unique_ptr<VulkanRenderPass> m_pVulkanRenderPass;
+    std::unique_ptr<VulkanRenderContext> m_pVulkanRenderContext;
     std::unique_ptr<GraphicsPipeline> m_pGraphicsPipeline;
     std::unique_ptr<VulkanCommandPool> m_pVulkanCommandPool;
 

@@ -3,10 +3,10 @@
 #include "FramebufferManager.h"
 #include "VulkanDevice.h"
 #include "VulkanSwapChain.h"
-#include "VulkanRenderPass.h"
+#include "VulkanRenderContext.h"
 #include "VulkanImage.h"
 
-void FramebufferManager::CreateFramebuffers(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderPass* pRenderpass, VulkanImage* pDepthImage)
+void FramebufferManager::CreateFramebuffers(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderContext* pRenderpass, VulkanImage* pDepthImage)
 {
     m_Framebuffers.resize(pSwapChain->GetSwapChainImageViews().size());
     auto temp = pSwapChain->GetSwapChainImageViews().size();
@@ -20,7 +20,7 @@ void FramebufferManager::CreateFramebuffers(VulkanDevice* pDevice, VulkanSwapCha
 
         VkFramebufferCreateInfo framebufferInfo{};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = pRenderpass->GetRenderPass();
+        framebufferInfo.renderPass = nullptr;
         framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
         framebufferInfo.pAttachments = attachments.data();
         framebufferInfo.width = pSwapChain->GetSwapChainExtent().width;

@@ -6,15 +6,15 @@
 #include "GLFW/glfw3.h"
 
 class VulkanDevice;
-class VulkanRenderPass;
+class VulkanRenderContext;
 
 class GraphicsPipeline final
 {
 public:
-	GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderPass* pRenderPass);
+	GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* pRenderPass);
 	~GraphicsPipeline();
 
-	void CreatePipeline();
+	void CreatePipeline(VkFormat swapImageFormat, VkFormat depthFormat);
 	void CreateDescriptorSetLayout();
 
 	void CleanupPipeline();
@@ -26,7 +26,7 @@ public:
 
 private:
 	VulkanDevice* m_pVulkanDevice;
-	VulkanRenderPass* m_pVulkanRenderPass;
+	VulkanRenderContext* m_pVulkanRenderPass;
 
 	VkPipelineLayout m_PipelineLayout;
 	VkPipeline m_GraphicsPipeline;

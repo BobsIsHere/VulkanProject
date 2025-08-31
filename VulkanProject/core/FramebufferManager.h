@@ -7,7 +7,7 @@
 
 class VulkanDevice;
 class VulkanSwapChain;
-class VulkanRenderPass;
+class VulkanRenderContext;
 class VulkanImage;
 
 class FramebufferManager
@@ -16,7 +16,7 @@ public:
 	FramebufferManager() = default;
 	~FramebufferManager() = default;
 
-	void CreateFramebuffers(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderPass* pRenderpass, VulkanImage* pDepthImage);
+	void CreateFramebuffers(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderContext* pRenderpass, VulkanImage* pDepthImage);
 	void Cleanup(VulkanDevice* pDevice);
 	const std::vector<VkFramebuffer>& GetFramebuffers() const;
 

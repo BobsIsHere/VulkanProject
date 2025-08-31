@@ -6,7 +6,7 @@
 #include "utils/utils.h"
 #include "VulkanDevice.h"
 #include "VulkanCommandPool.h"
-#include "VulkanRenderPass.h"
+#include "VulkanRenderContext.h"
 #include "VulkanSwapChain.h"
 #include "VulkanImage.h"
 #include "pipelines/GraphicsPipeline.h"
@@ -82,35 +82,15 @@ VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
     return m_CommandBuffer;
 }
 
-void VulkanCommandBuffer::Record(uint32_t imageIdx, std::vector<VkFramebuffer> swapChainFramebuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
-    VulkanRenderPass* pRenderPass, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets,
-    uint32_t currentFrame, std::vector<uint32_t> indices, ImDrawData* drawData)
+void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
+    VulkanRenderContext* pRenderContext, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets,
+    uint32_t currentFrame, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage)
 {
-    VkRenderingAttachmentInfo colorAttachment{};
-    colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-    //colorAttachment.imageView = pSwapChain->GetImageView(imageIdx);
-    //colorAttachment.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    colorAttachment.clearValue = { {0.0f, 0.0f, 0.0f, 1.0f} };
-
-    VkRenderingAttachmentInfo depthAttachment{};
-    depthAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-    //depthAttachment.imageView = pDepthImage->GetImageView();
-    //depthAttachment.imageLayout = pDepthImage->TransitionImageLayout();
-    depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    depthAttachment.clearValue = { {1.0f, 0} };
-
     VkRenderingInfo renderInfo{};
-    renderInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO;
-    renderInfo.renderArea.offset = { 0, 0 };
-    renderInfo.renderArea.extent = pSwapChain->GetSwapChainExtent();
-    renderInfo.layerCount = 1;
-    renderInfo.colorAttachmentCount = 1;
-    renderInfo.pColorAttachments = &colorAttachment;
-    renderInfo.pDepthAttachment = &depthAttachment;
-    renderInfo.pStencilAttachment = nullptr;
+    VkRenderingAttachmentInfo colorAttachment{};
+    VkRenderingAttachmentInfo depthAttachment{};
+
+	pRenderContext->BuildRenderingInfo(imageIdx, pDepthImage, renderInfo, colorAttachment, depthAttachment);
 
     vkCmdBeginRendering(m_CommandBuffer, &renderInfo);
 

@@ -4,9 +4,9 @@
 #include "GraphicsPipeline.h"
 #include "utils/utils.h"
 #include "core/VulkanDevice.h"
-#include "core/VulkanRenderPass.h"
+#include "core/VulkanRenderContext.h"
 
-GraphicsPipeline::GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderPass* pRenderPass) :
+GraphicsPipeline::GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* pRenderPass) :
 	m_pVulkanDevice{ pDevice },
 	m_pVulkanRenderPass{ pRenderPass },
     m_GraphicsPipeline{},
@@ -18,7 +18,7 @@ GraphicsPipeline::~GraphicsPipeline()
 {
 }
 
-void GraphicsPipeline::CreatePipeline()
+void GraphicsPipeline::CreatePipeline(VkFormat swapImageFormat, VkFormat depthFormat)
 {
     auto vertShaderCode = ReadFile("shaders/vert.spv");
     auto fragShaderCode = ReadFile("shaders/frag.spv");
@@ -140,7 +140,9 @@ void GraphicsPipeline::CreatePipeline()
 
     VkPipelineRenderingCreateInfo renderingInfo{};
 	renderingInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-	renderingInfo.colorAttachmentCount = 1;
+    renderingInfo.colorAttachmentCount = 1;
+    renderingInfo.pColorAttachmentFormats = &swapImageFormat;
+    renderingInfo.depthAttachmentFormat = depthFormat;
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;

@@ -3,26 +3,24 @@
 #include "Renderer.h"
 #include "VulkanDevice.h"
 #include "VulkanSwapChain.h"
-#include "VulkanRenderPass.h"
+#include "VulkanRenderContext.h"
 #include "VulkanCommandBuffer.h"
 #include "VulkanImage.h"
 #include "buffers/UniformBuffer.h"
 #include "buffers/VertexBuffer.h"
 #include "buffers/IndexBuffer.h"
 #include "Window.h"
-#include "FramebufferManager.h"
 #include "Camera.h"
 
-Renderer::Renderer(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderPass* pRenderPass, Window* pWindow, Camera* pCamera) :
+Renderer::Renderer(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderContext* pRenderPass, Window* pWindow, Camera* pCamera) :
     m_pVulkanDevice{ pDevice },
     m_pVulkanSwapChain{ pSwapChain },
-    m_pVulkanRenderPass{ pRenderPass },
+    m_pVulkanRenderContext{ pRenderPass },
     m_pWindow{ pWindow },
 	m_pCamera{ pCamera },
     m_pDepthImage{ new VulkanImage(pDevice) },
-    m_pFramebufferManager{ new FramebufferManager() }
+	m_pSwapChainImage{ new VulkanImage(pDevice) }
 {
-    
 }
 
 Renderer::~Renderer()
@@ -44,14 +42,9 @@ void Renderer::Cleanup()
     }
 }
 
-void Renderer::CreateFramebuffers()
-{
-    m_pFramebufferManager->CreateFramebuffers(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pDepthImage);
-}
-
 void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer,
     std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, VulkanCommandPool* pCommandPool, GraphicsPipeline* pPipeline,
-    std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData)
+    std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage)
 {
     vkWaitForFences(m_pVulkanDevice->GetDevice(), 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
 
@@ -76,37 +69,59 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
     pCommandBuffers[m_CurrentFrame]->Reset();
     pCommandBuffers[m_CurrentFrame]->Begin();
 
+    const VkImage swapChainImage{ m_pVulkanSwapChain->GetSwapChainImages()[imageIndex] };
+	const VkFormat swapChainImageFormat{ m_pVulkanSwapChain->GetSwapChainImageFormat() };
+
 	m_pDepthImage->TransitionImageLayout(m_pDepthImage->GetImage(), m_pDepthImage->GetFormat(), VK_IMAGE_LAYOUT_UNDEFINED, 
         VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL, pCommandPool);
-	m_pSwapChainImage->TransitionImageLayout(m_pSwapChainImage->GetImage(), m_pSwapChainImage->GetFormat(),
+    m_pSwapChainImage->TransitionImageLayout(swapChainImage, swapChainImageFormat,
 		VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, pCommandPool);
 
-    pCommandBuffers[m_CurrentFrame]->Record(imageIndex, m_pFramebufferManager->GetFramebuffers(), pVertexBuffer, pIndexBuffer, m_pVulkanRenderPass,
-        m_pVulkanSwapChain, pPipeline, pVulkanDescriptorSets, m_CurrentFrame, indices, drawData);
+    pCommandBuffers[m_CurrentFrame]->Record(imageIndex, pVertexBuffer, pIndexBuffer, m_pVulkanRenderContext,
+        m_pVulkanSwapChain, pPipeline, pVulkanDescriptorSets, m_CurrentFrame, indices, drawData, m_pDepthImage);
 
-    m_pSwapChainImage->TransitionImageLayout(m_pSwapChainImage->GetImage(), m_pSwapChainImage->GetFormat(),
+    m_pSwapChainImage->TransitionImageLayout(swapChainImage, swapChainImageFormat,
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, pCommandPool);
 
     pCommandBuffers[m_CurrentFrame]->End();
 
-    VkSubmitInfo submitInfo{};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    VkSemaphoreSubmitInfo waitSemaphoreInfo{};
+    waitSemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO;
+    waitSemaphoreInfo.pNext = nullptr;
+    waitSemaphoreInfo.semaphore = m_ImageAvailableSemaphores[m_CurrentFrame];
+    waitSemaphoreInfo.value = 0; 
+    waitSemaphoreInfo.stageMask = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+    waitSemaphoreInfo.deviceIndex = 0;
 
-    VkSemaphore waitSemaphores[] = { m_ImageAvailableSemaphores[m_CurrentFrame] };
-    VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT };
-    submitInfo.waitSemaphoreCount = 1;
-    submitInfo.pWaitSemaphores = waitSemaphores;
-    submitInfo.pWaitDstStageMask = waitStages;
+    VkSemaphoreSubmitInfo signalSemaphoreInfo{};
+    signalSemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO;
+    signalSemaphoreInfo.pNext = nullptr;
+    signalSemaphoreInfo.semaphore = m_RenderFinishedSemaphores[m_CurrentFrame];
+    signalSemaphoreInfo.value = 0;
+    signalSemaphoreInfo.stageMask = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
+    signalSemaphoreInfo.deviceIndex = 0;
 
-    const VkCommandBuffer commandBuffer{ pCommandBuffers[m_CurrentFrame]->GetCommandBuffer() };
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffer;
+    VkCommandBuffer commandBuffer = pCommandBuffers[m_CurrentFrame]->GetCommandBuffer();
 
-    VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores[m_CurrentFrame] };
-    submitInfo.signalSemaphoreCount = 1;
-    submitInfo.pSignalSemaphores = signalSemaphores;
+    VkCommandBufferSubmitInfo cmdBufferInfo{};
+    cmdBufferInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO;
+    cmdBufferInfo.pNext = nullptr;
+    cmdBufferInfo.commandBuffer = commandBuffer;
+    cmdBufferInfo.deviceMask = 0;
 
-    if (vkQueueSubmit(m_pVulkanDevice->GetGraphicsQueue(), 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
+    VkSubmitInfo2 submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO_2;
+    submitInfo.pNext = nullptr;
+    submitInfo.waitSemaphoreInfoCount = 1;
+    submitInfo.pWaitSemaphoreInfos = &waitSemaphoreInfo;
+    submitInfo.commandBufferInfoCount = 1;
+    submitInfo.pCommandBufferInfos = &cmdBufferInfo;
+    submitInfo.signalSemaphoreInfoCount = 1;
+    submitInfo.pSignalSemaphoreInfos = &signalSemaphoreInfo;
+
+    VkFence fence = m_InFlightFences[m_CurrentFrame];
+
+    if (vkQueueSubmit2(m_pVulkanDevice->GetGraphicsQueue(), 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to submit draw command buffer!");
     }
@@ -114,6 +129,7 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
     VkPresentInfoKHR presentInfo{};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
+    VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores[m_CurrentFrame] };
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
 
@@ -142,8 +158,6 @@ void Renderer::CleanupSwapChain()
 {
     m_pDepthImage->Cleanup();
 
-    m_pFramebufferManager->Cleanup(m_pVulkanDevice);
-
     for (size_t idx = 0; idx < m_pVulkanSwapChain->GetSwapChainImageViews().size(); ++idx)
     {
         vkDestroyImageView(m_pVulkanDevice->GetDevice(), m_pVulkanSwapChain->GetSwapChainImageViews()[idx], nullptr);
@@ -170,7 +184,6 @@ void Renderer::RecreateSwapChain()
     m_pVulkanSwapChain->Create();
     m_pVulkanSwapChain->CreateImageViews();
     m_pDepthImage->Create(m_pVulkanSwapChain);
-    m_pFramebufferManager->CreateFramebuffers(m_pVulkanDevice, m_pVulkanSwapChain, m_pVulkanRenderPass, m_pDepthImage);
 }
 
 void Renderer::CreateSyncObjects()

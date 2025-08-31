@@ -14,12 +14,12 @@ void VulkanProject::Run()
     m_pVulkanInstance = std::make_unique<VulkanInstance>();
     m_pVulkanDevice = std::make_unique<VulkanDevice>(m_pVulkanInstance.get(), m_pWindow.get());
     m_pVulkanSwapChain = std::make_unique<VulkanSwapChain>(m_pWindow.get(), m_pVulkanDevice.get());
-    m_pVulkanRenderPass = std::make_unique<VulkanRenderPass>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get());
+    m_pVulkanRenderContext = std::make_unique<VulkanRenderContext>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get());
     m_pVulkanCommandPool = std::make_unique<VulkanCommandPool>(m_pVulkanDevice.get());
     m_pVulkanDescriptorPool = std::make_unique<VulkanDescriptorPool>(m_pVulkanDevice.get());
 
     // Initialize Graphics Pipeline
-    m_pGraphicsPipeline = std::make_unique<GraphicsPipeline>(m_pVulkanDevice.get(), m_pVulkanRenderPass.get());
+    m_pGraphicsPipeline = std::make_unique<GraphicsPipeline>(m_pVulkanDevice.get(), m_pVulkanRenderContext.get());
 
     m_pVulkanCommandBuffers.resize(utils::MAX_FRAMES_IN_FLIGHT);
     m_pVulkanDescriptorSets.resize(utils::MAX_FRAMES_IN_FLIGHT);
@@ -41,7 +41,7 @@ void VulkanProject::Run()
     }
 
     // Initialize Rendering
-    m_pRenderer = std::make_unique<Renderer>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get(), m_pVulkanRenderPass.get(), m_pWindow.get(), m_pCamera.get());
+    m_pRenderer = std::make_unique<Renderer>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get(), m_pVulkanRenderContext.get(), m_pWindow.get(), m_pCamera.get());
 
     m_pVikingModel = std::make_unique<Model>("models/viking_room.obj");
     m_pVikingTexture = std::make_unique<Texture>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get(), "textures/viking_room.png");
@@ -64,12 +64,11 @@ void VulkanProject::InitVulkan()
     m_pVulkanSwapChain->Create();
 
     m_pVulkanSwapChain->CreateImageViews();
-    m_pVulkanRenderPass->Create();
+    //m_pVulkanRenderContext->Create();
     m_pGraphicsPipeline->CreateDescriptorSetLayout();
-    m_pGraphicsPipeline->CreatePipeline();
+    m_pGraphicsPipeline->CreatePipeline(m_pVulkanSwapChain->GetSwapChainImageFormat(), m_pRenderer->GetDepthImage()->GetFormat());
     m_pVulkanCommandPool->Create();
     m_pRenderer->CreateDepthResources();
-    m_pRenderer->CreateFramebuffers();
     m_pVikingTexture->CreateTextureImage();
     m_pVikingTexture->CreateTextureImageView();
     m_pVikingTexture->CreateTextureSampler();
@@ -133,7 +132,37 @@ void VulkanProject::InitImGui()
 
 	ImGui::StyleColorsDark();
 
-    // 3. Setup Platform/Renderer bindings
+    // 3. Setup Dummy Renderpass
+    VkAttachmentDescription colorAttachment{};
+    colorAttachment.format = m_pVulkanSwapChain->GetSwapChainImageFormat();
+    colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+    VkAttachmentReference colorAttachmentRef{};
+    colorAttachmentRef.attachment = 0;
+    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+    VkSubpassDescription subpass{};
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.colorAttachmentCount = 1;
+    subpass.pColorAttachments = &colorAttachmentRef;
+
+    VkRenderPassCreateInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.attachmentCount = 1;
+    renderPassInfo.pAttachments = &colorAttachment;
+    renderPassInfo.subpassCount = 1;
+    renderPassInfo.pSubpasses = &subpass;
+
+    VkRenderPass imguiRenderPass;
+    vkCreateRenderPass(m_pVulkanDevice->GetDevice(), &renderPassInfo, nullptr, &imguiRenderPass);
+
+    // 4. Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForVulkan(m_pWindow->GetWindow(), true);
 
     ImGui_ImplVulkan_InitInfo init_info = {};
@@ -149,7 +178,7 @@ void VulkanProject::InitImGui()
     init_info.ImageCount = utils::MAX_FRAMES_IN_FLIGHT;
     init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
     init_info.Allocator = nullptr;
-    init_info.RenderPass = m_pVulkanRenderPass->GetRenderPass();
+    init_info.RenderPass = imguiRenderPass;
 
     ImGui_ImplVulkan_Init(&init_info);
 }
@@ -211,7 +240,8 @@ void VulkanProject::MainLoopImGui()
         m_pGraphicsPipeline.get(),
         m_pVulkanDescriptorSets,
         m_pVikingModel->GetIndices(),
-        ImGui::GetDrawData());
+        ImGui::GetDrawData(),
+        m_pRenderer->GetDepthImage());
 }
 
 void VulkanProject::MainLoop()
@@ -243,7 +273,7 @@ void VulkanProject::CleanupVulkan()
 
     m_pGraphicsPipeline->CleanupPipeline();
 
-    m_pVulkanRenderPass->Cleanup();
+    //m_pVulkanRenderContext->Cleanup();
 
     for (size_t i = 0; i < utils::MAX_FRAMES_IN_FLIGHT; ++i)
     {
