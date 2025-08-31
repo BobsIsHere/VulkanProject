@@ -64,7 +64,6 @@ void VulkanProject::InitVulkan()
     m_pVulkanSwapChain->Create();
 
     m_pVulkanSwapChain->CreateImageViews();
-    //m_pVulkanRenderContext->Create();
     m_pGraphicsPipeline->CreateDescriptorSetLayout();
     m_pGraphicsPipeline->CreatePipeline();
     m_pVulkanCommandPool->Create();
@@ -132,55 +131,37 @@ void VulkanProject::InitImGui()
 
 	ImGui::StyleColorsDark();
 
-    // 3. Setup Dummy Renderpass
-    VkAttachmentDescription colorAttachment{};
-    colorAttachment.format = m_pVulkanSwapChain->GetSwapChainImageFormat();
-    colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
-    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
-    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
-    VkAttachmentReference colorAttachmentRef{};
-    colorAttachmentRef.attachment = 0;
-    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-    VkSubpassDescription subpass{};
-    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-    subpass.colorAttachmentCount = 1;
-    subpass.pColorAttachments = &colorAttachmentRef;
-
-    VkRenderPassCreateInfo renderPassInfo{};
-    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
-    renderPassInfo.attachmentCount = 1;
-    renderPassInfo.pAttachments = &colorAttachment;
-    renderPassInfo.subpassCount = 1;
-    renderPassInfo.pSubpasses = &subpass;
-
-    VkRenderPass imguiRenderPass;
-    vkCreateRenderPass(m_pVulkanDevice->GetDevice(), &renderPassInfo, nullptr, &imguiRenderPass);
-
-    // 4. Setup Platform/Renderer bindings
+    // 3. Setup Platform/Renderer bindings
     ImGui_ImplGlfw_InitForVulkan(m_pWindow->GetWindow(), true);
 
-    ImGui_ImplVulkan_InitInfo init_info = {};
-    init_info.Instance = m_pVulkanInstance->GetInstance();
-    init_info.PhysicalDevice = m_pVulkanDevice->GetPhysicalDevice();
-    init_info.Device = m_pVulkanDevice->GetDevice();
-    init_info.QueueFamily = m_pVulkanDevice->FindQueueFamilies(m_pVulkanDevice->GetPhysicalDevice()).graphicsFamily.value();
-    init_info.Queue = m_pVulkanDevice->GetGraphicsQueue();
-    init_info.PipelineCache = VK_NULL_HANDLE;
-    init_info.DescriptorPool = m_ImGuiPool;
-    init_info.Subpass = 0;
-    init_info.MinImageCount = utils::MAX_FRAMES_IN_FLIGHT;
-    init_info.ImageCount = utils::MAX_FRAMES_IN_FLIGHT;
-    init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
-    init_info.Allocator = nullptr;
-    init_info.RenderPass = imguiRenderPass;
+    ImGui_ImplVulkan_InitInfo imguiInfo = {};
+    imguiInfo.Instance = m_pVulkanInstance->GetInstance();
+    imguiInfo.PhysicalDevice = m_pVulkanDevice->GetPhysicalDevice();
+    imguiInfo.Device = m_pVulkanDevice->GetDevice();
+    imguiInfo.QueueFamily = m_pVulkanDevice->FindQueueFamilies(m_pVulkanDevice->GetPhysicalDevice()).graphicsFamily.value();
+    imguiInfo.Queue = m_pVulkanDevice->GetGraphicsQueue();
+    imguiInfo.PipelineCache = VK_NULL_HANDLE;
+    imguiInfo.DescriptorPool = m_ImGuiPool;
+    imguiInfo.Subpass = 0;
+    imguiInfo.MinImageCount = utils::MAX_FRAMES_IN_FLIGHT;
+    imguiInfo.ImageCount = utils::MAX_FRAMES_IN_FLIGHT;
+    imguiInfo.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+    imguiInfo.Allocator = nullptr;
 
-    ImGui_ImplVulkan_Init(&init_info);
+    // Dynamic rendering
+    VkFormat colorFormat{ m_pVulkanSwapChain->GetSwapChainImageFormat() };
+    VkFormat depthFormat{ m_pRenderer->GetDepthImage()->GetFormat() };
+
+    imguiInfo.UseDynamicRendering = true;
+    imguiInfo.RenderPass = nullptr;
+
+    imguiInfo.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR;
+    imguiInfo.PipelineRenderingCreateInfo.pNext = nullptr;
+	imguiInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+	imguiInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &colorFormat;
+	imguiInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = depthFormat;
+
+    ImGui_ImplVulkan_Init(&imguiInfo);
 }
 
 void VulkanProject::MainLoopImGui()

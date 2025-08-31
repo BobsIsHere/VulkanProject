@@ -85,4 +85,5 @@ private:
 	std::unique_ptr<Camera> m_pCamera;
 
     VkDescriptorPool m_ImGuiPool;
+	VkRenderPass m_ImGuiRenderPass;
 };
