@@ -18,7 +18,7 @@ GraphicsPipeline::~GraphicsPipeline()
 {
 }
 
-void GraphicsPipeline::CreatePipeline(VkFormat swapImageFormat, VkFormat depthFormat)
+void GraphicsPipeline::CreatePipeline()
 {
     auto vertShaderCode = ReadFile("shaders/vert.spv");
     auto fragShaderCode = ReadFile("shaders/frag.spv");
@@ -138,11 +138,15 @@ void GraphicsPipeline::CreatePipeline(VkFormat swapImageFormat, VkFormat depthFo
     depthStencil.front = {};
     depthStencil.back = {};
 
+    VkFormat swapImageFormat{ VK_FORMAT_B8G8R8A8_SRGB };
+    VkFormat depthFormat{ VK_FORMAT_D32_SFLOAT };
+
     VkPipelineRenderingCreateInfo renderingInfo{};
 	renderingInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
     renderingInfo.colorAttachmentCount = 1;
     renderingInfo.pColorAttachmentFormats = &swapImageFormat;
     renderingInfo.depthAttachmentFormat = depthFormat;
+	renderingInfo.stencilAttachmentFormat = VK_FORMAT_UNDEFINED;
 
     VkGraphicsPipelineCreateInfo pipelineInfo{};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;

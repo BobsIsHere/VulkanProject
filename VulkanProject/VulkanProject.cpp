@@ -66,7 +66,7 @@ void VulkanProject::InitVulkan()
     m_pVulkanSwapChain->CreateImageViews();
     //m_pVulkanRenderContext->Create();
     m_pGraphicsPipeline->CreateDescriptorSetLayout();
-    m_pGraphicsPipeline->CreatePipeline(m_pVulkanSwapChain->GetSwapChainImageFormat(), m_pRenderer->GetDepthImage()->GetFormat());
+    m_pGraphicsPipeline->CreatePipeline();
     m_pVulkanCommandPool->Create();
     m_pRenderer->CreateDepthResources();
     m_pVikingTexture->CreateTextureImage();

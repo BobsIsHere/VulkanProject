@@ -14,7 +14,7 @@ public:
 	GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* pRenderPass);
 	~GraphicsPipeline();
 
-	void CreatePipeline(VkFormat swapImageFormat, VkFormat depthFormat);
+	void CreatePipeline();
 	void CreateDescriptorSetLayout();
 
 	void CleanupPipeline();
