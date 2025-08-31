@@ -27,4 +27,6 @@ private:
 
 	VkFormat m_ColorFormat;
 	VkFormat m_DepthFormat;
+
+	static bool HasStencilComponent(VkFormat format);
 };

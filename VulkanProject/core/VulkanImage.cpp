@@ -99,21 +99,7 @@ void VulkanImage::TransitionImageLayout(VkImage image, VkFormat format, VkImageL
 {
     VkCommandBuffer commandBuffer = CommandUtils::BeginSingleTimeCommands(m_pVulkanDevice, pCommandPool);
 
-    VkImageAspectFlags aspect = 0;
-    if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL ||
-        oldLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) 
-    {
-        aspect |= VK_IMAGE_ASPECT_DEPTH_BIT;
-
-        if (format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT)
-        {
-            aspect |= VK_IMAGE_ASPECT_STENCIL_BIT;
-        }
-    }
-    else 
-    {
-        aspect = VK_IMAGE_ASPECT_COLOR_BIT;
-    }
+    VkImageAspectFlags aspect = GetAspectMask(format);
 
     VkImageMemoryBarrier2 barrier{};
     barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2;
@@ -209,6 +195,28 @@ VkImageView VulkanImage::GetImageView() const
 VkFormat VulkanImage::GetFormat() const
 {
     return m_Format;
+}
+
+VkImageAspectFlags VulkanImage::GetAspectMask(VkFormat format)
+{
+    switch (format) 
+    {
+    case VK_FORMAT_D16_UNORM:
+    case VK_FORMAT_X8_D24_UNORM_PACK32:
+    case VK_FORMAT_D32_SFLOAT:
+        return VK_IMAGE_ASPECT_DEPTH_BIT;
+
+    case VK_FORMAT_S8_UINT:
+        return VK_IMAGE_ASPECT_STENCIL_BIT;
+
+    case VK_FORMAT_D16_UNORM_S8_UINT:
+    case VK_FORMAT_D24_UNORM_S8_UINT:
+    case VK_FORMAT_D32_SFLOAT_S8_UINT:
+        return VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT;
+
+    default:
+        return VK_IMAGE_ASPECT_COLOR_BIT;
+    }
 }
 
 VkFormat VulkanImage::FindFormat()
