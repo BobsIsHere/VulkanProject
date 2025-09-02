@@ -85,7 +85,7 @@ void VulkanProject::InitVulkan()
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
         m_pVulkanCommandBuffers[idx]->Create(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
-        m_pVulkanDescriptorSets[idx]->Create(m_pGraphicsPipeline.get(), m_pUniformBuffers[idx].get(),
+		m_pVulkanDescriptorSets[idx]->Create(m_pGraphicsPipeline.get(), m_pUniformBuffers[idx].get(), m_pVertexBuffer.get(),
             m_pVikingTexture->GetImageView(), m_pVikingTexture->GetSampler());
     }
 

@@ -78,7 +78,7 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
 		VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, pCommandPool);
 
     pCommandBuffers[m_CurrentFrame]->Record(imageIndex, pVertexBuffer, pIndexBuffer, m_pVulkanRenderContext,
-        m_pVulkanSwapChain, pPipeline, pVulkanDescriptorSets, m_CurrentFrame, indices, drawData, m_pDepthImage);
+        m_pVulkanSwapChain, pPipeline, pVulkanDescriptorSets, m_CurrentFrame, indices, drawData, m_pDepthImage, m_pVulkanDevice);
 
     m_pSwapChainImage->TransitionImageLayout(swapChainImage, swapChainImageFormat,
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, pCommandPool);

@@ -7,6 +7,7 @@ class VulkanDevice;
 class VulkanDescriptorPool;
 class GraphicsPipeline;
 class UniformBuffer;
+class VertexBuffer;
 
 class VulkanDescriptorSet final
 {
@@ -14,7 +15,7 @@ public:
 	VulkanDescriptorSet(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool);
 	~VulkanDescriptorSet();
 
-	void Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VkImageView textureImageView, VkSampler textureSampler);
+	void Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, VkImageView textureImageView, VkSampler textureSampler);
 
 	VkDescriptorSet GetDescriptorSet() const;
 

@@ -18,6 +18,7 @@ public:
 
 	VkBuffer GetBuffer() const;
 	VkDeviceMemory GetBufferMemory() const;
+	VkDeviceSize GetBufferSize() const;
 
 protected:
 	VulkanDevice* m_pVulkanDevice;
@@ -26,6 +27,7 @@ protected:
 	VkBuffer m_Buffer;
 	VkDeviceMemory m_BufferMemory;
 
-private:
+	VkDeviceSize m_BufferSize;
+
 	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
 };

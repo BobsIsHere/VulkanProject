@@ -84,7 +84,7 @@ VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
 
 void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
     VulkanRenderContext* pRenderContext, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets,
-    uint32_t currentFrame, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage)
+    uint32_t currentFrame, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage, VulkanDevice* pDevice)
 {
     VkRenderingInfo renderInfo{};
     VkRenderingAttachmentInfo colorAttachment{};
@@ -110,16 +110,27 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
     scissor.extent = pSwapChain->GetSwapChainExtent();
     vkCmdSetScissor(m_CommandBuffer, 0, 1, &scissor);
 
-    VkBuffer vertexBuffers[] = { pVertexBuffer->GetBuffer() };
-    VkDeviceSize offsets[] = { 0 };
-    vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);
-
-    vkCmdBindIndexBuffer(m_CommandBuffer, pIndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
+    vkCmdBindIndexBuffer(m_CommandBuffer, 
+        pIndexBuffer->GetBuffer(), 
+        0, 
+        VK_INDEX_TYPE_UINT32);
 
     const VkDescriptorSet descriptorSet{ pVulkanDescriptorSets[currentFrame]->GetDescriptorSet() };
-    vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 0, 1,
-        &descriptorSet, 0, nullptr);
-    vkCmdDrawIndexed(m_CommandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+    vkCmdBindDescriptorSets(m_CommandBuffer, 
+        VK_PIPELINE_BIND_POINT_GRAPHICS, 
+        pPipeline->GetPipelineLayout(), 
+        0, 
+        1,
+        &descriptorSet, 
+        0, 
+        nullptr);
+
+    vkCmdDrawIndexed(m_CommandBuffer, 
+        static_cast<uint32_t>(indices.size()), 
+        1, 
+        0, 
+        0, 
+        0);
 
 	// Render ImGui
 	if (drawData)

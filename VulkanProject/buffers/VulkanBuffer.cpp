@@ -9,7 +9,8 @@ VulkanBuffer::VulkanBuffer(VulkanDevice* pDevice, VulkanCommandPool* pCommandPoo
 	m_pVulkanDevice{ pDevice },
 	m_pVulkanCommandPool{ pCommandPool },
 	m_Buffer{},
-	m_BufferMemory{}
+	m_BufferMemory{},
+	m_BufferSize{}
 {
 }
 
@@ -19,6 +20,8 @@ VulkanBuffer::~VulkanBuffer()
 
 void VulkanBuffer::CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
 {
+    m_BufferSize = size;
+
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size = size;
@@ -71,6 +74,11 @@ VkBuffer VulkanBuffer::GetBuffer() const
 VkDeviceMemory VulkanBuffer::GetBufferMemory() const
 {
     return m_BufferMemory;
+}
+
+VkDeviceSize VulkanBuffer::GetBufferSize() const
+{
+    return m_BufferSize;
 }
 
 uint32_t VulkanBuffer::FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
