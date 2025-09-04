@@ -16,11 +16,13 @@ public:
 
 	void Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VkImageView textureImageView, VkSampler textureSampler);
 
-	VkDescriptorSet GetDescriptorSet() const;
+	VkDescriptorSet GetGlobalDescriptorSet() const;
+	VkDescriptorSet GetFrameDescriptorSet() const;
 
 private:
 	VulkanDevice* m_pVulkanDevice;
 	VulkanDescriptorPool* m_pVulkanDescriptorPool;
 
-	VkDescriptorSet m_DescriptorSet;
+	VkDescriptorSet m_GlobalDescriptorSet;
+	VkDescriptorSet m_FrameDescriptorSet;
 };

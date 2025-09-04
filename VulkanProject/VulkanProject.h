@@ -75,8 +75,9 @@ private:
     std::unique_ptr<VulkanDescriptorPool> m_pVulkanDescriptorPool;
     std::vector<std::unique_ptr<VulkanDescriptorSet>> m_pVulkanDescriptorSets;
     std::unique_ptr<Renderer> m_pRenderer;
-    std::unique_ptr<Model> m_pVikingModel;
-    std::unique_ptr<Texture> m_pVikingTexture;
+    std::unique_ptr<Model> m_pSponzaModel;
+    std::unique_ptr<Texture> m_pSponzaTexture;
+    std::unique_ptr<Texture> m_pCurtainBTexture;
 
     std::unique_ptr<VertexBuffer> m_pVertexBuffer;
     std::unique_ptr<IndexBuffer> m_pIndexBuffer;

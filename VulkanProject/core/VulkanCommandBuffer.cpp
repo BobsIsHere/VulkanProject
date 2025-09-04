@@ -116,9 +116,21 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
 
     vkCmdBindIndexBuffer(m_CommandBuffer, pIndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
 
-    const VkDescriptorSet descriptorSet{ pVulkanDescriptorSets[currentFrame]->GetDescriptorSet() };
+    const VkDescriptorSet globalDescriptorSet{ pVulkanDescriptorSets[currentFrame]->GetGlobalDescriptorSet() };
+    const VkDescriptorSet frameDescriptorSet{ pVulkanDescriptorSets[currentFrame]->GetFrameDescriptorSet() };
+
     vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 0, 1,
-        &descriptorSet, 0, nullptr);
+        &globalDescriptorSet, 0, nullptr);
+    vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 1, 1,
+        &frameDescriptorSet, 0, nullptr);
+
+    uint32_t textureIndex = 0;
+
+    vkCmdPushConstants(m_CommandBuffer, pPipeline->GetPipelineLayout(),
+        VK_SHADER_STAGE_FRAGMENT_BIT,
+        0, sizeof(uint32_t), &textureIndex);
+
+
     vkCmdDrawIndexed(m_CommandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
 	// Render ImGui

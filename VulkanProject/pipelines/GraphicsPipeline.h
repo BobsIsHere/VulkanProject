@@ -22,7 +22,9 @@ public:
 
 	VkPipelineLayout GetPipelineLayout() const;
 	VkPipeline GetGraphicsPipeline() const;
-	VkDescriptorSetLayout GetDescriptorSetLayout() const;
+
+	VkDescriptorSetLayout GetFrameSetLayout() const;
+	VkDescriptorSetLayout GetGlobalSetLayout() const;
 
 private:
 	VulkanDevice* m_pVulkanDevice;
@@ -30,7 +32,9 @@ private:
 
 	VkPipelineLayout m_PipelineLayout;
 	VkPipeline m_GraphicsPipeline;
-	VkDescriptorSetLayout m_DescriptorSetLayout;
+
+	VkDescriptorSetLayout m_FrameDataSetLayout;
+	VkDescriptorSetLayout m_GlobalDataSetLayout;
 
 	static std::vector<char> ReadFile(const std::string& filename);
 	VkShaderModule CreateShaderModule(const std::vector<char>& code);
