@@ -1,32 +1,13 @@
 #version 450
-#extension GL_EXT_nonuniform_qualifier : enable
 
+layout(binding = 1) uniform sampler2D texSampler;
+
+layout(location = 0) in vec3 fragColor;
 layout(location = 1) in vec2 fragTexCoord;
 
-layout(push_constant) uniform PushConstants
-{
-    uint materialIndex;
-} pushConstants;
-
-layout(set = 1, binding = 1) uniform sampler sharedSampler;
-layout(set = 1, binding = 2) uniform texture2D textures[];
-
-struct Material 
-{
-    uvec4 textureIndices;
-};
-
-layout(set = 1, binding = 0) readonly buffer MaterialData
-{
-    Material materials[];
-} materialBuffer;
+layout(location = 0) out vec4 outColor;
 
 void main() 
 {
-    Material material = materialBuffer.materials[pushConstants.materialIndex];
-
-    const uint textureIndex = nonuniformEXT(material.textureIndices.r);
-    vec4 color = texture(
-        sampler2D(textures[textureIndex], sharedSampler),
-        fragTexCoord).rgba;
+    outColor = texture(texSampler, fragTexCoord);
 }
