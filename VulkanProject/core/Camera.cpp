@@ -5,9 +5,7 @@ Camera::Camera(glm::vec3 startPos) :
 	m_CameraPosition{ startPos },
 	m_LastMousePosition{ 0.f, 0.f },
 	m_Yaw{ 180.f }, 
-	m_Pitch{ 0.f },
-	m_MovementSpeed{ 0.05f },
-	m_MouseSensitivity{ 0.1f }
+	m_Pitch{ 0.f }
 {
 }
 
@@ -60,11 +58,16 @@ void Camera::ProcessMouseMovement(GLFWwindow* window, double xpos, double ypos)
 	if (state == GLFW_PRESS)
 	{
 		m_Yaw += mouseDelta.x * m_MouseSensitivity;
-		m_Pitch += mouseDelta.y * m_MouseSensitivity;
+		m_Pitch -= mouseDelta.y * m_MouseSensitivity;
 
 		if (m_Pitch > m_MaxAngle)
 		{
 			m_Pitch = m_MaxAngle;
+		}
+
+		if (m_Pitch < -m_MaxAngle)
+		{
+			m_Pitch = -m_MaxAngle;
 		}
 	}
 }

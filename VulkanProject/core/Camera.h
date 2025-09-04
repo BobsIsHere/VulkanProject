@@ -24,7 +24,7 @@ private:
 	float m_Yaw;
 	float m_Pitch;
 
-	const float m_MovementSpeed = 100.f;
-	const float m_MouseSensitivity = 0.001f;
+	const float m_MovementSpeed = 50.f;
+	const float m_MouseSensitivity = 0.1f;
 	const float m_MaxAngle = 89.f;
 };

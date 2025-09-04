@@ -6,7 +6,7 @@
 void VulkanProject::Run()
 {
     // Make Window
-    m_pCamera = std::make_unique<Camera>(glm::vec3(3.f, 0.5f, 0.f));
+    m_pCamera = std::make_unique<Camera>(glm::vec3(0.f, 100.f, 0.f));
     m_pWindow = std::make_unique<Window>(m_pCamera.get());
     m_pWindow->Initialize(utils::WINDOW_WIDTH, utils::WINDOW_HEIGHT, "Vulkan Window");
 
@@ -43,7 +43,7 @@ void VulkanProject::Run()
     // Initialize Rendering
     m_pRenderer = std::make_unique<Renderer>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get(), m_pVulkanRenderContext.get(), m_pWindow.get(), m_pCamera.get());
 
-    m_pVikingModel = std::make_unique<Model>("models/viking_room.obj");
+    m_pVikingModel = std::make_unique<Model>("models/sponza.obj");
     m_pVikingTexture = std::make_unique<Texture>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get(), "textures/viking_room.png");
 
     InitVulkan();
