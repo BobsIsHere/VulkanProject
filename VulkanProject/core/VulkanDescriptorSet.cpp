@@ -4,6 +4,7 @@
 #include "VulkanDescriptorSet.h"
 #include "core/VulkanDevice.h"
 #include "core/VulkanDescriptorPool.h"
+#include "core/Texture.h"
 #include "pipelines/GraphicsPipeline.h"
 #include "buffers/UniformBuffer.h"
 #include "utils/utils.h"
@@ -20,7 +21,7 @@ VulkanDescriptorSet::~VulkanDescriptorSet()
 {
 }
 
-void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VkImageView textureImageView, VkSampler textureSampler)
+void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, std::vector<Texture*> pTextures)
 {
     // ---- Allocate descriptor set for UBO (set = 0) ----
     VkDescriptorSetLayout uboLayout{ pPipeline->GetGlobalSetLayout() };
@@ -65,7 +66,7 @@ void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUn
     }
 
     VkDescriptorImageInfo samplerInfo{};
-    samplerInfo.sampler = textureSampler;
+    samplerInfo.sampler = pTextures[0]->GetSampler();
 
     VkWriteDescriptorSet samplerWrite{};
     samplerWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -76,9 +77,18 @@ void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUn
     samplerWrite.descriptorCount = 1;
     samplerWrite.pImageInfo = &samplerInfo;
 
-    VkDescriptorImageInfo imageInfo{};
-    imageInfo.imageView = textureImageView;
-    imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    std::vector<VkDescriptorImageInfo> imageInfos;
+    imageInfos.reserve(pTextures.size());
+
+    for (auto tex : pTextures)
+    {
+        VkDescriptorImageInfo info{};
+        info.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+        info.imageView = tex->GetImageView();
+        info.sampler = tex->GetSampler();
+
+        imageInfos.push_back(info);
+    }
 
     VkWriteDescriptorSet imageWrite{};
     imageWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -86,8 +96,8 @@ void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUn
     imageWrite.dstBinding = 1;
     imageWrite.dstArrayElement = 0;
     imageWrite.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
-    imageWrite.descriptorCount = 1;
-    imageWrite.pImageInfo = &imageInfo;
+    imageWrite.descriptorCount = static_cast<uint32_t>(imageInfos.size());
+    imageWrite.pImageInfo = imageInfos.data();
 
     const std::array<VkWriteDescriptorSet, 2> writes = { samplerWrite, imageWrite };
 

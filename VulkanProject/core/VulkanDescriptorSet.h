@@ -3,10 +3,13 @@
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
+#include <vector>
+
 class VulkanDevice;
 class VulkanDescriptorPool;
 class GraphicsPipeline;
 class UniformBuffer;
+class Texture;
 
 class VulkanDescriptorSet final
 {
@@ -14,7 +17,7 @@ public:
 	VulkanDescriptorSet(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool);
 	~VulkanDescriptorSet();
 
-	void Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VkImageView textureImageView, VkSampler textureSampler);
+	void Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, std::vector<Texture*> pTextures);
 
 	VkDescriptorSet GetGlobalDescriptorSet() const;
 	VkDescriptorSet GetFrameDescriptorSet() const;

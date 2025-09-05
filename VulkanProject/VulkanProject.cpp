@@ -89,11 +89,14 @@ void VulkanProject::InitVulkan()
     }
 
     m_pVulkanDescriptorPool->Create();
+
+	const std::vector<Texture*> pTextures{ m_pSponzaTexture.get(), m_pCurtainBTexture.get() };
+
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
         m_pVulkanCommandBuffers[idx]->Create(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
         m_pVulkanDescriptorSets[idx]->Create(m_pGraphicsPipeline.get(), m_pUniformBuffers[idx].get(),
-            m_pSponzaTexture->GetImageView(), m_pSponzaTexture->GetSampler());
+            pTextures);
     }
 
     m_pRenderer->CreateSyncObjects();
