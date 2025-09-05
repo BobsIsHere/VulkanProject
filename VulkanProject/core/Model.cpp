@@ -21,11 +21,12 @@ void Model::LoadModel()
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
-    std::string warn, err;
+    std::string warning{};
+    std::string error{};
 
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, m_FileName.c_str()))
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warning, &error, m_FileName.c_str()))
     {
-        throw std::runtime_error(warn + err);
+        throw std::runtime_error(warning + error);
     }
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};

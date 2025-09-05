@@ -130,7 +130,6 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
         VK_SHADER_STAGE_FRAGMENT_BIT,
         0, sizeof(uint32_t), &textureIndex);
 
-
     vkCmdDrawIndexed(m_CommandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
 	// Render ImGui

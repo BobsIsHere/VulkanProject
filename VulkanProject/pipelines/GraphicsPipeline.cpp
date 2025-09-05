@@ -10,7 +10,9 @@ GraphicsPipeline::GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* p
 	m_pVulkanDevice{ pDevice },
 	m_pVulkanRenderPass{ pRenderPass },
     m_GraphicsPipeline{},
-	m_PipelineLayout{}
+	m_PipelineLayout{},
+	m_GlobalDataSetLayout{},
+	m_FrameDataSetLayout{}
 {
 }
 
@@ -32,11 +34,23 @@ void GraphicsPipeline::CreatePipeline()
     vertShaderStageInfo.module = vertShaderModule;
     vertShaderStageInfo.pName = "main";
 
+    VkSpecializationMapEntry mapEntry{};
+	mapEntry.constantID = 0;
+	mapEntry.offset = 0;
+	mapEntry.size = sizeof(uint32_t);
+
+	VkSpecializationInfo specializationInfo{};
+	specializationInfo.mapEntryCount = 1;
+	specializationInfo.pMapEntries = &mapEntry;
+	specializationInfo.dataSize = sizeof(uint32_t);
+	specializationInfo.pData = &m_TextureArraySize;
+
     VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
     fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
     fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
     fragShaderStageInfo.module = fragShaderModule;
     fragShaderStageInfo.pName = "main";
+	fragShaderStageInfo.pSpecializationInfo = &specializationInfo;
 
     VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 

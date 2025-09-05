@@ -1,6 +1,6 @@
 #version 450
 
-layout(constant_id = 0) const uint TEXTURE_ARRAY_SIZE = 1;
+layout(constant_id = 0) const uint TEXTURE_ARRAY_SIZE = 2;
 layout(push_constant) uniform constants
 {
     uint textureIndex;

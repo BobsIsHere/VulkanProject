@@ -36,6 +36,8 @@ private:
 	VkDescriptorSetLayout m_FrameDataSetLayout;
 	VkDescriptorSetLayout m_GlobalDataSetLayout;
 
+	uint32_t m_TextureArraySize{ 2 };
+
 	static std::vector<char> ReadFile(const std::string& filename);
 	VkShaderModule CreateShaderModule(const std::vector<char>& code);
 };
