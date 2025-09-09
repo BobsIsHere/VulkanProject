@@ -30,6 +30,7 @@ public:
 	void CleanupSampler();
 
 	VkSampler GetSampler() const;
+	std::string GetFileName() const;
 
 	void SetType(TextureType type);
 	TextureType GetType() const;

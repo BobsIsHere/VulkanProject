@@ -26,8 +26,10 @@ public:
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
 
-		std::vector<std::shared_ptr<Texture>> textures;
-		uint32_t textureIndex;
+		uint32_t textureIndex = 0;
+
+		uint32_t firstIndex = 0;
+		uint32_t vertexOffset = 0;
 	};
 
 	Model(std::string fileName);
@@ -50,6 +52,6 @@ private:
 	std::vector<MeshData> m_Meshes;
 	std::vector<std::shared_ptr<Texture>> m_AllTextures;
 
-	void ProcessNode(aiNode* node, const aiScene* scene);
-	MeshData ProcessMesh(aiMesh* mesh, const aiScene* scene);
+	void ProcessNode(aiNode* node, const aiScene* scene, VulkanDevice* pDevice, VulkanCommandPool* pCommandPool);
+	MeshData ProcessMesh(aiMesh* mesh, const aiScene* scene, VulkanDevice* pDevice, VulkanCommandPool* pCommandPool);
 };

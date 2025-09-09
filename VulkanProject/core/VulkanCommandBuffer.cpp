@@ -117,13 +117,13 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
 
     vkCmdBindIndexBuffer(m_CommandBuffer, pIndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
 
-    const VkDescriptorSet globalDescriptorSet{ pModel->GetDescriptorSets()[0]->GetUBODescriptorSet() };
-    const VkDescriptorSet frameDescriptorSet{ pModel->GetDescriptorSets()[0]->GetGlobalDescriptorSet() };
+    const VkDescriptorSet uboDescriptorSet{ pModel->GetDescriptorSets()[0]->GetUBODescriptorSet() };
+    const VkDescriptorSet globalDescriptorSet{ pModel->GetDescriptorSets()[0]->GetGlobalDescriptorSet() };
 
     vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 0, 1,
-        &globalDescriptorSet, 0, nullptr);
+        &uboDescriptorSet, 0, nullptr);
     vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 1, 1,
-        &frameDescriptorSet, 0, nullptr);
+        &globalDescriptorSet, 0, nullptr);
 
     for (auto& subMesh : pModel->GetSubMeshes())
     {
@@ -132,7 +132,7 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
         vkCmdPushConstants(m_CommandBuffer, pPipeline->GetPipelineLayout(),
             VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &pc);
 
-        vkCmdDrawIndexed(m_CommandBuffer, subMesh.indices.size(), 1, 0, 0, 0);
+        vkCmdDrawIndexed(m_CommandBuffer, subMesh.indices.size(), 1, subMesh.firstIndex, subMesh.vertexOffset, 0);
     }
 
 	// Render ImGui

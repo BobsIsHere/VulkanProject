@@ -164,6 +164,11 @@ VkSampler Texture::GetSampler() const
     return m_Sampler;
 }
 
+std::string Texture::GetFileName() const
+{
+    return m_FileName;
+}
+
 void Texture::SetType(TextureType type)
 {
 	m_Type = type;

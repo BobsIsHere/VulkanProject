@@ -75,7 +75,8 @@ void Model::AssimpLoadModel(VulkanDevice* pDevice, VulkanDescriptorPool* pDescri
     const aiScene* scene = importer.ReadFile(m_FileName,
         aiProcess_Triangulate |
         aiProcess_FlipUVs |
-        aiProcess_CalcTangentSpace
+        aiProcess_CalcTangentSpace |
+        aiProcess_GenNormals
     );
 
     if (!scene || !scene->mRootNode)
@@ -83,27 +84,19 @@ void Model::AssimpLoadModel(VulkanDevice* pDevice, VulkanDescriptorPool* pDescri
         throw std::runtime_error("Failed to load model: " + m_FileName);
     }
 
-    ProcessNode(scene->mRootNode, scene);
+    ProcessNode(scene->mRootNode, scene, pDevice, pCommandPool);
 
-    for (const auto& subMesh : m_Meshes)
+    for (auto& subMesh : m_Meshes)
     {
-        const uint32_t vertexOffset = static_cast<uint32_t>(m_Vertices.size());
+        uint32_t vertexOffset = static_cast<uint32_t>(m_Vertices.size());
+        uint32_t indexOffset = static_cast<uint32_t>(m_Indices.size());
 
         m_Vertices.insert(m_Vertices.end(), subMesh.vertices.begin(), subMesh.vertices.end());
+        m_Indices.insert(m_Indices.end(), subMesh.indices.begin(), subMesh.indices.end());
 
-        m_Indices.reserve(m_Indices.size() + subMesh.indices.size());
-        for (uint32_t idx : subMesh.indices)
-        {
-            m_Indices.push_back(idx + vertexOffset);
-        }
+        subMesh.vertexOffset = vertexOffset;
+        subMesh.firstIndex = indexOffset;
     }
-
-    auto defaultTexture = std::make_shared<Texture>(pDevice, pCommandPool, "models/sponza/5792855332885324923.jpg");
-    defaultTexture->CreateTextureImage();
-    defaultTexture->CreateTextureImageView();
-    defaultTexture->CreateTextureSampler();
-
-    m_AllTextures.push_back(defaultTexture);
 
     std::vector<Texture*> rawTextures;
     rawTextures.reserve(m_AllTextures.size());
@@ -112,6 +105,7 @@ void Model::AssimpLoadModel(VulkanDevice* pDevice, VulkanDescriptorPool* pDescri
         rawTextures.push_back(texPtr.get());
     }
 
+    // Create descriptor set(s)
     m_pVulkanDescriptorSets.push_back(std::make_unique<VulkanDescriptorSet>(pDevice, pDescriptorPool));
     m_pVulkanDescriptorSets.back()->Create(pPipeline, pUniformBuffer, rawTextures);
 }
@@ -136,23 +130,23 @@ const std::vector<std::unique_ptr<VulkanDescriptorSet>>& Model::GetDescriptorSet
     return m_pVulkanDescriptorSets;
 }
 
-void Model::ProcessNode(aiNode* node, const aiScene* scene)
+void Model::ProcessNode(aiNode* node, const aiScene* scene, VulkanDevice* pDevice, VulkanCommandPool* pCommandPool)
 {
     // Process all meshes at this node
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-        m_Meshes.push_back(ProcessMesh(mesh, scene));
+        m_Meshes.push_back(ProcessMesh(mesh, scene, pDevice, pCommandPool));
     }
 
     // Process children
     for (unsigned int i = 0; i < node->mNumChildren; i++)
     {
-        ProcessNode(node->mChildren[i], scene);
+        ProcessNode(node->mChildren[i], scene, pDevice, pCommandPool);
     }
 }
 
-Model::MeshData Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+Model::MeshData Model::ProcessMesh(aiMesh* mesh, const aiScene* scene, VulkanDevice* pDevice, VulkanCommandPool* pCommandPool)
 {
     MeshData meshData{};
 
@@ -200,6 +194,43 @@ Model::MeshData Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         for (unsigned int j = 0; j < face.mNumIndices; j++)
         {
             meshData.indices.push_back(face.mIndices[j]);
+        }
+    }
+
+    // Textures
+    meshData.textureIndex = 0;
+
+    if (mesh->mMaterialIndex >= 0)
+    {
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        aiString str;
+
+        if (material->GetTexture(aiTextureType_BASE_COLOR, 0, &str) == AI_SUCCESS ||
+            material->GetTexture(aiTextureType_DIFFUSE, 0, &str) == AI_SUCCESS) // fallback
+        {
+            std::string texPath = str.C_Str();
+            std::string directory = m_FileName.substr(0, m_FileName.find_last_of("/\\"));
+            texPath = directory + "/" + texPath;
+
+            // Check if already loaded
+            auto it = std::find_if(m_AllTextures.begin(), m_AllTextures.end(),
+                [&](const std::shared_ptr<Texture>& t) { return t->GetFileName() == texPath; });
+
+            uint32_t texIndex;
+            if (it == m_AllTextures.end()) {
+                auto texture = std::make_shared<Texture>(pDevice, pCommandPool, texPath);
+                texture->CreateTextureImage();
+                texture->CreateTextureImageView();
+                texture->CreateTextureSampler();
+
+                texIndex = static_cast<uint32_t>(m_AllTextures.size());
+                m_AllTextures.push_back(texture);
+            }
+            else {
+                texIndex = static_cast<uint32_t>(std::distance(m_AllTextures.begin(), it));
+            }
+
+            meshData.textureIndex = texIndex;
         }
     }
 
