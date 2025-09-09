@@ -1,6 +1,6 @@
 #version 450
 
-layout(constant_id = 0) const uint TEXTURE_ARRAY_SIZE = 2;
+layout(constant_id = 0) const uint TEXTURE_ARRAY_SIZE = 1;
 layout(push_constant) uniform constants
 {
     uint textureIndex;
@@ -16,5 +16,15 @@ layout(location = 0) out vec4 outColor;
 
 void main() 
 {
-    outColor = texture(sampler2D(textures[pc.textureIndex], sharedSampler), fragTexCoord);
+    uint idx = pc.textureIndex;
+
+    // Bounds check: if out-of-range -> fallback color
+    if (idx >= TEXTURE_ARRAY_SIZE) 
+    {
+        outColor = vec4(1.0, 1.0, 0.0, 1.0);
+        return;
+    }
+
+    vec4 color = texture(sampler2D(textures[idx], sharedSampler), fragTexCoord);
+    outColor = color;
 }

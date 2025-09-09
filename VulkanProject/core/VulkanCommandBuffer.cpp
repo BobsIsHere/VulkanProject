@@ -10,6 +10,7 @@
 #include "VulkanSwapChain.h"
 #include "VulkanImage.h"
 #include "pipelines/GraphicsPipeline.h"
+#include "Model.h"
 
 VulkanCommandBuffer::VulkanCommandBuffer() :
 	m_CommandBuffer{}
@@ -83,8 +84,8 @@ VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
 }
 
 void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
-    VulkanRenderContext* pRenderContext, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets,
-    uint32_t currentFrame, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage)
+    VulkanRenderContext* pRenderContext, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, const std::unique_ptr<Model>& pModel,
+    uint32_t currentFrame, ImDrawData* drawData, VulkanImage* pDepthImage)
 {
     VkRenderingInfo renderInfo{};
     VkRenderingAttachmentInfo colorAttachment{};
@@ -116,21 +117,23 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
 
     vkCmdBindIndexBuffer(m_CommandBuffer, pIndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
 
-    const VkDescriptorSet globalDescriptorSet{ pVulkanDescriptorSets[currentFrame]->GetGlobalDescriptorSet() };
-    const VkDescriptorSet frameDescriptorSet{ pVulkanDescriptorSets[currentFrame]->GetFrameDescriptorSet() };
+    const VkDescriptorSet globalDescriptorSet{ pModel->GetDescriptorSets()[0]->GetUBODescriptorSet() };
+    const VkDescriptorSet frameDescriptorSet{ pModel->GetDescriptorSets()[0]->GetGlobalDescriptorSet() };
 
     vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 0, 1,
         &globalDescriptorSet, 0, nullptr);
     vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 1, 1,
         &frameDescriptorSet, 0, nullptr);
 
-    uint32_t textureIndex = 0;
+    for (auto& subMesh : pModel->GetSubMeshes())
+    {
+        PushConstants pc{ subMesh.textureIndex };
 
-    vkCmdPushConstants(m_CommandBuffer, pPipeline->GetPipelineLayout(),
-        VK_SHADER_STAGE_FRAGMENT_BIT,
-        0, sizeof(uint32_t), &textureIndex);
+        vkCmdPushConstants(m_CommandBuffer, pPipeline->GetPipelineLayout(),
+            VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &pc);
 
-    vkCmdDrawIndexed(m_CommandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+        vkCmdDrawIndexed(m_CommandBuffer, subMesh.indices.size(), 1, 0, 0, 0);
+    }
 
 	// Render ImGui
 	if (drawData)

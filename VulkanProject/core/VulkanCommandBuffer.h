@@ -18,6 +18,7 @@ class VulkanRenderContext;
 class VulkanSwapChain;
 class VulkanImage;
 class GraphicsPipeline;
+class Model;
 
 class VulkanCommandBuffer final
 {
@@ -37,8 +38,8 @@ public:
 	VkCommandBuffer GetCommandBuffer() const;
 
 	void Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, VulkanRenderContext* pRenderContext,
-		VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, std::vector<std::unique_ptr<VulkanDescriptorSet>>& m_pVulkanDescriptorSets,
-		uint32_t currentFrame, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage);
+		VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, const std::unique_ptr<Model>& pModel,
+		uint32_t currentFrame, ImDrawData* drawData, VulkanImage* pDepthImage);
 
 private:
 	VkCommandBuffer m_CommandBuffer;

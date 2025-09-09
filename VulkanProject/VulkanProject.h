@@ -73,17 +73,18 @@ private:
 
     std::vector<std::unique_ptr<VulkanCommandBuffer>> m_pVulkanCommandBuffers;
     std::unique_ptr<VulkanDescriptorPool> m_pVulkanDescriptorPool;
-    std::vector<std::unique_ptr<VulkanDescriptorSet>> m_pVulkanDescriptorSets;
     std::unique_ptr<Renderer> m_pRenderer;
-    std::unique_ptr<Model> m_pSponzaModel;
-    std::unique_ptr<Texture> m_pSponzaTexture;
-    std::unique_ptr<Texture> m_pCurtainBTexture;
 
     std::unique_ptr<VertexBuffer> m_pVertexBuffer;
     std::unique_ptr<IndexBuffer> m_pIndexBuffer;
     std::vector<std::unique_ptr<UniformBuffer>> m_pUniformBuffers;
 
 	std::unique_ptr<Camera> m_pCamera;
+
+    std::unique_ptr<Model> m_pSponzaOBJModel;
+    std::unique_ptr<Model> m_pSponzaGLTFModel;
+    std::unique_ptr<Texture> m_pSponzaTexture;
+    std::unique_ptr<Texture> m_pCurtainBTexture;
 
     VkDescriptorPool m_ImGuiPool;
 	VkRenderPass m_ImGuiRenderPass;

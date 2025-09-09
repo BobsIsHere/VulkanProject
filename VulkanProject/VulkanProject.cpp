@@ -22,11 +22,9 @@ void VulkanProject::Run()
     m_pGraphicsPipeline = std::make_unique<GraphicsPipeline>(m_pVulkanDevice.get(), m_pVulkanRenderContext.get());
 
     m_pVulkanCommandBuffers.resize(utils::MAX_FRAMES_IN_FLIGHT);
-    m_pVulkanDescriptorSets.resize(utils::MAX_FRAMES_IN_FLIGHT);
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
         m_pVulkanCommandBuffers[idx] = std::make_unique<VulkanCommandBuffer>();
-        m_pVulkanDescriptorSets[idx] = std::make_unique<VulkanDescriptorSet>(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get());
     }
 
     // Initialize Buffers
@@ -43,9 +41,7 @@ void VulkanProject::Run()
     // Initialize Rendering
     m_pRenderer = std::make_unique<Renderer>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get(), m_pVulkanRenderContext.get(), m_pWindow.get(), m_pCamera.get());
 
-    m_pSponzaModel = std::make_unique<Model>("models/sponza.obj");
-    m_pSponzaTexture = std::make_unique<Texture>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get(), "textures/sponza/spnza_bricks_a_diff.png");
-    m_pCurtainBTexture = std::make_unique<Texture>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get(), "textures/sponza/sponza_curtain_blue_diff.png");
+    m_pSponzaGLTFModel = std::make_unique<Model>("models/sponza/Sponza.gltf");
 
     InitVulkan();
     InitImGui();
@@ -70,33 +66,23 @@ void VulkanProject::InitVulkan()
     m_pVulkanCommandPool->Create();
     m_pRenderer->CreateDepthResources();
 
-    m_pSponzaTexture->CreateTextureImage();
-    m_pSponzaTexture->CreateTextureImageView();
-    m_pSponzaTexture->CreateTextureSampler();
-
-	m_pCurtainBTexture->CreateTextureImage();
-	m_pCurtainBTexture->CreateTextureImageView();
-	m_pCurtainBTexture->CreateTextureSampler();
-
-    m_pSponzaModel->LoadModel();
-
-    // Create Buffers
-    m_pVertexBuffer->CreateVertexBuffer(m_pSponzaModel->GetVertices());
-    m_pIndexBuffer->CreateIndexBuffer(m_pSponzaModel->GetIndices());
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
         m_pUniformBuffers[idx]->CreateUniformBuffer();
     }
 
-    m_pVulkanDescriptorPool->Create();
+    m_pVulkanDescriptorPool->Create(103);
 
-	const std::vector<Texture*> pTextures{ m_pSponzaTexture.get(), m_pCurtainBTexture.get() };
+    m_pSponzaGLTFModel->AssimpLoadModel(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get(), m_pVulkanCommandPool.get(), m_pGraphicsPipeline.get(), m_pUniformBuffers[0].get());
+    auto temp = m_pSponzaGLTFModel->GetSubMeshes().size();
+
+    // Create Buffers
+    m_pVertexBuffer->CreateVertexBuffer(m_pSponzaGLTFModel->GetVertices());
+    m_pIndexBuffer->CreateIndexBuffer(m_pSponzaGLTFModel->GetIndices());
 
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
         m_pVulkanCommandBuffers[idx]->Create(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
-        m_pVulkanDescriptorSets[idx]->Create(m_pGraphicsPipeline.get(), m_pUniformBuffers[idx].get(),
-            pTextures);
     }
 
     m_pRenderer->CreateSyncObjects();
@@ -229,8 +215,7 @@ void VulkanProject::MainLoopImGui()
         m_pVulkanCommandBuffers,
         m_pVulkanCommandPool.get(),
         m_pGraphicsPipeline.get(),
-        m_pVulkanDescriptorSets,
-        m_pSponzaModel->GetIndices(),
+        m_pSponzaGLTFModel,
         ImGui::GetDrawData(),
         m_pRenderer->GetDepthImage());
 }
@@ -273,11 +258,11 @@ void VulkanProject::CleanupVulkan()
 
     m_pVulkanDescriptorPool->Cleanup();
 
-    m_pCurtainBTexture->CleanupSampler();
+    /*m_pCurtainBTexture->CleanupSampler();
     m_pCurtainBTexture->Cleanup();
 
     m_pSponzaTexture->CleanupSampler();
-    m_pSponzaTexture->Cleanup();
+    m_pSponzaTexture->Cleanup();*/
 
     m_pGraphicsPipeline->CleanupDescriptorSetLayout();
 

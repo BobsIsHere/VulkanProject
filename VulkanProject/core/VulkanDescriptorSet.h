@@ -19,13 +19,13 @@ public:
 
 	void Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, std::vector<Texture*> pTextures);
 
+	VkDescriptorSet GetUBODescriptorSet() const;
 	VkDescriptorSet GetGlobalDescriptorSet() const;
-	VkDescriptorSet GetFrameDescriptorSet() const;
 
 private:
 	VulkanDevice* m_pVulkanDevice;
 	VulkanDescriptorPool* m_pVulkanDescriptorPool;
 
+	VkDescriptorSet m_UBODescriptorSet;
 	VkDescriptorSet m_GlobalDescriptorSet;
-	VkDescriptorSet m_FrameDescriptorSet;
 };

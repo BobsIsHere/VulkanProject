@@ -11,7 +11,7 @@ public:
 	VulkanDescriptorPool(VulkanDevice* pDevice);
 	~VulkanDescriptorPool();
 
-	void Create();
+	void Create(int numModels);
 	void Cleanup();
 
 	VkDescriptorPool GetDescriptorPool() const;

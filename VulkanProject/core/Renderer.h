@@ -20,6 +20,7 @@ class GraphicsPipeline;
 class VulkanDescriptorSet;
 class VulkanImage;
 class VulkanCommandPool;
+class Model;
 
 class Renderer final
 {
@@ -32,7 +33,7 @@ public:
 
 	void DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
 		std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, VulkanCommandPool* pCommandPool, GraphicsPipeline* pPipeline, 
-		std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage);
+		const std::unique_ptr<Model>& pModel, ImDrawData* drawData, VulkanImage* pDepthImage);
 
 	void CleanupSwapChain();
 	void RecreateSwapChain();

@@ -11,8 +11,8 @@ GraphicsPipeline::GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* p
 	m_pVulkanRenderPass{ pRenderPass },
     m_GraphicsPipeline{},
 	m_PipelineLayout{},
-	m_GlobalDataSetLayout{},
-	m_FrameDataSetLayout{}
+	m_UBOSetLayout{},
+	m_GlobalDataSetLayout{}
 {
 }
 
@@ -43,7 +43,7 @@ void GraphicsPipeline::CreatePipeline()
 	specializationInfo.mapEntryCount = 1;
 	specializationInfo.pMapEntries = &mapEntry;
 	specializationInfo.dataSize = sizeof(uint32_t);
-	specializationInfo.pData = &m_TextureArraySize;
+	specializationInfo.pData = &utils::TEXTURE_ARRAY_SIZE;
 
     VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
     fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -129,8 +129,8 @@ void GraphicsPipeline::CreatePipeline()
     dynamicState.pDynamicStates = dynamicStates.data();
 
     const std::array<VkDescriptorSetLayout, 2> setLayouts = {
-        m_GlobalDataSetLayout,
-        m_FrameDataSetLayout
+        m_UBOSetLayout,
+        m_GlobalDataSetLayout
     };
 
 	VkPushConstantRange pushConstantRange{};
@@ -216,7 +216,7 @@ void GraphicsPipeline::CreateDescriptorSetLayout()
     frameLayoutInfo.bindingCount = 1;
     frameLayoutInfo.pBindings = &uboLayoutBinding;
 
-    if (vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &frameLayoutInfo, nullptr, &m_GlobalDataSetLayout) != VK_SUCCESS)
+    if (vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &frameLayoutInfo, nullptr, &m_UBOSetLayout) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to create ubo descriptor set layout!");
     }
@@ -227,20 +227,23 @@ void GraphicsPipeline::CreateDescriptorSetLayout()
     samplerLayoutBinding.descriptorCount = 1;
     samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
     samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    samplerLayoutBinding.pImmutableSamplers = nullptr;
 
     VkDescriptorSetLayoutBinding sampledImageBinding{};
     sampledImageBinding.binding = 1;
-    sampledImageBinding.descriptorCount = 2;
+    sampledImageBinding.descriptorCount = utils::TEXTURE_ARRAY_SIZE;
     sampledImageBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
     sampledImageBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    sampledImageBinding.pImmutableSamplers = nullptr;
 
     std::array<VkDescriptorSetLayoutBinding, 2> bindings = { samplerLayoutBinding, sampledImageBinding };
+
     VkDescriptorSetLayoutCreateInfo globalLayoutInfo{};
     globalLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     globalLayoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
     globalLayoutInfo.pBindings = bindings.data();
 
-    if (vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &globalLayoutInfo, nullptr, &m_FrameDataSetLayout) != VK_SUCCESS)
+    if (vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &globalLayoutInfo, nullptr, &m_GlobalDataSetLayout) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to create descriptor set layout!");
     }
@@ -254,8 +257,8 @@ void GraphicsPipeline::CleanupPipeline()
 
 void GraphicsPipeline::CleanupDescriptorSetLayout()
 {
-    vkDestroyDescriptorSetLayout(m_pVulkanDevice->GetDevice(), m_FrameDataSetLayout, nullptr);
     vkDestroyDescriptorSetLayout(m_pVulkanDevice->GetDevice(), m_GlobalDataSetLayout, nullptr);
+    vkDestroyDescriptorSetLayout(m_pVulkanDevice->GetDevice(), m_UBOSetLayout, nullptr);
 }
 
 VkPipelineLayout GraphicsPipeline::GetPipelineLayout() const
@@ -268,14 +271,14 @@ VkPipeline GraphicsPipeline::GetGraphicsPipeline() const
     return m_GraphicsPipeline;
 }
 
-VkDescriptorSetLayout GraphicsPipeline::GetFrameSetLayout() const
-{
-    return m_FrameDataSetLayout;
-}
-
 VkDescriptorSetLayout GraphicsPipeline::GetGlobalSetLayout() const
 {
     return m_GlobalDataSetLayout;
+}
+
+VkDescriptorSetLayout GraphicsPipeline::GetUBOSetLayout() const
+{
+    return m_UBOSetLayout;
 }
 
 std::vector<char> GraphicsPipeline::ReadFile(const std::string& filename)

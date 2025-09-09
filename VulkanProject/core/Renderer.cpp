@@ -11,6 +11,7 @@
 #include "buffers/IndexBuffer.h"
 #include "Window.h"
 #include "Camera.h"
+#include "Model.h"
 
 Renderer::Renderer(VulkanDevice* pDevice, VulkanSwapChain* pSwapChain, VulkanRenderContext* pRenderPass, Window* pWindow, Camera* pCamera) :
     m_pVulkanDevice{ pDevice },
@@ -44,7 +45,7 @@ void Renderer::Cleanup()
 
 void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer,
     std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, VulkanCommandPool* pCommandPool, GraphicsPipeline* pPipeline,
-    std::vector<std::unique_ptr<VulkanDescriptorSet>>& pVulkanDescriptorSets, std::vector<uint32_t> indices, ImDrawData* drawData, VulkanImage* pDepthImage)
+    const std::unique_ptr<Model>& pModel, ImDrawData* drawData, VulkanImage* pDepthImage)
 {
     vkWaitForFences(m_pVulkanDevice->GetDevice(), 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, UINT64_MAX);
 
@@ -78,7 +79,7 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
 		VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, pCommandPool);
 
     pCommandBuffers[m_CurrentFrame]->Record(imageIndex, pVertexBuffer, pIndexBuffer, m_pVulkanRenderContext,
-        m_pVulkanSwapChain, pPipeline, pVulkanDescriptorSets, m_CurrentFrame, indices, drawData, m_pDepthImage);
+        m_pVulkanSwapChain, pPipeline, pModel, m_CurrentFrame, drawData, m_pDepthImage);
 
     m_pSwapChainImage->TransitionImageLayout(swapChainImage, swapChainImageFormat,
         VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, pCommandPool);
