@@ -41,7 +41,8 @@ void VulkanProject::Run()
     // Initialize Rendering
     m_pRenderer = std::make_unique<Renderer>(m_pVulkanDevice.get(), m_pVulkanSwapChain.get(), m_pVulkanRenderContext.get(), m_pWindow.get(), m_pCamera.get());
 
-    m_pSponzaGLTFModel = std::make_unique<Model>("models/sponza/Sponza.gltf");
+	m_pModelLoader = std::make_unique<ModelLoader>(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get(), m_pVulkanCommandPool.get());
+    m_pSponzaGLTFModel = std::make_unique<Model>();
 
     InitVulkan();
     InitImGui();
@@ -73,8 +74,7 @@ void VulkanProject::InitVulkan()
 
     m_pVulkanDescriptorPool->Create(103);
 
-    m_pSponzaGLTFModel->AssimpLoadModel(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get(), m_pVulkanCommandPool.get(), m_pGraphicsPipeline.get(), m_pUniformBuffers[0].get());
-    auto temp = m_pSponzaGLTFModel->GetSubMeshes().size();
+    m_pSponzaGLTFModel = m_pModelLoader->AssimpLoadModel("models/sponza/Sponza.gltf", m_pGraphicsPipeline.get(), m_pUniformBuffers[0].get());
 
     // Create Buffers
     m_pVertexBuffer->CreateVertexBuffer(m_pSponzaGLTFModel->GetVertices());

@@ -41,6 +41,7 @@
 #include "core/VulkanDescriptorSet.h"
 #include "core/Renderer.h"
 #include "core/Model.h"
+#include "core/ModelLoader.h"
 #include "core/Texture.h"
 #include "core/Camera.h"
 
@@ -80,11 +81,8 @@ private:
     std::vector<std::unique_ptr<UniformBuffer>> m_pUniformBuffers;
 
 	std::unique_ptr<Camera> m_pCamera;
-
-    std::unique_ptr<Model> m_pSponzaOBJModel;
+	std::unique_ptr<ModelLoader> m_pModelLoader;
     std::unique_ptr<Model> m_pSponzaGLTFModel;
-    std::unique_ptr<Texture> m_pSponzaTexture;
-    std::unique_ptr<Texture> m_pCurtainBTexture;
 
     VkDescriptorPool m_ImGuiPool;
 	VkRenderPass m_ImGuiRenderPass;
