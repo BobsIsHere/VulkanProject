@@ -13,7 +13,7 @@ class VulkanImage
 {
 public:
 	VulkanImage(VulkanDevice* pDevice);
-	~VulkanImage();
+	virtual ~VulkanImage();
 
 	void Create(VulkanSwapChain* pSwapChain);
 	void Cleanup();
@@ -26,8 +26,6 @@ public:
 	VkFormat GetFormat() const;
 
 protected:
-	VulkanDevice* m_pVulkanDevice;
-
 	VkImage m_Image;
 	VkDeviceMemory m_ImageMemory;
 	VkImageView m_ImageView;
@@ -38,6 +36,8 @@ protected:
 	VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags);
 
 private:
+	VulkanDevice* m_pVulkanDevice;
+
 	VkImageAspectFlags GetAspectMask(VkFormat format);
 	VkFormat FindFormat();
 	VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);

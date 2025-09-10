@@ -247,37 +247,26 @@ void VulkanProject::CleanupVulkan()
 
     m_pRenderer->CleanupSwapChain();
 
-    m_pGraphicsPipeline->CleanupPipeline();
+    m_pRenderer->Cleanup();
+    m_pSponzaGLTFModel.reset();
 
-    //m_pVulkanRenderContext->Cleanup();
+    m_pVulkanDescriptorPool->Cleanup();
 
     for (size_t i = 0; i < utils::MAX_FRAMES_IN_FLIGHT; ++i)
     {
         m_pUniformBuffers[i]->Cleanup();
     }
 
-    m_pVulkanDescriptorPool->Cleanup();
-
-    /*m_pCurtainBTexture->CleanupSampler();
-    m_pCurtainBTexture->Cleanup();
-
-    m_pSponzaTexture->CleanupSampler();
-    m_pSponzaTexture->Cleanup();*/
-
+    m_pGraphicsPipeline->CleanupPipeline();
     m_pGraphicsPipeline->CleanupDescriptorSetLayout();
 
     m_pIndexBuffer->Cleanup();
     m_pVertexBuffer->Cleanup();
 
-    m_pRenderer->Cleanup();
-
     m_pVulkanCommandPool->Cleanup();
-
     m_pVulkanDevice->Cleanup();
-
     m_pVulkanInstance->Cleanup();
 
     glfwDestroyWindow(m_pWindow->GetWindow());
-
     glfwTerminate();
 }

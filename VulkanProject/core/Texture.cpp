@@ -9,6 +9,7 @@
 
 Texture::Texture(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool, std::string fileName) :
 	VulkanImage(pDevice),
+	m_pVulkanDevice{ pDevice },
     m_pVulkanCommandPool{ pCommandPool },
 	m_Sampler{},
     m_FileName{ fileName },
@@ -18,6 +19,7 @@ Texture::Texture(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool, std::st
 
 Texture::Texture(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool, const aiTexture* embeddedTexture) :
     VulkanImage(pDevice),
+    m_pVulkanDevice{ pDevice },
     m_pVulkanCommandPool{ pCommandPool },
     m_Sampler{},
     m_FileName{},
@@ -42,6 +44,7 @@ Texture::Texture(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool, const a
 
 Texture::~Texture()
 {
+    Cleanup();
 }
 
 void Texture::CreateTextureImage()
@@ -154,9 +157,10 @@ void Texture::CreateTextureSampler()
     }
 }
 
-void Texture::CleanupSampler()
+void Texture::Cleanup()
 {
     vkDestroySampler(m_pVulkanDevice->GetDevice(), m_Sampler, nullptr);
+	VulkanImage::Cleanup();
 }
 
 VkSampler Texture::GetSampler() const

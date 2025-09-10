@@ -27,7 +27,8 @@ public:
 	void CreateTextureImageFromMemory(const unsigned char* pixels, size_t size);
 	void CreateTextureImageView();
 	void CreateTextureSampler();
-	void CleanupSampler();
+
+	void Cleanup();
 
 	VkSampler GetSampler() const;
 	std::string GetFileName() const;
@@ -39,6 +40,7 @@ public:
 	uint32_t GetBindlessIndex() const;
 
 private:
+	VulkanDevice* m_pVulkanDevice;
 	VulkanCommandPool* m_pVulkanCommandPool;
 
 	VkSampler m_Sampler;
