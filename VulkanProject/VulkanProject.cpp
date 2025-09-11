@@ -27,6 +27,8 @@ void VulkanProject::Run()
         m_pVulkanCommandBuffers[idx] = std::make_unique<VulkanCommandBuffer>();
     }
 
+	m_pVulkanDescriptorSetLayout = std::make_unique<VulkanDescriptorSetLayout>(m_pVulkanDevice.get());
+
     // Initialize Buffers
     m_pUniformBuffers.resize(utils::MAX_FRAMES_IN_FLIGHT);
 
@@ -62,8 +64,8 @@ void VulkanProject::InitVulkan()
     m_pVulkanSwapChain->Create();
 
     m_pVulkanSwapChain->CreateImageViews();
-    m_pGraphicsPipeline->CreateDescriptorSetLayout();
-    m_pGraphicsPipeline->CreatePipeline();
+    m_pVulkanDescriptorSetLayout->Create();
+    m_pGraphicsPipeline->CreatePipeline(m_pVulkanDescriptorSetLayout.get());
     m_pVulkanCommandPool->Create();
     m_pRenderer->CreateDepthResources();
 
@@ -80,7 +82,7 @@ void VulkanProject::InitVulkan()
     m_pVertexBuffer->CreateVertexBuffer(m_pSponzaGLTFModel->GetVertices());
     m_pIndexBuffer->CreateIndexBuffer(m_pSponzaGLTFModel->GetIndices());
 
-    m_pSponzaGLTFModel->CreateDescriptorSets(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get(), m_pGraphicsPipeline.get(), m_pUniformBuffers[0].get(), m_pVertexBuffer.get());
+    m_pSponzaGLTFModel->CreateDescriptorSets(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get(), m_pVulkanDescriptorSetLayout.get(), m_pUniformBuffers[0].get(), m_pVertexBuffer.get());
 
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
@@ -261,7 +263,7 @@ void VulkanProject::CleanupVulkan()
     }
 
     m_pGraphicsPipeline->CleanupPipeline();
-    m_pGraphicsPipeline->CleanupDescriptorSetLayout();
+    m_pVulkanDescriptorSetLayout->Cleanup();
 
     m_pIndexBuffer->Cleanup();
     m_pVertexBuffer->Cleanup();

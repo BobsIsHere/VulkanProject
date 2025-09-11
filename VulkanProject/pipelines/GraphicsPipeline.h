@@ -7,6 +7,7 @@
 
 class VulkanDevice;
 class VulkanRenderContext;
+class VulkanDescriptorSetLayout;
 
 class GraphicsPipeline final
 {
@@ -14,17 +15,11 @@ public:
 	GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* pRenderPass);
 	~GraphicsPipeline();
 
-	void CreatePipeline();
-	void CreateDescriptorSetLayout();
-
+	void CreatePipeline(VulkanDescriptorSetLayout* pLayout);
 	void CleanupPipeline();
-	void CleanupDescriptorSetLayout();
 
 	VkPipelineLayout GetPipelineLayout() const;
 	VkPipeline GetGraphicsPipeline() const;
-
-	VkDescriptorSetLayout GetGlobalSetLayout() const;
-	VkDescriptorSetLayout GetUBOSetLayout() const;
 
 private:
 	VulkanDevice* m_pVulkanDevice;
@@ -32,9 +27,6 @@ private:
 
 	VkPipelineLayout m_PipelineLayout;
 	VkPipeline m_GraphicsPipeline;
-
-	VkDescriptorSetLayout m_GlobalDataSetLayout;
-	VkDescriptorSetLayout m_UBOSetLayout;
 
 	static std::vector<char> ReadFile(const std::string& filename);
 	VkShaderModule CreateShaderModule(const std::vector<char>& code);

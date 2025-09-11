@@ -4,7 +4,7 @@
 #include "utils/utils.h"
 #include "VulkanDevice.h"
 #include "VulkanDescriptorPool.h"
-#include "pipelines/GraphicsPipeline.h"
+#include "VulkanDescriptorSetLayout.h"
 #include "buffers/UniformBuffer.h"
 #include "buffers/VertexBuffer.h"
 
@@ -18,7 +18,7 @@ Model::~Model()
 {
 }
 
-void Model::CreateDescriptorSets(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool, GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer)
+void Model::CreateDescriptorSets(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool, VulkanDescriptorSetLayout* pLayout, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer)
 {
     std::vector<Texture*> rawTextures;
 
@@ -30,7 +30,7 @@ void Model::CreateDescriptorSets(VulkanDevice* pDevice, VulkanDescriptorPool* pD
 
     // Create descriptor set(s)
     auto descriptorSet{ std::make_unique<VulkanDescriptorSet>(pDevice, pDescriptorPool) };
-    descriptorSet->Create(pPipeline, pUniformBuffer, pVertexBuffer, rawTextures);
+    descriptorSet->Create(pLayout, pUniformBuffer, pVertexBuffer, rawTextures);
     AddDescriptorSet(std::move(descriptorSet));
 }
 

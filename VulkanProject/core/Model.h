@@ -13,7 +13,7 @@ class Texture;
 class VulkanDescriptorSet;
 class VulkanDevice;
 class VulkanDescriptorPool;
-class GraphicsPipeline;
+class VulkanDescriptorSetLayout;
 class UniformBuffer;
 class VertexBuffer;
 
@@ -33,7 +33,7 @@ public:
 	Model();
 	~Model();
 
-	void CreateDescriptorSets(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool, GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer);
+	void CreateDescriptorSets(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool, VulkanDescriptorSetLayout* pLayout, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer);
 
 	void AddVertices(const std::vector<Vertex>& vertices);
 	void AddIndices(const std::vector<uint32_t>& indices);

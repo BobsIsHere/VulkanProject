@@ -39,6 +39,7 @@
 #include "core/VulkanCommandBuffer.h"
 #include "core/VulkanDescriptorPool.h"
 #include "core/VulkanDescriptorSet.h"
+#include "core/VulkanDescriptorSetLayout.h"
 #include "core/Renderer.h"
 #include "core/Model.h"
 #include "core/ModelLoader.h"
@@ -73,6 +74,7 @@ private:
     std::unique_ptr<VulkanCommandPool> m_pVulkanCommandPool;
 
     std::vector<std::unique_ptr<VulkanCommandBuffer>> m_pVulkanCommandBuffers;
+	std::unique_ptr<VulkanDescriptorSetLayout> m_pVulkanDescriptorSetLayout;
     std::unique_ptr<VulkanDescriptorPool> m_pVulkanDescriptorPool;
     std::unique_ptr<Renderer> m_pRenderer;
 

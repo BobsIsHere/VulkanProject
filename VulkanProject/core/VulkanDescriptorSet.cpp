@@ -5,7 +5,7 @@
 #include "core/VulkanDevice.h"
 #include "core/VulkanDescriptorPool.h"
 #include "core/Texture.h"
-#include "pipelines/GraphicsPipeline.h"
+#include "core/VulkanDescriptorSetLayout.h"
 #include "buffers/UniformBuffer.h"
 #include "buffers/VertexBuffer.h"
 #include "utils/utils.h"
@@ -22,10 +22,10 @@ VulkanDescriptorSet::~VulkanDescriptorSet()
 {
 }
 
-void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, std::vector<Texture*> pTextures)
+void VulkanDescriptorSet::Create(VulkanDescriptorSetLayout* pLayout, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, std::vector<Texture*> pTextures)
 {
     // ---- Allocate descriptor set for UBO (set = 0) ----
-    VkDescriptorSetLayout uboLayout{ pPipeline->GetUBOSetLayout() };
+    VkDescriptorSetLayout uboLayout{ pLayout->GetUBOSetLayout() };
     VkDescriptorSetAllocateInfo uboAllocInfo{};
     uboAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     uboAllocInfo.descriptorPool = m_pVulkanDescriptorPool->GetDescriptorPool();
@@ -69,7 +69,7 @@ void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUn
     vkUpdateDescriptorSets(m_pVulkanDevice->GetDevice(), static_cast<uint32_t>(uboWrites.size()), uboWrites.data(), 0, nullptr);
 
     // ---- Allocate descriptor set for textures (set = 1) ----
-    VkDescriptorSetLayout textureLayout{ pPipeline->GetGlobalSetLayout() };
+    VkDescriptorSetLayout textureLayout{ pLayout->GetGlobalSetLayout() };
     VkDescriptorSetAllocateInfo texAllocInfo{};
     texAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
     texAllocInfo.descriptorPool = m_pVulkanDescriptorPool->GetDescriptorPool();

@@ -5,14 +5,13 @@
 #include "utils/utils.h"
 #include "core/VulkanDevice.h"
 #include "core/VulkanRenderContext.h"
+#include "core/VulkanDescriptorSetLayout.h"
 
 GraphicsPipeline::GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* pRenderPass) :
 	m_pVulkanDevice{ pDevice },
 	m_pVulkanRenderPass{ pRenderPass },
     m_GraphicsPipeline{},
-	m_PipelineLayout{},
-	m_UBOSetLayout{},
-	m_GlobalDataSetLayout{}
+	m_PipelineLayout{}
 {
 }
 
@@ -20,7 +19,7 @@ GraphicsPipeline::~GraphicsPipeline()
 {
 }
 
-void GraphicsPipeline::CreatePipeline()
+void GraphicsPipeline::CreatePipeline(VulkanDescriptorSetLayout* pLayout)
 {
     auto vertShaderCode = ReadFile("shaders/vert.spv");
     auto fragShaderCode = ReadFile("shaders/frag.spv");
@@ -126,8 +125,8 @@ void GraphicsPipeline::CreatePipeline()
     dynamicState.pDynamicStates = dynamicStates.data();
 
     const std::array<VkDescriptorSetLayout, 2> setLayouts = {
-        m_UBOSetLayout,
-        m_GlobalDataSetLayout
+        pLayout->GetUBOSetLayout(),
+		pLayout->GetGlobalSetLayout()
     };
 
 	VkPushConstantRange pushConstantRange{};
@@ -198,70 +197,10 @@ void GraphicsPipeline::CreatePipeline()
     vkDestroyShaderModule(m_pVulkanDevice->GetDevice(), vertShaderModule, nullptr);
 }
 
-void GraphicsPipeline::CreateDescriptorSetLayout()
-{
-    // --- UBO layout --- 
-    VkDescriptorSetLayoutBinding uboBinding{};
-    uboBinding.binding = 0;
-    uboBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    uboBinding.descriptorCount = 1;
-    uboBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-    uboBinding.pImmutableSamplers = nullptr;
-
-    VkDescriptorSetLayoutBinding ssboBinding{};
-    ssboBinding.binding = 1;
-    ssboBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-    ssboBinding.descriptorCount = 1;
-    ssboBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-    ssboBinding.pImmutableSamplers = nullptr;
-
-    std::array<VkDescriptorSetLayoutBinding, 2> uboBindings = { uboBinding, ssboBinding };
-
-    VkDescriptorSetLayoutCreateInfo layoutInfo{};
-    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    layoutInfo.bindingCount = static_cast<uint32_t>(uboBindings.size());
-    layoutInfo.pBindings = uboBindings.data();
-
-    vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &layoutInfo, nullptr, &m_UBOSetLayout);
-
-	// --- Texture layout ---
-    VkDescriptorSetLayoutBinding samplerLayoutBinding{};
-    samplerLayoutBinding.binding = 0;
-    samplerLayoutBinding.descriptorCount = 1;
-    samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
-    samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-    samplerLayoutBinding.pImmutableSamplers = nullptr;
-
-    VkDescriptorSetLayoutBinding sampledImageBinding{};
-    sampledImageBinding.binding = 1;
-    sampledImageBinding.descriptorCount = utils::TEXTURE_ARRAY_SIZE;
-    sampledImageBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
-    sampledImageBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-    sampledImageBinding.pImmutableSamplers = nullptr;
-
-    std::array<VkDescriptorSetLayoutBinding, 2> globalBindings = { samplerLayoutBinding, sampledImageBinding };
-
-    VkDescriptorSetLayoutCreateInfo globalLayoutInfo{};
-    globalLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    globalLayoutInfo.bindingCount = static_cast<uint32_t>(globalBindings.size());
-    globalLayoutInfo.pBindings = globalBindings.data();
-
-    if (vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &globalLayoutInfo, nullptr, &m_GlobalDataSetLayout) != VK_SUCCESS)
-    {
-        throw std::runtime_error("failed to create descriptor set layout!");
-    }
-}
-
 void GraphicsPipeline::CleanupPipeline()
 {
     vkDestroyPipeline(m_pVulkanDevice->GetDevice(), m_GraphicsPipeline, nullptr);
     vkDestroyPipelineLayout(m_pVulkanDevice->GetDevice(), m_PipelineLayout, nullptr);
-}
-
-void GraphicsPipeline::CleanupDescriptorSetLayout()
-{
-    vkDestroyDescriptorSetLayout(m_pVulkanDevice->GetDevice(), m_GlobalDataSetLayout, nullptr);
-    vkDestroyDescriptorSetLayout(m_pVulkanDevice->GetDevice(), m_UBOSetLayout, nullptr);
 }
 
 VkPipelineLayout GraphicsPipeline::GetPipelineLayout() const
@@ -272,16 +211,6 @@ VkPipelineLayout GraphicsPipeline::GetPipelineLayout() const
 VkPipeline GraphicsPipeline::GetGraphicsPipeline() const
 {
     return m_GraphicsPipeline;
-}
-
-VkDescriptorSetLayout GraphicsPipeline::GetGlobalSetLayout() const
-{
-    return m_GlobalDataSetLayout;
-}
-
-VkDescriptorSetLayout GraphicsPipeline::GetUBOSetLayout() const
-{
-    return m_UBOSetLayout;
 }
 
 std::vector<char> GraphicsPipeline::ReadFile(const std::string& filename)
