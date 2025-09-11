@@ -83,9 +83,8 @@ VkCommandBuffer VulkanCommandBuffer::GetCommandBuffer() const
     return m_CommandBuffer;
 }
 
-void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
-    VulkanRenderContext* pRenderContext, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, const std::unique_ptr<Model>& pModel,
-    uint32_t currentFrame, ImDrawData* drawData, VulkanImage* pDepthImage)
+void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, VulkanRenderContext* pRenderContext, VulkanSwapChain* pSwapChain,
+    GraphicsPipeline* pPipeline, const std::unique_ptr<Model>& pModel, uint32_t currentFrame, ImDrawData* drawData, VulkanImage* pDepthImage, VulkanDevice* pDevice)
 {
     VkRenderingInfo renderInfo{};
     VkRenderingAttachmentInfo colorAttachment{};
@@ -111,9 +110,9 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
     scissor.extent = pSwapChain->GetSwapChainExtent();
     vkCmdSetScissor(m_CommandBuffer, 0, 1, &scissor);
 
-    VkBuffer vertexBuffers[] = { pVertexBuffer->GetBuffer() };
+    /*VkBuffer vertexBuffers[] = { pVertexBuffer->GetBuffer() };
     VkDeviceSize offsets[] = { 0 };
-    vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);
+    vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);*/
 
     vkCmdBindIndexBuffer(m_CommandBuffer, pIndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
 

@@ -80,6 +80,8 @@ void VulkanProject::InitVulkan()
     m_pVertexBuffer->CreateVertexBuffer(m_pSponzaGLTFModel->GetVertices());
     m_pIndexBuffer->CreateIndexBuffer(m_pSponzaGLTFModel->GetIndices());
 
+    m_pSponzaGLTFModel->CreateDescriptorSets(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get(), m_pGraphicsPipeline.get(), m_pUniformBuffers[0].get(), m_pVertexBuffer.get());
+
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
         m_pVulkanCommandBuffers[idx]->Create(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
@@ -211,7 +213,8 @@ void VulkanProject::MainLoopImGui()
 
     m_pRenderer->DrawFrame(
         m_pUniformBuffers,
-        m_pVertexBuffer.get(), m_pIndexBuffer.get(),
+		m_pVertexBuffer.get(),
+        m_pIndexBuffer.get(),
         m_pVulkanCommandBuffers,
         m_pVulkanCommandPool.get(),
         m_pGraphicsPipeline.get(),

@@ -24,7 +24,7 @@ void VertexBuffer::CreateVertexBuffer(std::vector<Vertex> vertices)
     memcpy(data, vertices.data(), (size_t)bufferSize);
     vkUnmapMemory(m_pVulkanDevice->GetDevice(), stagingBufferMemory);
 
-    CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+    CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_Buffer, m_BufferMemory);
 
     CopyBuffer(stagingBuffer, m_Buffer, bufferSize);

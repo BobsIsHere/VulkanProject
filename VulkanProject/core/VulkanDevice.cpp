@@ -98,9 +98,14 @@ void VulkanDevice::CreateLogicalDevice()
 	deviceFeatures2.pNext = &features11;
 	deviceFeatures2.features.samplerAnisotropy = VK_TRUE;
 
+	VkPhysicalDeviceVertexInputDynamicStateFeaturesEXT vertexInputDynamicStateFeatures{};
+	vertexInputDynamicStateFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_INPUT_DYNAMIC_STATE_FEATURES_EXT;
+	vertexInputDynamicStateFeatures.pNext = &deviceFeatures2;
+	vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_TRUE;
+
     VkDeviceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-	createInfo.pNext = &deviceFeatures2;
+	createInfo.pNext = &vertexInputDynamicStateFeatures;
     createInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
     createInfo.pQueueCreateInfos = queueCreateInfos.data();
 

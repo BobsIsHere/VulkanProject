@@ -31,7 +31,7 @@ public:
 	void CreateDepthResources();
 	void Cleanup();
 
-	void DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, 
+	void DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBuffers, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer,
 		std::vector<std::unique_ptr<VulkanCommandBuffer>>& pCommandBuffers, VulkanCommandPool* pCommandPool, GraphicsPipeline* pPipeline, 
 		const std::unique_ptr<Model>& pModel, ImDrawData* drawData, VulkanImage* pDepthImage);
 

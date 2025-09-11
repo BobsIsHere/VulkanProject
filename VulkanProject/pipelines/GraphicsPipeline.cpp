@@ -54,15 +54,12 @@ void GraphicsPipeline::CreatePipeline()
 
     VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
-    auto bindingDescription = Vertex::getBindingDescription();
-    auto attributeDescriptions = Vertex::getAttributeDescriptions();
-
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexBindingDescriptionCount = 1;
-    vertexInputInfo.pVertexBindingDescriptions = &bindingDescription;
-    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
-    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+    vertexInputInfo.vertexBindingDescriptionCount = 0;
+    vertexInputInfo.pVertexBindingDescriptions = nullptr;
+    vertexInputInfo.vertexAttributeDescriptionCount = 0;
+    vertexInputInfo.pVertexAttributeDescriptions = nullptr;;
 
     VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
     inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
@@ -204,22 +201,28 @@ void GraphicsPipeline::CreatePipeline()
 void GraphicsPipeline::CreateDescriptorSetLayout()
 {
     // --- UBO layout --- 
-    VkDescriptorSetLayoutBinding uboLayoutBinding{};
-    uboLayoutBinding.binding = 0;
-    uboLayoutBinding.descriptorCount = 1;
-    uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-    uboLayoutBinding.pImmutableSamplers = nullptr;
-    uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    VkDescriptorSetLayoutBinding uboBinding{};
+    uboBinding.binding = 0;
+    uboBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+    uboBinding.descriptorCount = 1;
+    uboBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    uboBinding.pImmutableSamplers = nullptr;
 
-    VkDescriptorSetLayoutCreateInfo frameLayoutInfo{};
-    frameLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    frameLayoutInfo.bindingCount = 1;
-    frameLayoutInfo.pBindings = &uboLayoutBinding;
+    VkDescriptorSetLayoutBinding ssboBinding{};
+    ssboBinding.binding = 1;
+    ssboBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    ssboBinding.descriptorCount = 1;
+    ssboBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+    ssboBinding.pImmutableSamplers = nullptr;
 
-    if (vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &frameLayoutInfo, nullptr, &m_UBOSetLayout) != VK_SUCCESS)
-    {
-        throw std::runtime_error("failed to create ubo descriptor set layout!");
-    }
+    std::array<VkDescriptorSetLayoutBinding, 2> uboBindings = { uboBinding, ssboBinding };
+
+    VkDescriptorSetLayoutCreateInfo layoutInfo{};
+    layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+    layoutInfo.bindingCount = static_cast<uint32_t>(uboBindings.size());
+    layoutInfo.pBindings = uboBindings.data();
+
+    vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &layoutInfo, nullptr, &m_UBOSetLayout);
 
 	// --- Texture layout ---
     VkDescriptorSetLayoutBinding samplerLayoutBinding{};
@@ -236,12 +239,12 @@ void GraphicsPipeline::CreateDescriptorSetLayout()
     sampledImageBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
     sampledImageBinding.pImmutableSamplers = nullptr;
 
-    std::array<VkDescriptorSetLayoutBinding, 2> bindings = { samplerLayoutBinding, sampledImageBinding };
+    std::array<VkDescriptorSetLayoutBinding, 2> globalBindings = { samplerLayoutBinding, sampledImageBinding };
 
     VkDescriptorSetLayoutCreateInfo globalLayoutInfo{};
     globalLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-    globalLayoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-    globalLayoutInfo.pBindings = bindings.data();
+    globalLayoutInfo.bindingCount = static_cast<uint32_t>(globalBindings.size());
+    globalLayoutInfo.pBindings = globalBindings.data();
 
     if (vkCreateDescriptorSetLayout(m_pVulkanDevice->GetDevice(), &globalLayoutInfo, nullptr, &m_GlobalDataSetLayout) != VK_SUCCESS)
     {

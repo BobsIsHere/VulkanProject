@@ -37,9 +37,8 @@ public:
 	void SetCommandBuffer(VkCommandBuffer commandBuffer);
 	VkCommandBuffer GetCommandBuffer() const;
 
-	void Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, VulkanRenderContext* pRenderContext,
-		VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline, const std::unique_ptr<Model>& pModel,
-		uint32_t currentFrame, ImDrawData* drawData, VulkanImage* pDepthImage);
+	void Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer, IndexBuffer* pIndexBuffer, VulkanRenderContext* pRenderContext, VulkanSwapChain* pSwapChain, GraphicsPipeline* pPipeline,
+		const std::unique_ptr<Model>& pModel, uint32_t currentFrame, ImDrawData* drawData, VulkanImage* pDepthImage, VulkanDevice* pDevice);
 
 private:
 	VkCommandBuffer m_CommandBuffer;

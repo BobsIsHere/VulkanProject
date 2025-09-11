@@ -7,6 +7,7 @@
 #include "core/Texture.h"
 #include "pipelines/GraphicsPipeline.h"
 #include "buffers/UniformBuffer.h"
+#include "buffers/VertexBuffer.h"
 #include "utils/utils.h"
 
 VulkanDescriptorSet::VulkanDescriptorSet(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool) :
@@ -21,7 +22,7 @@ VulkanDescriptorSet::~VulkanDescriptorSet()
 {
 }
 
-void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, std::vector<Texture*> pTextures)
+void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, std::vector<Texture*> pTextures)
 {
     // ---- Allocate descriptor set for UBO (set = 0) ----
     VkDescriptorSetLayout uboLayout{ pPipeline->GetUBOSetLayout() };
@@ -50,7 +51,22 @@ void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUn
     uboWrite.descriptorCount = 1;
     uboWrite.pBufferInfo = &bufferInfo;
 
-    vkUpdateDescriptorSets(m_pVulkanDevice->GetDevice(), 1, &uboWrite, 0, nullptr);
+	VkDescriptorBufferInfo vertexBufferInfo{};
+	vertexBufferInfo.buffer = pVertexBuffer->GetBuffer();
+	vertexBufferInfo.offset = 0;
+	vertexBufferInfo.range = VK_WHOLE_SIZE;
+
+	VkWriteDescriptorSet vertexBufferWrite{};
+	vertexBufferWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	vertexBufferWrite.dstSet = m_UBODescriptorSet;
+	vertexBufferWrite.dstBinding = 1;
+	vertexBufferWrite.dstArrayElement = 0;
+	vertexBufferWrite.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+	vertexBufferWrite.descriptorCount = 1;
+	vertexBufferWrite.pBufferInfo = &vertexBufferInfo;
+
+    const std::array<VkWriteDescriptorSet, 2> uboWrites = { uboWrite, vertexBufferWrite };
+    vkUpdateDescriptorSets(m_pVulkanDevice->GetDevice(), static_cast<uint32_t>(uboWrites.size()), uboWrites.data(), 0, nullptr);
 
     // ---- Allocate descriptor set for textures (set = 1) ----
     VkDescriptorSetLayout textureLayout{ pPipeline->GetGlobalSetLayout() };
@@ -99,7 +115,7 @@ void VulkanDescriptorSet::Create(GraphicsPipeline* pPipeline, UniformBuffer* pUn
     texturesWrite.descriptorCount = textureCount;
     texturesWrite.pImageInfo = imageInfos.data();
 
-    std::array<VkWriteDescriptorSet, 2> writes = { samplerWrite, texturesWrite };
+    const std::array<VkWriteDescriptorSet, 2> writes = { samplerWrite, texturesWrite };
     vkUpdateDescriptorSets(m_pVulkanDevice->GetDevice(), static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
 }
 

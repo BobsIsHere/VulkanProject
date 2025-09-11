@@ -48,7 +48,8 @@ std::unique_ptr<Model> ModelLoader::TinyOBJLoadModel(const std::string& fileName
             vertex.pos = {
                 attrib.vertices[3 * index.vertex_index + 0],
                 attrib.vertices[3 * index.vertex_index + 1],
-                attrib.vertices[3 * index.vertex_index + 2]
+                attrib.vertices[3 * index.vertex_index + 2],
+                1.0f
             };
 
             vertex.texCoord = {
@@ -56,7 +57,7 @@ std::unique_ptr<Model> ModelLoader::TinyOBJLoadModel(const std::string& fileName
                 1.0f - attrib.texcoords[2 * index.texcoord_index + 1]
             };
 
-            vertex.color = { 1.0f, 1.0f, 1.0f };
+            vertex.color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
             if (uniqueVertices.count(vertex) == 0)
             {
@@ -109,20 +110,6 @@ std::unique_ptr<Model> ModelLoader::AssimpLoadModel(const std::string& fileName,
         model->SetSubMeshOffsets(idx, vertexOffset, indexOffset);
     }
 
-    std::vector<Texture*> rawTextures;
-	const auto pAllTextures{ model->GetAllTextures() };
-
-    rawTextures.reserve(pAllTextures.size());
-    for (auto& texPtr : pAllTextures)
-    {
-        rawTextures.push_back(texPtr.get());
-    }
-
-    // Create descriptor set(s)
-    auto descriptorSet{ std::make_unique<VulkanDescriptorSet>(m_pDevice, m_pDescriptorPool) };
-    descriptorSet->Create(pPipeline, pUniformBuffer, rawTextures);
-    model->AddDescriptorSet(std::move(descriptorSet));
-
     return model;
 }
 
@@ -154,7 +141,8 @@ Model::MeshData ModelLoader::ProcessMesh(Model* model, aiMesh* mesh, const aiSce
         vertex.pos = {
             mesh->mVertices[idx].x,
             mesh->mVertices[idx].y,
-            mesh->mVertices[idx].z
+            mesh->mVertices[idx].z,
+            1.0f
         };
 
         // Normal as color for now
@@ -163,12 +151,13 @@ Model::MeshData ModelLoader::ProcessMesh(Model* model, aiMesh* mesh, const aiSce
             vertex.color = {
                 (mesh->mNormals[idx].x + 1.0f) * 0.5f,
                 (mesh->mNormals[idx].y + 1.0f) * 0.5f,
-                (mesh->mNormals[idx].z + 1.0f) * 0.5f
+                (mesh->mNormals[idx].z + 1.0f) * 0.5f,
+                1.0f
             };
         }
         else 
         {
-            vertex.color = { 1.0f, 1.0f, 1.0f };
+            vertex.color = { 1.0f, 1.0f, 1.0f, 1.0f };
         }
 
         // Texcoords

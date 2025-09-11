@@ -2,6 +2,11 @@
 #include "Texture.h"
 #include "VulkanDescriptorSet.h"
 #include "utils/utils.h"
+#include "VulkanDevice.h"
+#include "VulkanDescriptorPool.h"
+#include "pipelines/GraphicsPipeline.h"
+#include "buffers/UniformBuffer.h"
+#include "buffers/VertexBuffer.h"
 
 Model::Model() :
     m_Indices{},
@@ -11,6 +16,22 @@ Model::Model() :
 
 Model::~Model()
 {
+}
+
+void Model::CreateDescriptorSets(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool, GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer)
+{
+    std::vector<Texture*> rawTextures;
+
+    rawTextures.reserve(m_pAllTextures.size());
+    for (auto& texPtr : m_pAllTextures)
+    {
+        rawTextures.push_back(texPtr.get());
+    }
+
+    // Create descriptor set(s)
+    auto descriptorSet{ std::make_unique<VulkanDescriptorSet>(pDevice, pDescriptorPool) };
+    descriptorSet->Create(pPipeline, pUniformBuffer, pVertexBuffer, rawTextures);
+    AddDescriptorSet(std::move(descriptorSet));
 }
 
 void Model::AddVertices(const std::vector<Vertex>& vertices)
