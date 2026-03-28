@@ -126,12 +126,12 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
 
     for (auto& subMesh : pModel->GetSubMeshes())
     {
-        PushConstants pc{ subMesh.textureIndex };
+        PushConstants pc{ subMesh.materialIndex };
 
         vkCmdPushConstants(m_CommandBuffer, pPipeline->GetPipelineLayout(),
             VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &pc);
 
-        vkCmdDrawIndexed(m_CommandBuffer, subMesh.indices.size(), 1, subMesh.firstIndex, subMesh.vertexOffset, 0);
+        vkCmdDrawIndexed(m_CommandBuffer, uint32_t(subMesh.indices.size()), 1, subMesh.firstIndex, subMesh.vertexOffset, 0);
     }
 
 	// Render ImGui

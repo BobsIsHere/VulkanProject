@@ -34,6 +34,7 @@ void VulkanProject::Run()
 
     m_pVertexBuffer = std::make_unique<VertexBuffer>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
     m_pIndexBuffer = std::make_unique<IndexBuffer>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
+    m_pMaterialBuffer = std::make_unique<MaterialBuffer>(m_pVulkanDevice.get(), m_pVulkanCommandPool.get());
 
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
@@ -82,7 +83,8 @@ void VulkanProject::InitVulkan()
     m_pVertexBuffer->CreateVertexBuffer(m_pSponzaGLTFModel->GetVertices());
     m_pIndexBuffer->CreateIndexBuffer(m_pSponzaGLTFModel->GetIndices());
 
-    m_pSponzaGLTFModel->CreateDescriptorSets(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get(), m_pVulkanDescriptorSetLayout.get(), m_pUniformBuffers[0].get(), m_pVertexBuffer.get());
+    m_pSponzaGLTFModel->CreateDescriptorSets(m_pVulkanDevice.get(), m_pVulkanDescriptorPool.get(), m_pVulkanDescriptorSetLayout.get(), 
+        m_pUniformBuffers[0].get(), m_pVertexBuffer.get(), m_pMaterialBuffer.get());
 
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
@@ -142,10 +144,10 @@ void VulkanProject::InitImGui()
     imguiInfo.Queue = m_pVulkanDevice->GetGraphicsQueue();
     imguiInfo.PipelineCache = VK_NULL_HANDLE;
     imguiInfo.DescriptorPool = m_ImGuiPool;
-    imguiInfo.Subpass = 0;
+    imguiInfo.PipelineInfoMain.Subpass = 0;
     imguiInfo.MinImageCount = utils::MAX_FRAMES_IN_FLIGHT;
     imguiInfo.ImageCount = utils::MAX_FRAMES_IN_FLIGHT;
-    imguiInfo.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
+    imguiInfo.PipelineInfoMain.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
     imguiInfo.Allocator = nullptr;
 
     // Dynamic rendering
@@ -153,13 +155,13 @@ void VulkanProject::InitImGui()
     VkFormat depthFormat{ m_pRenderer->GetDepthImage()->GetFormat() };
 
     imguiInfo.UseDynamicRendering = true;
-    imguiInfo.RenderPass = nullptr;
+    imguiInfo.PipelineInfoMain.RenderPass = nullptr;
 
-    imguiInfo.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR;
-    imguiInfo.PipelineRenderingCreateInfo.pNext = nullptr;
-	imguiInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-	imguiInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &colorFormat;
-	imguiInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = depthFormat;
+    imguiInfo.PipelineInfoMain.PipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO_KHR;
+    imguiInfo.PipelineInfoMain.PipelineRenderingCreateInfo.pNext = nullptr;
+	imguiInfo.PipelineInfoMain.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+	imguiInfo.PipelineInfoMain.PipelineRenderingCreateInfo.pColorAttachmentFormats = &colorFormat;
+	imguiInfo.PipelineInfoMain.PipelineRenderingCreateInfo.depthAttachmentFormat = depthFormat;
 
     ImGui_ImplVulkan_Init(&imguiInfo);
 }
@@ -265,6 +267,7 @@ void VulkanProject::CleanupVulkan()
     m_pGraphicsPipeline->CleanupPipeline();
     m_pVulkanDescriptorSetLayout->Cleanup();
 
+    m_pMaterialBuffer->Cleanup();
     m_pIndexBuffer->Cleanup();
     m_pVertexBuffer->Cleanup();
 

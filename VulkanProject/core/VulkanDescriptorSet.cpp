@@ -8,6 +8,7 @@
 #include "core/VulkanDescriptorSetLayout.h"
 #include "buffers/UniformBuffer.h"
 #include "buffers/VertexBuffer.h"
+#include "buffers/MaterialBuffer.h"
 #include "utils/utils.h"
 
 VulkanDescriptorSet::VulkanDescriptorSet(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool) :
@@ -22,7 +23,7 @@ VulkanDescriptorSet::~VulkanDescriptorSet()
 {
 }
 
-void VulkanDescriptorSet::Create(VulkanDescriptorSetLayout* pLayout, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, std::vector<Texture*> pTextures)
+void VulkanDescriptorSet::Create(VulkanDescriptorSetLayout* pLayout, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, MaterialBuffer* pMaterialBuffer, std::vector<Texture*> pTextures)
 {
     // ---- Allocate descriptor set for UBO (set = 0) ----
     VkDescriptorSetLayout uboLayout{ pLayout->GetUBOSetLayout() };
@@ -69,17 +70,37 @@ void VulkanDescriptorSet::Create(VulkanDescriptorSetLayout* pLayout, UniformBuff
     vkUpdateDescriptorSets(m_pVulkanDevice->GetDevice(), static_cast<uint32_t>(uboWrites.size()), uboWrites.data(), 0, nullptr);
 
     // ---- Allocate descriptor set for textures (set = 1) ----
-    VkDescriptorSetLayout textureLayout{ pLayout->GetGlobalSetLayout() };
-    VkDescriptorSetAllocateInfo texAllocInfo{};
-    texAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-    texAllocInfo.descriptorPool = m_pVulkanDescriptorPool->GetDescriptorPool();
-    texAllocInfo.descriptorSetCount = 1;
-    texAllocInfo.pSetLayouts = &textureLayout;
+	VkDescriptorSetVariableDescriptorCountAllocateInfo variableDescCountAllocInfo{};
+	variableDescCountAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO;
+	variableDescCountAllocInfo.descriptorSetCount = 1;
+    variableDescCountAllocInfo.pDescriptorCounts = &m_VariableCount;
 
-    if (vkAllocateDescriptorSets(m_pVulkanDevice->GetDevice(), &texAllocInfo, &m_GlobalDescriptorSet) != VK_SUCCESS)
+    VkDescriptorSetLayout textureLayout{ pLayout->GetGlobalSetLayout() };
+    VkDescriptorSetAllocateInfo textureAllocInfo{};
+    textureAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	textureAllocInfo.pNext = &variableDescCountAllocInfo;
+    textureAllocInfo.descriptorPool = m_pVulkanDescriptorPool->GetDescriptorPool();
+    textureAllocInfo.descriptorSetCount = 1;
+    textureAllocInfo.pSetLayouts = &textureLayout;
+
+    if (vkAllocateDescriptorSets(m_pVulkanDevice->GetDevice(), &textureAllocInfo, &m_GlobalDescriptorSet) != VK_SUCCESS)
     {
         throw std::runtime_error("failed to allocate texture descriptor set!");
     }
+
+	VkDescriptorBufferInfo materialBufferInfo{};
+	materialBufferInfo.offset = 0;
+	materialBufferInfo.buffer = pMaterialBuffer->GetBuffer();
+	materialBufferInfo.range = VK_WHOLE_SIZE;
+
+    VkWriteDescriptorSet materialWrite{};
+    materialWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    materialWrite.dstSet = m_GlobalDescriptorSet;
+    materialWrite.dstBinding = 0;
+    materialWrite.dstArrayElement = 0;
+    materialWrite.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    materialWrite.descriptorCount = 1;
+    materialWrite.pBufferInfo = &materialBufferInfo;
 
     VkDescriptorImageInfo samplerInfo{};
     samplerInfo.sampler = pTextures[0]->GetSampler();
@@ -87,7 +108,7 @@ void VulkanDescriptorSet::Create(VulkanDescriptorSetLayout* pLayout, UniformBuff
     VkWriteDescriptorSet samplerWrite{};
     samplerWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     samplerWrite.dstSet = m_GlobalDescriptorSet;
-    samplerWrite.dstBinding = 0;
+    samplerWrite.dstBinding = 1;
     samplerWrite.dstArrayElement = 0;
     samplerWrite.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
     samplerWrite.descriptorCount = 1;
@@ -109,13 +130,13 @@ void VulkanDescriptorSet::Create(VulkanDescriptorSetLayout* pLayout, UniformBuff
     VkWriteDescriptorSet texturesWrite{};
     texturesWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
     texturesWrite.dstSet = m_GlobalDescriptorSet;
-    texturesWrite.dstBinding = 1;
+    texturesWrite.dstBinding = 2;
     texturesWrite.dstArrayElement = 0;
     texturesWrite.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
     texturesWrite.descriptorCount = textureCount;
     texturesWrite.pImageInfo = imageInfos.data();
 
-    const std::array<VkWriteDescriptorSet, 2> writes = { samplerWrite, texturesWrite };
+    const std::array<VkWriteDescriptorSet, 3> writes = { materialWrite, samplerWrite, texturesWrite };
     vkUpdateDescriptorSets(m_pVulkanDevice->GetDevice(), static_cast<uint32_t>(writes.size()), writes.data(), 0, nullptr);
 }
 

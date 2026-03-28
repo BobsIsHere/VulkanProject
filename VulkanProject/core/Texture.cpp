@@ -13,7 +13,7 @@ Texture::Texture(VulkanDevice* pDevice, VulkanCommandPool* pCommandPool, std::st
     m_pVulkanCommandPool{ pCommandPool },
 	m_Sampler{},
     m_FileName{ fileName },
-    m_Type{}
+    m_Type{ TextureType::Unknown }
 {
 }
 

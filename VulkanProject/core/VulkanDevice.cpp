@@ -68,7 +68,7 @@ void VulkanDevice::CreateLogicalDevice()
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
     std::set<uint32_t> uniqueQueueFamilies = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
-    float queuePriority = 1.0f;
+    const float queuePriority{ 1.0f };
     for (uint32_t queueFamily : uniqueQueueFamilies)
     {
         VkDeviceQueueCreateInfo queueCreateInfo{};
@@ -88,6 +88,12 @@ void VulkanDevice::CreateLogicalDevice()
 	VkPhysicalDeviceVulkan12Features features12{};
 	features12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
 	features12.pNext = &features13;
+	features12.descriptorIndexing = VK_TRUE;
+	features12.descriptorBindingPartiallyBound = VK_TRUE;
+	features12.descriptorBindingSampledImageUpdateAfterBind = VK_TRUE;
+	features12.descriptorBindingVariableDescriptorCount = VK_TRUE;
+    features12.shaderSampledImageArrayNonUniformIndexing = VK_TRUE;
+	features12.runtimeDescriptorArray = VK_TRUE;
 
 	VkPhysicalDeviceVulkan11Features features11{};
 	features11.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES;

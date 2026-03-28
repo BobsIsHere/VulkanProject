@@ -31,7 +31,7 @@ void VulkanDescriptorSetLayout::Create()
     ssboBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
     ssboBinding.pImmutableSamplers = nullptr;
 
-    std::array<VkDescriptorSetLayoutBinding, 2> uboBindings = { uboBinding, ssboBinding };
+    const std::array<VkDescriptorSetLayoutBinding, 2> uboBindings = { uboBinding, ssboBinding };
 
     VkDescriptorSetLayoutCreateInfo layoutInfo{};
     layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
@@ -41,24 +41,50 @@ void VulkanDescriptorSetLayout::Create()
     vkCreateDescriptorSetLayout(m_pDevice->GetDevice(), &layoutInfo, nullptr, &m_UBOSetLayout);
 
     // --- Texture layout ---
+    VkDescriptorSetLayoutBinding materialBufferBinding{};
+    materialBufferBinding.binding = 0;
+    materialBufferBinding.descriptorCount = 1;
+    materialBufferBinding.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    materialBufferBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+    materialBufferBinding.pImmutableSamplers = nullptr;
+
     VkDescriptorSetLayoutBinding samplerLayoutBinding{};
-    samplerLayoutBinding.binding = 0;
+    samplerLayoutBinding.binding = 1;
     samplerLayoutBinding.descriptorCount = 1;
     samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
     samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
     samplerLayoutBinding.pImmutableSamplers = nullptr;
 
     VkDescriptorSetLayoutBinding sampledImageBinding{};
-    sampledImageBinding.binding = 1;
+    sampledImageBinding.binding = 2;
     sampledImageBinding.descriptorCount = utils::TEXTURE_ARRAY_SIZE;
     sampledImageBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
     sampledImageBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
     sampledImageBinding.pImmutableSamplers = nullptr;
 
-    std::array<VkDescriptorSetLayoutBinding, 2> globalBindings = { samplerLayoutBinding, sampledImageBinding };
+    const std::array<VkDescriptorSetLayoutBinding, 3> globalBindings = { materialBufferBinding, samplerLayoutBinding, sampledImageBinding };
+
+    m_BindingFlags.clear();
+    m_BindingFlags.resize(globalBindings.size(), 0);
+
+    m_BindingFlags[0] = 0;
+    m_BindingFlags[1] = 0;
+    m_BindingFlags[2] = VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT |
+                        VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT |
+                        VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
+
+	VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo{};
+	bindingFlagsInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
+	bindingFlagsInfo.bindingCount = static_cast<uint32_t>(globalBindings.size());
+	bindingFlagsInfo.pBindingFlags = m_BindingFlags.data();
+
+    VkDescriptorSetLayoutCreateFlags flags = 0;
+	flags |= VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT;
 
     VkDescriptorSetLayoutCreateInfo globalLayoutInfo{};
     globalLayoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	globalLayoutInfo.pNext = &bindingFlagsInfo;
+	globalLayoutInfo.flags = flags;
     globalLayoutInfo.bindingCount = static_cast<uint32_t>(globalBindings.size());
     globalLayoutInfo.pBindings = globalBindings.data();
 

@@ -51,6 +51,7 @@
 #include "buffers/VertexBuffer.h"
 #include "buffers/IndexBuffer.h"
 #include "buffers/UniformBuffer.h"
+#include "buffers/MaterialBuffer.h"
 
 class VulkanProject final
 {
@@ -81,6 +82,7 @@ private:
     std::unique_ptr<VertexBuffer> m_pVertexBuffer;
     std::unique_ptr<IndexBuffer> m_pIndexBuffer;
     std::vector<std::unique_ptr<UniformBuffer>> m_pUniformBuffers;
+    std::unique_ptr<MaterialBuffer> m_pMaterialBuffer;
 
 	std::unique_ptr<Camera> m_pCamera;
 	std::unique_ptr<ModelLoader> m_pModelLoader;

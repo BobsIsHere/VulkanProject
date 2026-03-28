@@ -8,7 +8,35 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Vulkan REQUIRED)
 
 # Add source to this project's executable.
-add_executable (VulkanProject "main.cpp" "VulkanProject.h" "VulkanProject.cpp" "utils/utils.h" "core/Window.h" "core/Window.cpp" "core/VulkanInstance.cpp" "core/VulkanInstance.h" "core/VulkanDevice.h" "core/VulkanDevice.cpp" "core/VulkanSwapChain.h" "core/VulkanSwapChain.cpp" "core/VulkanRenderContext.h" "core/VulkanRenderContext.cpp" "pipelines/GraphicsPipeline.h" "pipelines/GraphicsPipeline.cpp" "core/VulkanCommandPool.h" "core/VulkanCommandPool.cpp" "core/VulkanCommandBuffer.h" "core/VulkanCommandBuffer.cpp" "buffers/VulkanBuffer.h" "buffers/VulkanBuffer.cpp" "buffers/VertexBuffer.h" "buffers/VertexBuffer.cpp" "buffers/IndexBuffer.h" "buffers/IndexBuffer.cpp" "utils/CommandUtils.h" "utils/CommandUtils.cpp" "buffers/UniformBuffer.h" "buffers/UniformBuffer.cpp"   "core/VulkanDescriptorPool.h" "core/VulkanDescriptorPool.cpp" "core/VulkanDescriptorSet.h" "core/VulkanDescriptorSet.cpp" "core/Renderer.h" "core/Renderer.cpp" "core/Model.h" "core/Model.cpp" "core/VulkanImage.h" "core/VulkanImage.cpp" "core/Texture.h" "core/Texture.cpp" "core/Camera.h" "core/Camera.cpp" "core/ModelLoader.h" "core/ModelLoader.cpp" "core/VulkanDescriptorSetLayout.h" "core/VulkanDescriptorSetLayout.cpp")
+add_executable (VulkanProject 
+    "main.cpp" 
+    "VulkanProject.h" "VulkanProject.cpp" 
+    "utils/utils.h" 
+    "utils/CommandUtils.h" "utils/CommandUtils.cpp"
+    "core/Window.h" "core/Window.cpp" 
+    "core/VulkanInstance.cpp" "core/VulkanInstance.h" 
+    "core/VulkanDevice.h" "core/VulkanDevice.cpp" 
+    "core/VulkanSwapChain.h" "core/VulkanSwapChain.cpp" 
+    "core/VulkanRenderContext.h" "core/VulkanRenderContext.cpp" 
+    "pipelines/GraphicsPipeline.h" "pipelines/GraphicsPipeline.cpp" 
+    "core/VulkanCommandPool.h" "core/VulkanCommandPool.cpp" 
+    "core/VulkanCommandBuffer.h" "core/VulkanCommandBuffer.cpp" 
+    "core/VulkanDescriptorPool.h" "core/VulkanDescriptorPool.cpp"
+    "core/VulkanDescriptorSet.h" "core/VulkanDescriptorSet.cpp"
+    "core/Renderer.h" "core/Renderer.cpp" 
+    "core/Model.h" "core/Model.cpp"
+    "core/VulkanImage.h" "core/VulkanImage.cpp" 
+    "core/Texture.h" "core/Texture.cpp"
+    "core/Camera.h" "core/Camera.cpp"
+    "core/ModelLoader.h" "core/ModelLoader.cpp"
+    "core/VulkanDescriptorSetLayout.h" "core/VulkanDescriptorSetLayout.cpp"
+    "core/Material.h" "core/Material.cpp"
+    "buffers/VulkanBuffer.h" "buffers/VulkanBuffer.cpp" 
+    "buffers/VertexBuffer.h" "buffers/VertexBuffer.cpp" 
+    "buffers/IndexBuffer.h" "buffers/IndexBuffer.cpp" 
+    "buffers/UniformBuffer.h" "buffers/UniformBuffer.cpp"
+    "buffers/MaterialBuffer.h" "buffers/MaterialBuffer.cpp"
+)
 
 set(3rdParty "${CMAKE_CURRENT_SOURCE_DIR}/../3rdParty")
 
@@ -97,7 +125,7 @@ add_custom_target(CopyShaders ALL
 # Ensure shaders are copied whenever the project is built
 add_dependencies(${PROJECT_NAME} CopyShaders)
 
-set(GLSLC "C:/VulkanSDK/1.3.296.0/Bin/glslc.exe")
+set(GLSLC "C:/VulkanSDK/1.4.335.0/Bin/glslc.exe")
 
 function(compile_shader shader)
 	#get_filename_component(FILE_NAME ${shader} NAME)

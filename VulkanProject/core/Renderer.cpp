@@ -74,15 +74,15 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
 	const VkFormat swapChainImageFormat{ m_pVulkanSwapChain->GetSwapChainImageFormat() };
 
 	m_pDepthImage->TransitionImageLayout(m_pDepthImage->GetImage(), m_pDepthImage->GetFormat(), VK_IMAGE_LAYOUT_UNDEFINED, 
-        VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL, pCommandPool);
+        VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL, pCommandBuffers[m_CurrentFrame]->GetCommandBuffer());
     m_pSwapChainImage->TransitionImageLayout(swapChainImage, swapChainImageFormat,
-		VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, pCommandPool);
+		VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, pCommandBuffers[m_CurrentFrame]->GetCommandBuffer());
 
     pCommandBuffers[m_CurrentFrame]->Record(imageIndex, pVertexBuffer, pIndexBuffer, m_pVulkanRenderContext,
         m_pVulkanSwapChain, pPipeline, pModel, m_CurrentFrame, drawData, m_pDepthImage, m_pVulkanDevice);
 
     m_pSwapChainImage->TransitionImageLayout(swapChainImage, swapChainImageFormat,
-        VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, pCommandPool);
+        VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, pCommandBuffers[m_CurrentFrame]->GetCommandBuffer());
 
     pCommandBuffers[m_CurrentFrame]->End();
 

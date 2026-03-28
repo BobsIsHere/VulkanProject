@@ -1,12 +1,14 @@
 #include "Model.h"
 #include "Texture.h"
 #include "VulkanDescriptorSet.h"
-#include "utils/utils.h"
 #include "VulkanDevice.h"
 #include "VulkanDescriptorPool.h"
 #include "VulkanDescriptorSetLayout.h"
+#include "Material.h"
+#include "utils/utils.h"
 #include "buffers/UniformBuffer.h"
 #include "buffers/VertexBuffer.h"
+#include "buffers/MaterialBuffer.h"
 
 Model::Model() :
     m_Indices{},
@@ -18,19 +20,28 @@ Model::~Model()
 {
 }
 
-void Model::CreateDescriptorSets(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool, VulkanDescriptorSetLayout* pLayout, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer)
+void Model::CreateDescriptorSets(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool, VulkanDescriptorSetLayout* pLayout, 
+    UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, MaterialBuffer* pMaterialBuffer)
 {
     std::vector<Texture*> rawTextures;
-
     rawTextures.reserve(m_pAllTextures.size());
     for (auto& texPtr : m_pAllTextures)
     {
         rawTextures.push_back(texPtr.get());
     }
 
+    // Build material GPU data
+    std::vector<MaterialGPU> materialData = {};
+    for (const auto& pMaterial : m_pMaterials)
+    {
+        materialData.push_back(pMaterial->BuildMaterialGPU());
+    }
+
+    pMaterialBuffer->CreateMaterialBuffer(materialData);
+
     // Create descriptor set(s)
     auto descriptorSet{ std::make_unique<VulkanDescriptorSet>(pDevice, pDescriptorPool) };
-    descriptorSet->Create(pLayout, pUniformBuffer, pVertexBuffer, rawTextures);
+    descriptorSet->Create(pLayout, pUniformBuffer, pVertexBuffer, pMaterialBuffer, rawTextures);
     AddDescriptorSet(std::move(descriptorSet));
 }
 
@@ -51,7 +62,16 @@ void Model::AddMesh(MeshData mesh)
 
 void Model::AddTexture(std::shared_ptr<Texture> texture)
 {
-	m_pAllTextures.push_back(texture);
+    texture->SetBindlessIndex(static_cast<uint32_t>(m_pAllTextures.size()));
+    m_pAllTextures.push_back(texture);
+}
+
+uint32_t Model::AddMaterial(std::shared_ptr<Material> pMaterial)
+{
+    uint32_t materialIdx{ static_cast<uint32_t>(m_pMaterials.size()) };
+    m_pMaterials.push_back(pMaterial);
+    
+    return materialIdx;
 }
 
 void Model::AddDescriptorSet(std::unique_ptr<VulkanDescriptorSet> descriptorSet)

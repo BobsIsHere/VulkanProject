@@ -11,6 +11,7 @@
 #include "VulkanDevice.h"
 #include "VulkanDescriptorPool.h"
 #include "VulkanCommandPool.h"
+#include "Material.h"
 #include "pipelines/GraphicsPipeline.h"
 #include "buffers/UniformBuffer.h"
 
@@ -79,6 +80,16 @@ std::unique_ptr<Model> ModelLoader::TinyOBJLoadModel(const std::string& fileName
 std::unique_ptr<Model> ModelLoader::AssimpLoadModel(const std::string& fileName, GraphicsPipeline* pPipeline, UniformBuffer* pUniformBuffer)
 {
     std::unique_ptr<Model> model{ std::make_unique<Model>() };
+
+    const std::string directory{ fileName.substr(0, fileName.find_last_of("/\\")) };
+    auto pFallback{ std::make_shared<Texture>(m_pDevice, m_pCommandPool, directory + "/white.png") };
+
+    pFallback->CreateTextureImage();
+    pFallback->CreateTextureImageView();
+    pFallback->CreateTextureSampler();
+
+    // Leave type as Unknown so BuildMaterialGPU can find it as fallback
+    model->AddTexture(pFallback);
 
     Assimp::Importer importer{};
     const aiScene* scene = importer.ReadFile(fileName,
@@ -188,47 +199,57 @@ Model::MeshData ModelLoader::ProcessMesh(Model* model, aiMesh* mesh, const aiSce
     }
 
     // Textures
-    meshData.textureIndex = 0;
+    meshData.materialIndex = 0;
 
     if (mesh->mMaterialIndex >= 0)
     {
         const aiMaterial* material{ scene->mMaterials[mesh->mMaterialIndex] };
-        aiString str;
+        const std::string directory{ fileName.substr(0, fileName.find_last_of("/\\")) };
 
-        if (material->GetTexture(aiTextureType_BASE_COLOR, 0, &str) == AI_SUCCESS ||
-            material->GetTexture(aiTextureType_DIFFUSE, 0, &str) == AI_SUCCESS)
+        // Helper lambda to avoid repeating load logic
+        auto loadTexture = [&](aiTextureType aiType, TextureType ourType) -> std::shared_ptr<Texture>
         {
-			const auto pAllTextures{ model->GetAllTextures() };
+            aiString str;
+            if (material->GetTexture(aiType, 0, &str) != AI_SUCCESS)
+            {
+                return nullptr;
+            }
 
-            const std::string directory{ fileName.substr(0, fileName.find_last_of("/\\")) };
-            std::string texPath{ str.C_Str() };
-            texPath = directory + "/" + texPath;
+            std::string texPath{ directory + "/" + str.C_Str() };
+            const auto& pAllTextures{ model->GetAllTextures() };
 
-            // Check if already loaded
-            auto textureIterator{ std::find_if(pAllTextures.begin(), pAllTextures.end(),
-                [&](const std::shared_ptr<Texture>& t)
-                {
-                    return t->GetFileName() == texPath;
-                })
+            auto it{ std::find_if(pAllTextures.begin(), pAllTextures.end(),
+                [&](const std::shared_ptr<Texture>& t) 
+                { 
+                    return t->GetFileName() == texPath; 
+                }) 
             };
 
-            uint32_t texIndex{};
-            if (textureIterator == pAllTextures.end())
+            if (it != pAllTextures.end())
             {
-                const std::shared_ptr<Texture> pTexture{ std::make_shared<Texture>(m_pDevice, m_pCommandPool, texPath) };
-                pTexture->CreateTextureImage();
-                pTexture->CreateTextureImageView();
-                pTexture->CreateTextureSampler();
-
-                texIndex = static_cast<uint32_t>(pAllTextures.size());
-                model->AddTexture(pTexture);
-            }
-            else 
-            {
-                texIndex = static_cast<uint32_t>(std::distance(pAllTextures.begin(), textureIterator));
+                return *it;
             }
 
-            meshData.textureIndex = texIndex;
+            auto pTexture{ std::make_shared<Texture>(m_pDevice, m_pCommandPool, texPath) };
+            pTexture->CreateTextureImage();
+            pTexture->CreateTextureImageView();
+            pTexture->CreateTextureSampler();
+            pTexture->SetType(ourType);
+            model->AddTexture(pTexture);
+            return pTexture;
+        };
+
+        // Load each texture type
+        auto pDiffuse{ loadTexture(aiTextureType_DIFFUSE, TextureType::Albedo) };
+        auto pNormal{ loadTexture(aiTextureType_NORMALS, TextureType::Normal) };
+        auto pRoughness{ loadTexture(aiTextureType_DIFFUSE_ROUGHNESS, TextureType::Roughness) };
+        auto pMetallic{ loadTexture(aiTextureType_METALNESS, TextureType::Metallic) };
+
+        // Need at least a diffuse to make a material
+        if (pDiffuse)
+        {
+            auto pMaterial{ std::make_shared<Material>(pDiffuse, pNormal, pRoughness, pMetallic) };
+            meshData.materialIndex = model->AddMaterial(pMaterial);
         }
     }
 

@@ -11,6 +11,7 @@ class VulkanDescriptorSetLayout;
 class UniformBuffer;
 class VertexBuffer;
 class Texture;
+class MaterialBuffer;
 
 class VulkanDescriptorSet final
 {
@@ -18,12 +19,14 @@ public:
 	VulkanDescriptorSet(VulkanDevice* pDevice, VulkanDescriptorPool* pDescriptorPool);
 	~VulkanDescriptorSet();
 
-	void Create(VulkanDescriptorSetLayout* pLayout, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, std::vector<Texture*> pTextures);
+	void Create(VulkanDescriptorSetLayout* pLayout, UniformBuffer* pUniformBuffer, VertexBuffer* pVertexBuffer, MaterialBuffer* pMaterialBuffer, std::vector<Texture*> pTextures);
 
 	VkDescriptorSet GetUBODescriptorSet() const;
 	VkDescriptorSet GetGlobalDescriptorSet() const;
 
 private:
+	const uint32_t m_VariableCount = 200;
+
 	VulkanDevice* m_pVulkanDevice;
 	VulkanDescriptorPool* m_pVulkanDescriptorPool;
 

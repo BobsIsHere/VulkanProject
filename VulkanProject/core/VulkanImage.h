@@ -18,6 +18,8 @@ public:
 	void Create(VulkanSwapChain* pSwapChain);
 	void Cleanup();
 
+	void RecordTransitionBarrier(VkCommandBuffer commandBuffer, VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+	void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VkCommandBuffer commandBuffer);
 	void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VulkanCommandPool* pCommandPool);
 
 	VkImage GetImage() const;

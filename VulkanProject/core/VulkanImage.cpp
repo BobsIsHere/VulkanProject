@@ -95,15 +95,13 @@ VkImageView VulkanImage::CreateImageView(VkImage image, VkFormat format, VkImage
     return imageView;
 }
 
-void VulkanImage::TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VulkanCommandPool* pCommandPool)
+void VulkanImage::RecordTransitionBarrier(VkCommandBuffer commandBuffer, VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
 {
-    VkCommandBuffer commandBuffer = CommandUtils::BeginSingleTimeCommands(m_pVulkanDevice, pCommandPool);
-
     VkImageAspectFlags aspect = GetAspectMask(format);
 
     VkImageMemoryBarrier2 barrier{};
     barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2;
-	barrier.pNext = nullptr;
+    barrier.pNext = nullptr;
     barrier.oldLayout = oldLayout;
     barrier.newLayout = newLayout;
     barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
@@ -166,14 +164,24 @@ void VulkanImage::TransitionImageLayout(VkImage image, VkFormat format, VkImageL
     }
 
     VkDependencyInfo dependencyInfo{};
-	dependencyInfo.sType = VK_STRUCTURE_TYPE_DEPENDENCY_INFO;
+    dependencyInfo.sType = VK_STRUCTURE_TYPE_DEPENDENCY_INFO;
     dependencyInfo.pNext = nullptr;
-	dependencyInfo.imageMemoryBarrierCount = 1;
-	dependencyInfo.pImageMemoryBarriers = &barrier;
-	dependencyInfo.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
+    dependencyInfo.imageMemoryBarrierCount = 1;
+    dependencyInfo.pImageMemoryBarriers = &barrier;
+    dependencyInfo.dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;
 
     vkCmdPipelineBarrier2(commandBuffer, &dependencyInfo);
+}
 
+void VulkanImage::TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VkCommandBuffer commandBuffer)
+{
+    RecordTransitionBarrier(commandBuffer, image, format, oldLayout, newLayout);
+}
+
+void VulkanImage::TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, VulkanCommandPool* pCommandPool)
+{
+    VkCommandBuffer commandBuffer{ CommandUtils::BeginSingleTimeCommands(m_pVulkanDevice, pCommandPool) };
+    RecordTransitionBarrier(commandBuffer, image, format, oldLayout, newLayout);
     CommandUtils::EndSingleTimeCommands(m_pVulkanDevice, pCommandPool, commandBuffer);
 }
 
