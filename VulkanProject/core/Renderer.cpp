@@ -35,9 +35,13 @@ void Renderer::CreateDepthResources()
 
 void Renderer::Cleanup()
 {
-    for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
+    for (size_t idx = 0; idx < m_pVulkanSwapChain->GetSwapChainImages().size(); ++idx)
     {
         vkDestroySemaphore(m_pVulkanDevice->GetDevice(), m_RenderFinishedSemaphores[idx], nullptr);
+    }
+
+    for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
+    {
         vkDestroySemaphore(m_pVulkanDevice->GetDevice(), m_ImageAvailableSemaphores[idx], nullptr);
         vkDestroyFence(m_pVulkanDevice->GetDevice(), m_InFlightFences[idx], nullptr);
     }
@@ -97,7 +101,7 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
     VkSemaphoreSubmitInfo signalSemaphoreInfo{};
     signalSemaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO;
     signalSemaphoreInfo.pNext = nullptr;
-    signalSemaphoreInfo.semaphore = m_RenderFinishedSemaphores[m_CurrentFrame];
+    signalSemaphoreInfo.semaphore = m_RenderFinishedSemaphores[imageIndex];
     signalSemaphoreInfo.value = 0;
     signalSemaphoreInfo.stageMask = VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT;
     signalSemaphoreInfo.deviceIndex = 0;
@@ -130,7 +134,7 @@ void Renderer::DrawFrame(std::vector<std::unique_ptr<UniformBuffer>>& pUniformBu
     VkPresentInfoKHR presentInfo{};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
-    VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores[m_CurrentFrame] };
+    VkSemaphore signalSemaphores[] = { m_RenderFinishedSemaphores[imageIndex] };
     presentInfo.waitSemaphoreCount = 1;
     presentInfo.pWaitSemaphores = signalSemaphores;
 
@@ -190,7 +194,7 @@ void Renderer::RecreateSwapChain()
 void Renderer::CreateSyncObjects()
 {
     m_ImageAvailableSemaphores.resize(utils::MAX_FRAMES_IN_FLIGHT);
-    m_RenderFinishedSemaphores.resize(utils::MAX_FRAMES_IN_FLIGHT);
+    m_RenderFinishedSemaphores.resize(m_pVulkanSwapChain->GetSwapChainImages().size());
     m_InFlightFences.resize(utils::MAX_FRAMES_IN_FLIGHT);
 
     VkSemaphoreCreateInfo semaphoreInfo{};
@@ -200,13 +204,20 @@ void Renderer::CreateSyncObjects()
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
+    for (size_t idx = 0; idx < m_pVulkanSwapChain->GetSwapChainImages().size(); ++idx)
+    {
+        if (vkCreateSemaphore(m_pVulkanDevice->GetDevice(), &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[idx]) != VK_SUCCESS)
+        {
+            throw std::runtime_error("failed to create RenderFinishedSemaphores objects for a frame!");
+        }
+    }
+
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)
     {
         if (vkCreateSemaphore(m_pVulkanDevice->GetDevice(), &semaphoreInfo, nullptr, &m_ImageAvailableSemaphores[idx]) != VK_SUCCESS ||
-            vkCreateSemaphore(m_pVulkanDevice->GetDevice(), &semaphoreInfo, nullptr, &m_RenderFinishedSemaphores[idx]) != VK_SUCCESS ||
             vkCreateFence(m_pVulkanDevice->GetDevice(), &fenceInfo, nullptr, &m_InFlightFences[idx]) != VK_SUCCESS)
         {
-            throw std::runtime_error("failed to create synchronization objects for a frame!");
+            throw std::runtime_error("failed to create ImageAvailableSemaphores or InFlightFences objects for a frame!");
         }
     }
 }
