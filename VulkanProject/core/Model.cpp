@@ -109,3 +109,8 @@ std::vector<std::shared_ptr<Texture>> Model::GetAllTextures() const
 {
     return m_pAllTextures;
 }
+
+std::vector<std::shared_ptr<Material>> Model::GetMaterials() const
+{
+    return m_pMaterials;
+}

@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <stdexcept>
 #include <algorithm>
+#include <assimp/GltfMaterial.h>
 
 #include "ModelLoader.h"
 #include "Model.h"
@@ -245,10 +246,27 @@ Model::MeshData ModelLoader::ProcessMesh(Model* model, aiMesh* mesh, const aiSce
         auto pRoughness{ loadTexture(aiTextureType_DIFFUSE_ROUGHNESS, TextureType::Roughness) };
         auto pMetallic{ loadTexture(aiTextureType_METALNESS, TextureType::Metallic) };
 
+        AlphaMode alphaMode{ AlphaMode::Opaque };
+        aiString alphaString;
+
+        if (material->Get(AI_MATKEY_GLTF_ALPHAMODE, alphaString) == AI_SUCCESS)
+        {
+            std::string mode{ alphaString.C_Str() };
+
+            if (mode == "BLEND")
+            {
+                alphaMode = AlphaMode::Blend;
+            }
+            else if (mode == "MASK")
+            {
+                alphaMode = AlphaMode::Mask;
+            }
+        }
+
         // Need at least a diffuse to make a material
         if (pDiffuse)
         {
-            auto pMaterial{ std::make_shared<Material>(pDiffuse, pNormal, pRoughness, pMetallic) };
+            auto pMaterial{ std::make_shared<Material>(pDiffuse, pNormal, pRoughness, pMetallic, alphaMode) };
             meshData.materialIndex = model->AddMaterial(pMaterial);
         }
     }

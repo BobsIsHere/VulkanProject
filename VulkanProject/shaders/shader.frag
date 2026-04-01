@@ -27,6 +27,13 @@ void main()
 
     const uint textureIdx = nonuniformEXT(material.textureIndices.r);
 
-    vec4 color = texture(sampler2D(textures[textureIdx], sharedSampler), fragTexCoord);
+    vec4 color = texture(sampler2D(textures[textureIdx], sharedSampler), fragTexCoord).rgba;
+
+    const float alphaThreshold = 0.5f;
+    if(color.a < alphaThreshold)
+    {
+        discard;
+    }
+
     outColor = color;
 }

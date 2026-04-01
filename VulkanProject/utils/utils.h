@@ -88,6 +88,13 @@ struct MaterialGPU
     glm::uvec4 textureIndices;
 };
 
+enum class AlphaMode
+{
+    Opaque,
+    Blend,
+    Mask
+};
+
 struct QueueFamilyIndices
 {
     std::optional<uint32_t> graphicsFamily;

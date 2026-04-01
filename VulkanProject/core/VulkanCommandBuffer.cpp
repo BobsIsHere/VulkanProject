@@ -11,6 +11,7 @@
 #include "VulkanImage.h"
 #include "pipelines/GraphicsPipeline.h"
 #include "Model.h"
+#include "Material.h"
 
 VulkanCommandBuffer::VulkanCommandBuffer() :
 	m_CommandBuffer{}
@@ -110,10 +111,6 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
     scissor.extent = pSwapChain->GetSwapChainExtent();
     vkCmdSetScissor(m_CommandBuffer, 0, 1, &scissor);
 
-    /*VkBuffer vertexBuffers[] = { pVertexBuffer->GetBuffer() };
-    VkDeviceSize offsets[] = { 0 };
-    vkCmdBindVertexBuffers(m_CommandBuffer, 0, 1, vertexBuffers, offsets);*/
-
     vkCmdBindIndexBuffer(m_CommandBuffer, pIndexBuffer->GetBuffer(), 0, VK_INDEX_TYPE_UINT32);
 
     const VkDescriptorSet uboDescriptorSet{ pModel->GetDescriptorSets()[0]->GetUBODescriptorSet() };
@@ -124,10 +121,43 @@ void VulkanCommandBuffer::Record(uint32_t imageIdx, VertexBuffer* pVertexBuffer,
     vkCmdBindDescriptorSets(m_CommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pPipeline->GetPipelineLayout(), 1, 1,
         &globalDescriptorSet, 0, nullptr);
 
-    for (auto& subMesh : pModel->GetSubMeshes())
-    {
-        PushConstants pc{ subMesh.materialIndex };
+    const auto& subMeshes{ pModel->GetSubMeshes() };
+    const auto& materials{ pModel->GetMaterials() };
 
+    auto isTransparent = [&](const Model::MeshData& subMesh) -> bool
+    {
+        if (subMesh.materialIndex >= materials.size())
+        {
+            return false;
+        }
+
+        return materials[subMesh.materialIndex]->GetAlphaMode() == AlphaMode::Blend;
+    };
+
+    // Pass 1: opaque
+    for (const auto& subMesh : subMeshes)
+    {
+        if (isTransparent(subMesh))
+        {
+            continue;
+        }
+
+        PushConstants pc{ subMesh.materialIndex };
+        vkCmdPushConstants(m_CommandBuffer, pPipeline->GetPipelineLayout(),
+            VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &pc);
+
+        vkCmdDrawIndexed(m_CommandBuffer, uint32_t(subMesh.indices.size()), 1, subMesh.firstIndex, subMesh.vertexOffset, 0);
+    }
+
+    // Pass 2: transparent
+    for (const auto& subMesh : subMeshes)
+    {
+        if (!isTransparent(subMesh))
+        {
+            continue;
+        }
+
+        PushConstants pc{ subMesh.materialIndex };
         vkCmdPushConstants(m_CommandBuffer, pPipeline->GetPipelineLayout(),
             VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(PushConstants), &pc);
 

@@ -52,6 +52,7 @@ public:
 	const std::vector<MeshData>& GetSubMeshes() const;
 	const std::vector<std::unique_ptr<VulkanDescriptorSet>>& GetDescriptorSets() const;
 	std::vector<std::shared_ptr<Texture>> GetAllTextures() const;
+	std::vector<std::shared_ptr<Material>> GetMaterials() const;
 
 private:
 	std::vector<uint32_t> m_Indices;

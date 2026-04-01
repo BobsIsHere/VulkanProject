@@ -1,8 +1,10 @@
 #include "Material.h"
 #include "Texture.h"
 
-Material::Material(std::shared_ptr<Texture> pDiffuse, std::shared_ptr<Texture> pNormal, std::shared_ptr<Texture> pRoughness, std::shared_ptr<Texture> pMetallic) :
-	m_pTextures{}
+Material::Material(std::shared_ptr<Texture> pDiffuse, std::shared_ptr<Texture> pNormal, std::shared_ptr<Texture> pRoughness, 
+    std::shared_ptr<Texture> pMetallic, AlphaMode alphaMode) :
+	m_pTextures{},
+    m_AlphaMode{ alphaMode }
 {
     if (pDiffuse)
     {
@@ -66,4 +68,9 @@ MaterialGPU Material::BuildMaterialGPU() const
 const std::vector<std::shared_ptr<Texture>>& Material::GetTextures() const
 {
 	return m_pTextures;
+}
+
+AlphaMode Material::GetAlphaMode() const
+{
+    return m_AlphaMode;
 }
