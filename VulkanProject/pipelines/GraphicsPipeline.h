@@ -12,7 +12,7 @@ class VulkanDescriptorSetLayout;
 class GraphicsPipeline final
 {
 public:
-	GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* pRenderPass);
+	GraphicsPipeline(VulkanDevice* pDevice);
 	~GraphicsPipeline();
 
 	void CreatePipeline(VulkanDescriptorSetLayout* pLayout);
@@ -23,7 +23,6 @@ public:
 
 private:
 	VulkanDevice* m_pVulkanDevice;
-	VulkanRenderContext* m_pVulkanRenderPass;
 
 	VkPipelineLayout m_PipelineLayout;
 	VkPipeline m_GraphicsPipeline;

@@ -19,7 +19,7 @@ void VulkanProject::Run()
     m_pVulkanDescriptorPool = std::make_unique<VulkanDescriptorPool>(m_pVulkanDevice.get());
 
     // Initialize Graphics Pipeline
-    m_pGraphicsPipeline = std::make_unique<GraphicsPipeline>(m_pVulkanDevice.get(), m_pVulkanRenderContext.get());
+    m_pGraphicsPipeline = std::make_unique<GraphicsPipeline>(m_pVulkanDevice.get());
 
     m_pVulkanCommandBuffers.resize(utils::MAX_FRAMES_IN_FLIGHT);
     for (size_t idx = 0; idx < utils::MAX_FRAMES_IN_FLIGHT; ++idx)

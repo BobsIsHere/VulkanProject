@@ -7,9 +7,8 @@
 #include "core/VulkanRenderContext.h"
 #include "core/VulkanDescriptorSetLayout.h"
 
-GraphicsPipeline::GraphicsPipeline(VulkanDevice* pDevice, VulkanRenderContext* pRenderPass) :
+GraphicsPipeline::GraphicsPipeline(VulkanDevice* pDevice) :
 	m_pVulkanDevice{ pDevice },
-	m_pVulkanRenderPass{ pRenderPass },
     m_GraphicsPipeline{},
 	m_PipelineLayout{}
 {
